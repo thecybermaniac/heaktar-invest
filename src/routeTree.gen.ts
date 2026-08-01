@@ -12,7 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DepositRouteImport } from './routes/deposit'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as ReferralRouteImport } from './routes/referral'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as WithdrawRouteImport } from './routes/withdraw'
 import { Route as InvestIndexRouteImport } from './routes/invest.index'
@@ -36,9 +39,24 @@ const DepositRoute = DepositRouteImport.update({
   path: '/deposit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReferralRoute = ReferralRouteImport.update({
+  id: '/referral',
+  path: '/referral',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -81,7 +99,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/deposit': typeof DepositRoute
+  '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
+  '/profile': typeof ProfileRoute
+  '/referral': typeof ReferralRoute
   '/register': typeof RegisterRoute
   '/withdraw': typeof WithdrawRoute
   '/invest/details': typeof InvestDetailsRoute
@@ -94,7 +115,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/deposit': typeof DepositRoute
+  '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
+  '/profile': typeof ProfileRoute
+  '/referral': typeof ReferralRoute
   '/register': typeof RegisterRoute
   '/withdraw': typeof WithdrawRoute
   '/invest/details': typeof InvestDetailsRoute
@@ -108,7 +132,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/deposit': typeof DepositRoute
+  '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
+  '/profile': typeof ProfileRoute
+  '/referral': typeof ReferralRoute
   '/register': typeof RegisterRoute
   '/withdraw': typeof WithdrawRoute
   '/invest/details': typeof InvestDetailsRoute
@@ -123,7 +150,10 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/deposit'
+    | '/notifications'
     | '/onboarding'
+    | '/profile'
+    | '/referral'
     | '/register'
     | '/withdraw'
     | '/invest/details'
@@ -136,7 +166,10 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/deposit'
+    | '/notifications'
     | '/onboarding'
+    | '/profile'
+    | '/referral'
     | '/register'
     | '/withdraw'
     | '/invest/details'
@@ -149,7 +182,10 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/deposit'
+    | '/notifications'
     | '/onboarding'
+    | '/profile'
+    | '/referral'
     | '/register'
     | '/withdraw'
     | '/invest/details'
@@ -163,7 +199,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   DepositRoute: typeof DepositRoute
+  NotificationsRoute: typeof NotificationsRoute
   OnboardingRoute: typeof OnboardingRoute
+  ProfileRoute: typeof ProfileRoute
+  ReferralRoute: typeof ReferralRoute
   RegisterRoute: typeof RegisterRoute
   WithdrawRoute: typeof WithdrawRoute
   InvestDetailsRoute: typeof InvestDetailsRoute
@@ -196,11 +235,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepositRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/referral': {
+      id: '/referral'
+      path: '/referral'
+      fullPath: '/referral'
+      preLoaderRoute: typeof ReferralRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -259,7 +319,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   DepositRoute: DepositRoute,
+  NotificationsRoute: NotificationsRoute,
   OnboardingRoute: OnboardingRoute,
+  ProfileRoute: ProfileRoute,
+  ReferralRoute: ReferralRoute,
   RegisterRoute: RegisterRoute,
   WithdrawRoute: WithdrawRoute,
   InvestDetailsRoute: InvestDetailsRoute,
@@ -271,3 +334,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
