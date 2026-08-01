@@ -11,11 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DepositRouteImport } from './routes/deposit'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as WithdrawRouteImport } from './routes/withdraw'
 import { Route as InvestIndexRouteImport } from './routes/invest.index'
 import { Route as InvestDetailsRouteImport } from './routes/invest.details'
 import { Route as InvestSuccessRouteImport } from './routes/invest.success'
+import { Route as InvestmentsIndexRouteImport } from './routes/investments.index'
+import { Route as InvestmentsHistoryRouteImport } from './routes/investments.history'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -27,6 +31,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DepositRoute = DepositRouteImport.update({
+  id: '/deposit',
+  path: '/deposit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -35,6 +44,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WithdrawRoute = WithdrawRouteImport.update({
+  id: '/withdraw',
+  path: '/withdraw',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvestIndexRoute = InvestIndexRouteImport.update({
@@ -52,73 +66,111 @@ const InvestSuccessRoute = InvestSuccessRouteImport.update({
   path: '/invest/success',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InvestmentsIndexRoute = InvestmentsIndexRouteImport.update({
+  id: '/investments/',
+  path: '/investments/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestmentsHistoryRoute = InvestmentsHistoryRouteImport.update({
+  id: '/investments/history',
+  path: '/investments/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/deposit': typeof DepositRoute
   '/onboarding': typeof OnboardingRoute
   '/register': typeof RegisterRoute
+  '/withdraw': typeof WithdrawRoute
   '/invest/details': typeof InvestDetailsRoute
   '/invest/success': typeof InvestSuccessRoute
+  '/investments/history': typeof InvestmentsHistoryRoute
   '/invest/': typeof InvestIndexRoute
+  '/investments/': typeof InvestmentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/deposit': typeof DepositRoute
   '/onboarding': typeof OnboardingRoute
   '/register': typeof RegisterRoute
+  '/withdraw': typeof WithdrawRoute
   '/invest/details': typeof InvestDetailsRoute
   '/invest/success': typeof InvestSuccessRoute
+  '/investments/history': typeof InvestmentsHistoryRoute
   '/invest': typeof InvestIndexRoute
+  '/investments': typeof InvestmentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/deposit': typeof DepositRoute
   '/onboarding': typeof OnboardingRoute
   '/register': typeof RegisterRoute
+  '/withdraw': typeof WithdrawRoute
   '/invest/details': typeof InvestDetailsRoute
   '/invest/success': typeof InvestSuccessRoute
+  '/investments/history': typeof InvestmentsHistoryRoute
   '/invest/': typeof InvestIndexRoute
+  '/investments/': typeof InvestmentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/deposit'
     | '/onboarding'
     | '/register'
+    | '/withdraw'
     | '/invest/details'
     | '/invest/success'
+    | '/investments/history'
     | '/invest/'
+    | '/investments/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
+    | '/deposit'
     | '/onboarding'
     | '/register'
+    | '/withdraw'
     | '/invest/details'
     | '/invest/success'
+    | '/investments/history'
     | '/invest'
+    | '/investments'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/deposit'
     | '/onboarding'
     | '/register'
+    | '/withdraw'
     | '/invest/details'
     | '/invest/success'
+    | '/investments/history'
     | '/invest/'
+    | '/investments/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  DepositRoute: typeof DepositRoute
   OnboardingRoute: typeof OnboardingRoute
   RegisterRoute: typeof RegisterRoute
+  WithdrawRoute: typeof WithdrawRoute
   InvestDetailsRoute: typeof InvestDetailsRoute
   InvestSuccessRoute: typeof InvestSuccessRoute
+  InvestmentsHistoryRoute: typeof InvestmentsHistoryRoute
   InvestIndexRoute: typeof InvestIndexRoute
+  InvestmentsIndexRoute: typeof InvestmentsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -137,6 +189,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deposit': {
+      id: '/deposit'
+      path: '/deposit'
+      fullPath: '/deposit'
+      preLoaderRoute: typeof DepositRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
@@ -149,6 +208,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/withdraw': {
+      id: '/withdraw'
+      path: '/withdraw'
+      fullPath: '/withdraw'
+      preLoaderRoute: typeof WithdrawRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invest/': {
@@ -172,17 +238,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvestSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/investments/': {
+      id: '/investments/'
+      path: '/investments'
+      fullPath: '/investments/'
+      preLoaderRoute: typeof InvestmentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investments/history': {
+      id: '/investments/history'
+      path: '/investments/history'
+      fullPath: '/investments/history'
+      preLoaderRoute: typeof InvestmentsHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  DepositRoute: DepositRoute,
   OnboardingRoute: OnboardingRoute,
   RegisterRoute: RegisterRoute,
+  WithdrawRoute: WithdrawRoute,
   InvestDetailsRoute: InvestDetailsRoute,
   InvestSuccessRoute: InvestSuccessRoute,
+  InvestmentsHistoryRoute: InvestmentsHistoryRoute,
   InvestIndexRoute: InvestIndexRoute,
+  InvestmentsIndexRoute: InvestmentsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
