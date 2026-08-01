@@ -20,7 +20,7 @@ const MOCK: Quote[] = BIG5.map((s, i) => ({
   symbol: s.symbol,
   name: s.name,
   price: s.base,
-  changePercent: [1.24, -0.86, 0.41, 2.13, -1.05, 0.68][i],
+  changePercent: [1.24, -0.86, 0.41, 2.13, -1.05, 0.68][i] ?? 0,
 }));
 
 /**
