@@ -13,6 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as InvestIndexRouteImport } from './routes/invest.index'
+import { Route as InvestDetailsRouteImport } from './routes/invest.details'
+import { Route as InvestSuccessRouteImport } from './routes/invest.success'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +37,39 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InvestIndexRoute = InvestIndexRouteImport.update({
+  id: '/invest/',
+  path: '/invest/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestDetailsRoute = InvestDetailsRouteImport.update({
+  id: '/invest/details',
+  path: '/invest/details',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestSuccessRoute = InvestSuccessRouteImport.update({
+  id: '/invest/success',
+  path: '/invest/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/onboarding': typeof OnboardingRoute
   '/register': typeof RegisterRoute
+  '/invest/details': typeof InvestDetailsRoute
+  '/invest/success': typeof InvestSuccessRoute
+  '/invest/': typeof InvestIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/onboarding': typeof OnboardingRoute
   '/register': typeof RegisterRoute
+  '/invest/details': typeof InvestDetailsRoute
+  '/invest/success': typeof InvestSuccessRoute
+  '/invest': typeof InvestIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +77,38 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/onboarding': typeof OnboardingRoute
   '/register': typeof RegisterRoute
+  '/invest/details': typeof InvestDetailsRoute
+  '/invest/success': typeof InvestSuccessRoute
+  '/invest/': typeof InvestIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/onboarding' | '/register'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/onboarding'
+    | '/register'
+    | '/invest/details'
+    | '/invest/success'
+    | '/invest/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/onboarding' | '/register'
-  id: '__root__' | '/' | '/dashboard' | '/onboarding' | '/register'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/onboarding'
+    | '/register'
+    | '/invest/details'
+    | '/invest/success'
+    | '/invest'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/onboarding'
+    | '/register'
+    | '/invest/details'
+    | '/invest/success'
+    | '/invest/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +116,9 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   OnboardingRoute: typeof OnboardingRoute
   RegisterRoute: typeof RegisterRoute
+  InvestDetailsRoute: typeof InvestDetailsRoute
+  InvestSuccessRoute: typeof InvestSuccessRoute
+  InvestIndexRoute: typeof InvestIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +151,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/invest/': {
+      id: '/invest/'
+      path: '/invest'
+      fullPath: '/invest/'
+      preLoaderRoute: typeof InvestIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invest/details': {
+      id: '/invest/details'
+      path: '/invest/details'
+      fullPath: '/invest/details'
+      preLoaderRoute: typeof InvestDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invest/success': {
+      id: '/invest/success'
+      path: '/invest/success'
+      fullPath: '/invest/success'
+      preLoaderRoute: typeof InvestSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +180,9 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   OnboardingRoute: OnboardingRoute,
   RegisterRoute: RegisterRoute,
+  InvestDetailsRoute: InvestDetailsRoute,
+  InvestSuccessRoute: InvestSuccessRoute,
+  InvestIndexRoute: InvestIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

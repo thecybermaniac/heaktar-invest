@@ -45,11 +45,11 @@ export function Card({ className, children }: { className?: string; children: Re
 /* ---------------- Field ---------------- */
 
 type FieldProps = InputHTMLAttributes<HTMLInputElement> & {
-  icon?: LucideIcon;
-  label?: string;
-  hint?: string;
-  error?: string;
-  trailing?: ReactNode;
+  icon?: LucideIcon | undefined;
+  label?: string | undefined;
+  hint?: string | undefined;
+  error?: string | undefined;
+  trailing?: ReactNode | undefined;
 };
 
 export function Field({ icon: Icon, label, hint, error, trailing, className, ...props }: FieldProps) {
