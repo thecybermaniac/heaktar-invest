@@ -6,7 +6,7 @@ import { Button, Card, Field, PageHeader } from "@/components/hk/ui";
 import { PAYMENT_METHODS, money } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/deposit")({
+export const Route = createFileRoute("/_authenticated/deposit")({
   head: () => ({
     meta: [
       { title: "Deposit funds — Heaktar" },

@@ -5,7 +5,7 @@ import { Card, Chips, StatusPill } from "@/components/hk/ui";
 import { PAST_INVESTMENTS, money } from "@/lib/data";
 import { Tabs } from "./investments.index";
 
-export const Route = createFileRoute("/investments/history")({
+export const Route = createFileRoute("/_authenticated/investments/history")({
   head: () => ({
     meta: [
       { title: "Investment history — Heaktar" },

@@ -5,7 +5,7 @@ import { Button, Chips, DatePicker, Field, Segmented, Select } from "@/component
 import { useApp, type Profile } from "@/lib/app-store";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/onboarding")({
+export const Route = createFileRoute("/_authenticated/onboarding")({
   head: () => ({
     meta: [
       { title: "Complete your profile — Heaktar" },

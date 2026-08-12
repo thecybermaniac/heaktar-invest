@@ -7,7 +7,7 @@ import { BANK_ACCOUNTS, money } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/withdraw")({
+export const Route = createFileRoute("/_authenticated/withdraw")({
   head: () => ({
     meta: [
       { title: "Withdraw funds — Heaktar" },

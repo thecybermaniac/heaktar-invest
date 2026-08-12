@@ -7,7 +7,7 @@ import { NOTIFICATIONS } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/notifications")({
+export const Route = createFileRoute("/_authenticated/notifications")({
   head: () => ({
     meta: [
       { title: "Notifications — Heaktar" },
