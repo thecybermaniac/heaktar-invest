@@ -78,7 +78,11 @@ export function Field({
           error ? "border-destructive" : "border-transparent",
         )}
       >
-        {typeof(Icon) == "string" ? <span className="text-muted-foreground font-semibold">{Icon}</span> : <Icon className="size-4.5 shrink-0 text-muted-foreground" strokeWidth={1.8} />}
+        {typeof Icon === "string" ? (
+          <span className="text-muted-foreground font-semibold">{Icon}</span>
+        ) : Icon ? (
+          <Icon className="size-4.5 shrink-0 text-muted-foreground" strokeWidth={1.8} />
+        ) : null}
         <input
           className={cn(
             "h-full w-full bg-transparent text-[15px] text-foreground outline-none placeholder:text-muted-foreground/70 placeholder:text-sm",
