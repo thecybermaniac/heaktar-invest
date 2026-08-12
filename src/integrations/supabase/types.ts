@@ -14,7 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          address: string | null
+          city: string | null
+          created_at: string
+          dob: string | null
+          email: string
+          employment_status: string | null
+          experience: string | null
+          first_name: string
+          gender: string | null
+          id: string
+          id_number: string | null
+          id_type: string | null
+          last_name: string
+          nationality: string | null
+          occupation: string | null
+          onboarding_completed: boolean
+          referral_code: string
+          referred_by: string | null
+          risk_tolerance: string | null
+          source_of_funds: string | null
+          state: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          dob?: string | null
+          email?: string
+          employment_status?: string | null
+          experience?: string | null
+          first_name?: string
+          gender?: string | null
+          id: string
+          id_number?: string | null
+          id_type?: string | null
+          last_name?: string
+          nationality?: string | null
+          occupation?: string | null
+          onboarding_completed?: boolean
+          referral_code?: string
+          referred_by?: string | null
+          risk_tolerance?: string | null
+          source_of_funds?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          dob?: string | null
+          email?: string
+          employment_status?: string | null
+          experience?: string | null
+          first_name?: string
+          gender?: string | null
+          id?: string
+          id_number?: string | null
+          id_type?: string | null
+          last_name?: string
+          nationality?: string | null
+          occupation?: string | null
+          onboarding_completed?: boolean
+          referral_code?: string
+          referred_by?: string | null
+          risk_tolerance?: string | null
+          source_of_funds?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
