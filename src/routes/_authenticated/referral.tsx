@@ -6,7 +6,7 @@ import { Button, Card, StatusPill } from "@/components/hk/ui";
 import { REFERRALS, money } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
 
-export const Route = createFileRoute("/referral")({
+export const Route = createFileRoute("/_authenticated/referral")({
   head: () => ({
     meta: [
       { title: "Referrals — Heaktar" },

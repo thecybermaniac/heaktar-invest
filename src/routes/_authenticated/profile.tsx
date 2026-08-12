@@ -5,7 +5,7 @@ import { Screen } from "@/components/hk/shell";
 import { Button, Card, Field, Toggle } from "@/components/hk/ui";
 import { useApp } from "@/lib/app-store";
 
-export const Route = createFileRoute("/profile")({
+export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
     meta: [
       { title: "Profile & settings — Heaktar" },

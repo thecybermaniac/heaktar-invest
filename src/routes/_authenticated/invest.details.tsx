@@ -6,7 +6,7 @@ import { Button, Card, Field, PageHeader, StatusPill } from "@/components/hk/ui"
 import { PLANS, SERVICE_FEE_RATE, money } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
 
-export const Route = createFileRoute("/invest/details")({
+export const Route = createFileRoute("/_authenticated/invest/details")({
   head: () => ({
     meta: [
       { title: "Investment details — Heaktar" },
