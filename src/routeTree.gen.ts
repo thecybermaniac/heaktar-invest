@@ -10,53 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as DepositRouteImport } from './routes/deposit'
-import { Route as NotificationsRouteImport } from './routes/notifications'
-import { Route as OnboardingRouteImport } from './routes/onboarding'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as ReferralRouteImport } from './routes/referral'
 import { Route as RegisterRouteImport } from './routes/register'
-import { Route as WithdrawRouteImport } from './routes/withdraw'
-import { Route as InvestIndexRouteImport } from './routes/invest.index'
-import { Route as InvestDetailsRouteImport } from './routes/invest.details'
-import { Route as InvestSuccessRouteImport } from './routes/invest.success'
-import { Route as InvestmentsIndexRouteImport } from './routes/investments.index'
-import { Route as InvestmentsHistoryRouteImport } from './routes/investments.history'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDepositRouteImport } from './routes/_authenticated/deposit'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedReferralRouteImport } from './routes/_authenticated/referral'
+import { Route as AuthenticatedWithdrawRouteImport } from './routes/_authenticated/withdraw'
+import { Route as AuthenticatedInvestIndexRouteImport } from './routes/_authenticated/invest.index'
+import { Route as AuthenticatedInvestDetailsRouteImport } from './routes/_authenticated/invest.details'
+import { Route as AuthenticatedInvestSuccessRouteImport } from './routes/_authenticated/invest.success'
+import { Route as AuthenticatedInvestmentsIndexRouteImport } from './routes/_authenticated/investments.index'
+import { Route as AuthenticatedInvestmentsHistoryRouteImport } from './routes/_authenticated/investments.history'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DepositRoute = DepositRouteImport.update({
-  id: '/deposit',
-  path: '/deposit',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OnboardingRoute = OnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReferralRoute = ReferralRouteImport.update({
-  id: '/referral',
-  path: '/referral',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -64,97 +34,133 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WithdrawRoute = WithdrawRouteImport.update({
-  id: '/withdraw',
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/_authenticated/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDepositRoute = AuthenticatedDepositRouteImport.update({
+  id: '/_authenticated/deposit',
+  path: '/deposit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/_authenticated/notifications',
+    path: '/notifications',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/_authenticated/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/_authenticated/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedReferralRoute = AuthenticatedReferralRouteImport.update({
+  id: '/_authenticated/referral',
+  path: '/referral',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedWithdrawRoute = AuthenticatedWithdrawRouteImport.update({
+  id: '/_authenticated/withdraw',
   path: '/withdraw',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InvestIndexRoute = InvestIndexRouteImport.update({
-  id: '/invest/',
-  path: '/invest/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestDetailsRoute = InvestDetailsRouteImport.update({
-  id: '/invest/details',
-  path: '/invest/details',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestSuccessRoute = InvestSuccessRouteImport.update({
-  id: '/invest/success',
-  path: '/invest/success',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestmentsIndexRoute = InvestmentsIndexRouteImport.update({
-  id: '/investments/',
-  path: '/investments/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestmentsHistoryRoute = InvestmentsHistoryRouteImport.update({
-  id: '/investments/history',
-  path: '/investments/history',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedInvestIndexRoute =
+  AuthenticatedInvestIndexRouteImport.update({
+    id: '/_authenticated/invest/',
+    path: '/invest/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedInvestDetailsRoute =
+  AuthenticatedInvestDetailsRouteImport.update({
+    id: '/_authenticated/invest/details',
+    path: '/invest/details',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedInvestSuccessRoute =
+  AuthenticatedInvestSuccessRouteImport.update({
+    id: '/_authenticated/invest/success',
+    path: '/invest/success',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedInvestmentsIndexRoute =
+  AuthenticatedInvestmentsIndexRouteImport.update({
+    id: '/_authenticated/investments/',
+    path: '/investments/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedInvestmentsHistoryRoute =
+  AuthenticatedInvestmentsHistoryRouteImport.update({
+    id: '/_authenticated/investments/history',
+    path: '/investments/history',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/deposit': typeof DepositRoute
-  '/notifications': typeof NotificationsRoute
-  '/onboarding': typeof OnboardingRoute
-  '/profile': typeof ProfileRoute
-  '/referral': typeof ReferralRoute
   '/register': typeof RegisterRoute
-  '/withdraw': typeof WithdrawRoute
-  '/invest/details': typeof InvestDetailsRoute
-  '/invest/success': typeof InvestSuccessRoute
-  '/investments/history': typeof InvestmentsHistoryRoute
-  '/invest/': typeof InvestIndexRoute
-  '/investments/': typeof InvestmentsIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/deposit': typeof AuthenticatedDepositRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/referral': typeof AuthenticatedReferralRoute
+  '/withdraw': typeof AuthenticatedWithdrawRoute
+  '/invest/details': typeof AuthenticatedInvestDetailsRoute
+  '/invest/success': typeof AuthenticatedInvestSuccessRoute
+  '/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
+  '/invest/': typeof AuthenticatedInvestIndexRoute
+  '/investments/': typeof AuthenticatedInvestmentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/deposit': typeof DepositRoute
-  '/notifications': typeof NotificationsRoute
-  '/onboarding': typeof OnboardingRoute
-  '/profile': typeof ProfileRoute
-  '/referral': typeof ReferralRoute
   '/register': typeof RegisterRoute
-  '/withdraw': typeof WithdrawRoute
-  '/invest/details': typeof InvestDetailsRoute
-  '/invest/success': typeof InvestSuccessRoute
-  '/investments/history': typeof InvestmentsHistoryRoute
-  '/invest': typeof InvestIndexRoute
-  '/investments': typeof InvestmentsIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/deposit': typeof AuthenticatedDepositRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/referral': typeof AuthenticatedReferralRoute
+  '/withdraw': typeof AuthenticatedWithdrawRoute
+  '/invest/details': typeof AuthenticatedInvestDetailsRoute
+  '/invest/success': typeof AuthenticatedInvestSuccessRoute
+  '/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
+  '/invest': typeof AuthenticatedInvestIndexRoute
+  '/investments': typeof AuthenticatedInvestmentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/deposit': typeof DepositRoute
-  '/notifications': typeof NotificationsRoute
-  '/onboarding': typeof OnboardingRoute
-  '/profile': typeof ProfileRoute
-  '/referral': typeof ReferralRoute
   '/register': typeof RegisterRoute
-  '/withdraw': typeof WithdrawRoute
-  '/invest/details': typeof InvestDetailsRoute
-  '/invest/success': typeof InvestSuccessRoute
-  '/investments/history': typeof InvestmentsHistoryRoute
-  '/invest/': typeof InvestIndexRoute
-  '/investments/': typeof InvestmentsIndexRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/deposit': typeof AuthenticatedDepositRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/referral': typeof AuthenticatedReferralRoute
+  '/_authenticated/withdraw': typeof AuthenticatedWithdrawRoute
+  '/_authenticated/invest/details': typeof AuthenticatedInvestDetailsRoute
+  '/_authenticated/invest/success': typeof AuthenticatedInvestSuccessRoute
+  '/_authenticated/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
+  '/_authenticated/invest/': typeof AuthenticatedInvestIndexRoute
+  '/_authenticated/investments/': typeof AuthenticatedInvestmentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/register'
     | '/dashboard'
     | '/deposit'
     | '/notifications'
     | '/onboarding'
     | '/profile'
     | '/referral'
-    | '/register'
     | '/withdraw'
     | '/invest/details'
     | '/invest/success'
@@ -164,13 +170,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/register'
     | '/dashboard'
     | '/deposit'
     | '/notifications'
     | '/onboarding'
     | '/profile'
     | '/referral'
-    | '/register'
     | '/withdraw'
     | '/invest/details'
     | '/invest/success'
@@ -180,36 +186,36 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
-    | '/deposit'
-    | '/notifications'
-    | '/onboarding'
-    | '/profile'
-    | '/referral'
     | '/register'
-    | '/withdraw'
-    | '/invest/details'
-    | '/invest/success'
-    | '/investments/history'
-    | '/invest/'
-    | '/investments/'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/deposit'
+    | '/_authenticated/notifications'
+    | '/_authenticated/onboarding'
+    | '/_authenticated/profile'
+    | '/_authenticated/referral'
+    | '/_authenticated/withdraw'
+    | '/_authenticated/invest/details'
+    | '/_authenticated/invest/success'
+    | '/_authenticated/investments/history'
+    | '/_authenticated/invest/'
+    | '/_authenticated/investments/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
-  DepositRoute: typeof DepositRoute
-  NotificationsRoute: typeof NotificationsRoute
-  OnboardingRoute: typeof OnboardingRoute
-  ProfileRoute: typeof ProfileRoute
-  ReferralRoute: typeof ReferralRoute
   RegisterRoute: typeof RegisterRoute
-  WithdrawRoute: typeof WithdrawRoute
-  InvestDetailsRoute: typeof InvestDetailsRoute
-  InvestSuccessRoute: typeof InvestSuccessRoute
-  InvestmentsHistoryRoute: typeof InvestmentsHistoryRoute
-  InvestIndexRoute: typeof InvestIndexRoute
-  InvestmentsIndexRoute: typeof InvestmentsIndexRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDepositRoute: typeof AuthenticatedDepositRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedReferralRoute: typeof AuthenticatedReferralRoute
+  AuthenticatedWithdrawRoute: typeof AuthenticatedWithdrawRoute
+  AuthenticatedInvestDetailsRoute: typeof AuthenticatedInvestDetailsRoute
+  AuthenticatedInvestSuccessRoute: typeof AuthenticatedInvestSuccessRoute
+  AuthenticatedInvestmentsHistoryRoute: typeof AuthenticatedInvestmentsHistoryRoute
+  AuthenticatedInvestIndexRoute: typeof AuthenticatedInvestIndexRoute
+  AuthenticatedInvestmentsIndexRoute: typeof AuthenticatedInvestmentsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -221,48 +227,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/deposit': {
-      id: '/deposit'
-      path: '/deposit'
-      fullPath: '/deposit'
-      preLoaderRoute: typeof DepositRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/onboarding': {
-      id: '/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/referral': {
-      id: '/referral'
-      path: '/referral'
-      fullPath: '/referral'
-      preLoaderRoute: typeof ReferralRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -270,46 +234,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/withdraw': {
-      id: '/withdraw'
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/deposit': {
+      id: '/_authenticated/deposit'
+      path: '/deposit'
+      fullPath: '/deposit'
+      preLoaderRoute: typeof AuthenticatedDepositRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/referral': {
+      id: '/_authenticated/referral'
+      path: '/referral'
+      fullPath: '/referral'
+      preLoaderRoute: typeof AuthenticatedReferralRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/withdraw': {
+      id: '/_authenticated/withdraw'
       path: '/withdraw'
       fullPath: '/withdraw'
-      preLoaderRoute: typeof WithdrawRouteImport
+      preLoaderRoute: typeof AuthenticatedWithdrawRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/invest/': {
-      id: '/invest/'
+    '/_authenticated/invest/': {
+      id: '/_authenticated/invest/'
       path: '/invest'
       fullPath: '/invest/'
-      preLoaderRoute: typeof InvestIndexRouteImport
+      preLoaderRoute: typeof AuthenticatedInvestIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/invest/details': {
-      id: '/invest/details'
+    '/_authenticated/invest/details': {
+      id: '/_authenticated/invest/details'
       path: '/invest/details'
       fullPath: '/invest/details'
-      preLoaderRoute: typeof InvestDetailsRouteImport
+      preLoaderRoute: typeof AuthenticatedInvestDetailsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/invest/success': {
-      id: '/invest/success'
+    '/_authenticated/invest/success': {
+      id: '/_authenticated/invest/success'
       path: '/invest/success'
       fullPath: '/invest/success'
-      preLoaderRoute: typeof InvestSuccessRouteImport
+      preLoaderRoute: typeof AuthenticatedInvestSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/investments/': {
-      id: '/investments/'
+    '/_authenticated/investments/': {
+      id: '/_authenticated/investments/'
       path: '/investments'
       fullPath: '/investments/'
-      preLoaderRoute: typeof InvestmentsIndexRouteImport
+      preLoaderRoute: typeof AuthenticatedInvestmentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/investments/history': {
-      id: '/investments/history'
+    '/_authenticated/investments/history': {
+      id: '/_authenticated/investments/history'
       path: '/investments/history'
       fullPath: '/investments/history'
-      preLoaderRoute: typeof InvestmentsHistoryRouteImport
+      preLoaderRoute: typeof AuthenticatedInvestmentsHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -317,19 +323,19 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
-  DepositRoute: DepositRoute,
-  NotificationsRoute: NotificationsRoute,
-  OnboardingRoute: OnboardingRoute,
-  ProfileRoute: ProfileRoute,
-  ReferralRoute: ReferralRoute,
   RegisterRoute: RegisterRoute,
-  WithdrawRoute: WithdrawRoute,
-  InvestDetailsRoute: InvestDetailsRoute,
-  InvestSuccessRoute: InvestSuccessRoute,
-  InvestmentsHistoryRoute: InvestmentsHistoryRoute,
-  InvestIndexRoute: InvestIndexRoute,
-  InvestmentsIndexRoute: InvestmentsIndexRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDepositRoute: AuthenticatedDepositRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedReferralRoute: AuthenticatedReferralRoute,
+  AuthenticatedWithdrawRoute: AuthenticatedWithdrawRoute,
+  AuthenticatedInvestDetailsRoute: AuthenticatedInvestDetailsRoute,
+  AuthenticatedInvestSuccessRoute: AuthenticatedInvestSuccessRoute,
+  AuthenticatedInvestmentsHistoryRoute: AuthenticatedInvestmentsHistoryRoute,
+  AuthenticatedInvestIndexRoute: AuthenticatedInvestIndexRoute,
+  AuthenticatedInvestmentsIndexRoute: AuthenticatedInvestmentsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
