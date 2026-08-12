@@ -1,13 +1,13 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutGrid, Wallet, Plus, Users, User } from "lucide-react";
+import { LayoutGrid, Wallet, Plus, Users, User, Trophy } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const TABS = [
   { to: "/dashboard", label: "Home", icon: LayoutGrid },
-  { to: "/investments", label: "Invests", icon: Wallet },
+  { to: "/investments", label: "Portfolio", icon: Wallet },
   { to: "/invest", label: "Invest", icon: Plus, center: true },
-  { to: "/referral", label: "Referral", icon: Users },
+  { to: "/referral", label: "Rewards", icon: Trophy },
   { to: "/profile", label: "Profile", icon: User },
 ] as const;
 
@@ -38,7 +38,7 @@ export function BottomNav() {
             return (
               <Link key={to} to={to} className="flex w-16 flex-col items-center gap-1 py-1.5">
                 <Icon
-                  className={cn("size-[21px]", active ? "text-primary" : "text-muted-foreground")}
+                  className={cn("size-5.25", active ? "text-primary" : "text-muted-foreground")}
                   strokeWidth={active ? 2.2 : 1.7}
                 />
                 <span className={cn("text-[10px]", active ? "font-medium text-primary" : "text-muted-foreground")}>

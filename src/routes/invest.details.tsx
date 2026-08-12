@@ -59,8 +59,8 @@ function InvestDetails() {
         </Card>
 
         <Field
-          icon={DollarSign}
-          label="Amount to invest"
+          icon={"₦"}
+          label="Amount to Invest"
           inputMode="decimal"
           placeholder={`${plan.minAmount}`}
           value={raw}
@@ -84,7 +84,7 @@ function InvestDetails() {
         </Card>
 
         <Button full disabled={!valid} onClick={() => navigate({ to: "/invest/success" })}>
-          Confirm investment
+          Confirm
         </Button>
         <p className="pb-2 text-center text-[11px] text-muted-foreground">
           A 2% service fee is deducted from your wallet at activation.

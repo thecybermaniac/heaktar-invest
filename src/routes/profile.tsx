@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Bell, ChevronRight, LogOut, Moon, Shield, User, Wallet } from "lucide-react";
+import { ArrowDown, Bell, Building, ChevronRight, Headphones, History, LogOut, Moon, Sheet, Shield, Star, User, UserCheck, UserCheck2, Wallet } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Card, Field, Toggle } from "@/components/hk/ui";
 import { useApp } from "@/lib/app-store";
@@ -36,49 +36,31 @@ function ProfilePage() {
       </header>
 
       <section className="px-5 pt-6">
-        <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">Personal information</h2>
         <Card className="p-0">
           <div className="divide-y divide-border">
-            <Row label="Date of birth" value={profile.dob || "—"} />
-            <Row label="Gender" value={profile.gender || "—"} />
-            <Row label="Nationality" value={profile.nationality} />
-            <Row label="Address" value={[profile.address, profile.city, profile.state].filter(Boolean).join(", ") || "—"} />
-            <Row label="ID" value={`${profile.idType} · ${profile.idNumber}`} />
-            <Row label="Occupation" value={profile.occupation || "—"} />
-            <Row label="Employment" value={profile.employmentStatus} />
-            <Row label="Source of funds" value={profile.sourceOfFunds} />
-            <Row label="Experience" value={profile.experience} />
-            <Row label="Risk tolerance" value={profile.riskTolerance} />
+            <NavRow to="/notifications" icon={User} label="Personal Information" />
+            <NavRow to="/notifications" icon={Shield} label="Change Password" />
+            <NavRow to="/investments" icon={ArrowDown} label="Withdraw Funds" />
+            <NavRow to="/onboarding" icon={UserCheck2} label="Update KYC details" />
+                        <NavRow to="/investments" icon={Wallet} label="My Investments" />
           </div>
         </Card>
       </section>
 
       <section className="px-5 pt-6">
-        <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">Settings</h2>
         <Card className="p-0">
           <div className="divide-y divide-border">
             <div className="flex items-center gap-3 px-4 py-3.5">
-              <Moon className="size-[18px] text-muted-foreground" strokeWidth={1.8} />
+              <Moon className="size-4.5 text-muted-foreground" strokeWidth={1.8} />
               <span className="flex-1 text-[13px] font-medium">Dark mode</span>
               <Toggle checked={theme === "dark"} onChange={toggleTheme} />
             </div>
-            <button onClick={() => setPwOpen((o) => !o)} className="flex w-full items-center gap-3 px-4 py-3.5 text-left">
-              <Shield className="size-[18px] text-muted-foreground" strokeWidth={1.8} />
-              <span className="flex-1 text-[13px] font-medium">Change password</span>
-              <ChevronRight className="size-4 text-muted-foreground" />
-            </button>
-            {pwOpen && (
-              <div className="space-y-3 px-4 py-4">
-                <Field label="Current password" type="password" placeholder="••••••••" />
-                <Field label="New password" type="password" placeholder="At least 8 characters" />
-                <Button full onClick={() => setPwOpen(false)}>
-                  Update password
-                </Button>
-              </div>
-            )}
+            <NavRow to="/onboarding" icon={History} label="Transaction History" />
             <NavRow to="/notifications" icon={Bell} label="Notifications" />
-            <NavRow to="/investments" icon={Wallet} label="My investments" />
-            <NavRow to="/onboarding" icon={User} label="Update KYC details" />
+            <NavRow to="/onboarding" icon={Sheet} label="Account Statement" />
+            <NavRow to="/onboarding" icon={Headphones} label="Get Support" />
+            <NavRow to="/onboarding" icon={Star} label="Write a Review" />
+            <NavRow to="/onboarding" icon={Building} label="About Heaktar" />
           </div>
         </Card>
       </section>
@@ -106,7 +88,7 @@ function Row({ label, value }: { label: string; value: string }) {
 function NavRow({ to, icon: Icon, label }: { to: string; icon: typeof Bell; label: string }) {
   return (
     <Link to={to} className="flex items-center gap-3 px-4 py-3.5">
-      <Icon className="size-[18px] text-muted-foreground" strokeWidth={1.8} />
+      <Icon className="size-4.5 text-muted-foreground" strokeWidth={1.8} />
       <span className="flex-1 text-[13px] font-medium">{label}</span>
       <ChevronRight className="size-4 text-muted-foreground" />
     </Link>

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Screen } from "@/components/hk/shell";
-import { Card, StatusPill } from "@/components/hk/ui";
+import { Card, Metric, StatusPill } from "@/components/hk/ui";
 import { ACTIVE_INVESTMENTS, money } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +23,7 @@ function ActiveInvestments() {
   return (
     <Screen>
       <header className="px-5 pt-6">
-        <h1 className="text-xl font-semibold tracking-tight">My investments</h1>
+        <h1 className="text-xl font-semibold">My investments</h1>
         <p className="mt-1 text-sm text-muted-foreground">{ACTIVE_INVESTMENTS.length} plans currently running.</p>
       </header>
 
@@ -31,11 +31,11 @@ function ActiveInvestments() {
 
       <div className="grid grid-cols-2 gap-3 px-5">
         <Card className="p-3.5">
-          <span className="text-[11px] text-muted-foreground">Total staked</span>
+          <span className="text-[11px] text-muted-foreground">Total invested</span>
           <p className="mt-1 text-lg font-semibold">{money(totalStaked, 0)}</p>
         </Card>
         <Card className="p-3.5">
-          <span className="text-[11px] text-muted-foreground">Daily income</span>
+          <span className="text-[11px] text-muted-foreground">Total Profit</span>
           <p className="mt-1 text-lg font-semibold text-success">+{money(dailyTotal)}</p>
         </Card>
       </div>
@@ -76,23 +76,14 @@ function ActiveInvestments() {
   );
 }
 
-function Metric({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return (
-    <div className="rounded-xl bg-muted px-2 py-2">
-      <span className="block text-[10px] text-muted-foreground">{label}</span>
-      <span className={cn("mt-0.5 block text-[12px] font-semibold", accent && "text-success")}>{value}</span>
-    </div>
-  );
-}
-
 export function Tabs({ active }: { active: "active" | "history" }) {
   return (
     <div className="px-5 py-4">
-      <div className="flex gap-1 rounded-xl bg-input p-1">
+      <div className="flex gap-1 rounded bg-input p-1">
         <Link
           to="/investments"
           className={cn(
-            "h-10 flex-1 rounded-lg text-center text-xs font-medium leading-10 transition-all",
+            "h-10 flex-1 rounded text-center text-xs font-medium leading-10 transition-all",
             active === "active" ? "bg-card text-foreground shadow-card" : "text-muted-foreground",
           )}
         >
@@ -101,7 +92,7 @@ export function Tabs({ active }: { active: "active" | "history" }) {
         <Link
           to="/investments/history"
           className={cn(
-            "h-10 flex-1 rounded-lg text-center text-xs font-medium leading-10 transition-all",
+            "h-10 flex-1 rounded text-center text-xs font-medium leading-10 transition-all",
             active === "history" ? "bg-card text-foreground shadow-card" : "text-muted-foreground",
           )}
         >

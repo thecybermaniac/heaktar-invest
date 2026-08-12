@@ -33,7 +33,7 @@ function SelectPlan() {
               key={plan.id}
               onClick={() => setDraft({ planId: plan.id })}
               className={cn(
-                "w-full rounded-2xl border p-4 text-left transition-all",
+                "w-full rounded border p-4 text-left transition-all",
                 selected ? "border-primary bg-accent/40 shadow-card" : "border-border bg-card",
               )}
             >
@@ -77,7 +77,7 @@ function SelectPlan() {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl bg-muted px-2 py-2">
+    <div className="rounded bg-muted border border-border px-2 py-2">
       <span className="block text-[10px] text-muted-foreground">{label}</span>
       <span className="mt-0.5 block text-[11px] font-semibold">{value}</span>
     </div>

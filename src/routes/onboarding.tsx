@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, Briefcase, Building2, Check, CreditCard, Globe, Hash, Home, MapPin } from "lucide-react";
+import { ArrowLeft, Briefcase, Building2, Check, CreditCard, Globe, Hash, Home, IdCard, MapPin, Users } from "lucide-react";
 import { Button, Chips, DatePicker, Field, Segmented, Select } from "@/components/hk/ui";
 import { useApp, type Profile } from "@/lib/app-store";
 import { cn } from "@/lib/utils";
@@ -21,6 +21,7 @@ const STEPS = ["Personal", "Location", "Identity", "Financial", "Review"];
 
 const NATIONALITIES = ["Nigeria", "Ghana", "Kenya", "South Africa", "United Kingdom", "United States", "Canada"];
 const STATES = ["Lagos", "Abuja (FCT)", "Rivers", "Kano", "Oyo", "Enugu", "Kaduna"];
+const GENDER_OPTIONS = ["Female", "Male", "Other", "Prefer not to say"]
 
 function Onboarding() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ function Onboarding() {
             <>
               <Heading title="A bit about you" sub="We use this to verify your identity." />
               <DatePicker label="Date of birth" value={form.dob} onChange={(v) => set("dob", v)} />
-              <Chips label="Gender" value={form.gender} onChange={(v) => set("gender", v)} options={["Female", "Male", "Other", "Prefer not to say"]} />
+              <Select label="Gender" icon={Users} value={form.gender} onChange={(v) => set("gender", v)} options={GENDER_OPTIONS} placeholder="Select Gender" />
               <Select label="Nationality" icon={Globe} value={form.nationality} onChange={(v) => set("nationality", v)} options={NATIONALITIES} />
             </>
           )}
@@ -74,7 +75,7 @@ function Onboarding() {
           {step === 1 && (
             <>
               <Heading title="Where do you live?" sub="Your residential details." />
-              <Select label="State" icon={MapPin} value={form.state} onChange={(v) => set("state", v)} options={STATES} />
+              <Select label="State" icon={MapPin} value={form.state} onChange={(v) => set("state", v)} options={STATES} placeholder="Select State" />
               <Field icon={Building2} label="City" placeholder="Ikeja" value={form.city} onChange={(e) => set("city", e.target.value)} />
               <Field icon={Home} label="Residential address" placeholder="14 Allen Avenue" value={form.address} onChange={(e) => set("address", e.target.value)} />
             </>
@@ -84,7 +85,7 @@ function Onboarding() {
             <>
               <Heading title="Verify your identity" sub="Choose a government-issued document." />
               <Segmented label="ID type" value={form.idType} onChange={(v) => set("idType", v)} options={["National ID", "Passport", "Driver's License"]} />
-              <Field icon={Hash} label="ID number" placeholder="NIN-0000-0000" value={form.idNumber} onChange={(e) => set("idNumber", e.target.value)} />
+              <Field icon={IdCard} label="ID number" placeholder="NIN-0000-0000" value={form.idNumber} onChange={(e) => set("idNumber", e.target.value)} />
             </>
           )}
 
@@ -102,7 +103,7 @@ function Onboarding() {
           {step === 4 && (
             <>
               <Heading title="Review & confirm" sub="Check that everything looks right." />
-              <div className="divide-y divide-border rounded-2xl border border-border bg-card">
+              <div className="divide-y divide-border rounded border border-border bg-card">
                 <Row label="Name" value={`${form.firstName} ${form.lastName}`} />
                 <Row label="Date of birth" value={form.dob || "—"} />
                 <Row label="Gender" value={form.gender || "—"} />
@@ -118,7 +119,7 @@ function Onboarding() {
               <button
                 type="button"
                 onClick={() => setAgreed((a) => !a)}
-                className="flex w-full items-start gap-3 rounded-2xl border border-border bg-card p-4 text-left"
+                className="flex w-full items-start gap-3 rounded border border-border bg-card p-4 text-left"
               >
                 <span
                   className={cn(
@@ -154,7 +155,7 @@ function Onboarding() {
 
 function Heading({ title, sub }: { title: string; sub: string }) {
   return (
-    <div className="mb-2">
+    <div className="mb-6">
       <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
       <p className="mt-1 text-sm text-muted-foreground">{sub}</p>
     </div>

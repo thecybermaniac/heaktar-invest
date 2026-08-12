@@ -50,7 +50,7 @@ function Notifications() {
               key={n.id}
               onClick={() => setItems((prev) => prev.map((x) => (x.id === n.id ? { ...x, read: true } : x)))}
               className={cn(
-                "flex w-full gap-3 rounded-2xl border p-4 text-left transition-colors",
+                "flex w-full gap-3 rounded border p-4 text-left transition-colors",
                 n.read ? "border-border bg-card" : "border-primary/40 bg-accent/30",
               )}
             >
@@ -60,7 +60,7 @@ function Notifications() {
                   n.read ? "bg-muted text-muted-foreground" : "bg-primary text-primary-foreground",
                 )}
               >
-                <Icon className="size-[18px]" strokeWidth={1.9} />
+                <Icon className="size-4.5" strokeWidth={1.9} />
               </span>
               <span className="min-w-0 flex-1">
                 <span className="flex items-center gap-2">

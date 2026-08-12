@@ -228,4 +228,4 @@ export const BANK_ACCOUNTS = [
 export const fmt = (n: number, digits = 2) =>
   n.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits });
 
-export const money = (n: number, digits = 2) => `$${fmt(Math.abs(n), digits)}`;
+export const money = (n: number, digits = 2) => `₦${fmt(Math.abs(n), digits)}`;

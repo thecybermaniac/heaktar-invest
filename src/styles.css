@@ -1,8 +1,31 @@
-@import "tailwindcss" source(none);
-@source "../src";
+@import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: "Poppins";
+  src: url(/font/Poppins/Poppins-Regular.ttf);
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url(/font/Poppins/Poppins-Medium.ttf);
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url(/font/Poppins/Poppins-SemiBold.ttf);
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url(/font/Poppins/Poppins-Bold.ttf);
+  font-weight: 700;
+}
 
 @theme inline {
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
@@ -47,8 +70,8 @@
   --card-foreground: oklch(0.19 0.01 250);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.19 0.01 250);
-  --primary: oklch(0.596 0.145 152.5);
-  --primary-foreground: oklch(0.99 0 0);
+  --primary: oklch(43.389% 0.09856 153.405);
+  --primary-foreground: oklch(0.16 0.02 152);
   --secondary: oklch(0.965 0.006 250);
   --secondary-foreground: oklch(0.24 0.01 250);
   --muted: oklch(0.965 0.006 250);
@@ -75,7 +98,7 @@
   --popover: oklch(0.253 0 0);
   --popover-foreground: oklch(0.97 0 0);
   --primary: oklch(0.66 0.155 152.5);
-  --primary-foreground: oklch(0.16 0.02 152);
+  --primary-foreground: oklch(0.99 0 0);
   --secondary: oklch(0.3 0 0);
   --secondary-foreground: oklch(0.97 0 0);
   --muted: oklch(0.3 0 0);
@@ -115,4 +138,8 @@
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+button {
+  cursor: pointer;
 }
