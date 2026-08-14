@@ -3,6 +3,8 @@ import { useState } from "react";
 import { ArrowLeft, Briefcase, Building2, Check, CreditCard, Globe, Hash, Home, IdCard, MapPin, Users } from "lucide-react";
 import { Button, Chips, DatePicker, Field, Segmented, Select } from "@/components/hk/ui";
 import { useApp, type Profile } from "@/lib/app-store";
+import { useAuth } from "@/lib/auth";
+import { toast } from "@/components/hk/toast";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
@@ -26,6 +28,7 @@ const GENDER_OPTIONS = ["Female", "Male", "Other", "Prefer not to say"]
 function Onboarding() {
   const navigate = useNavigate();
   const { profile, setProfile } = useApp();
+  const { saveProfile } = useAuth();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<Profile>({ ...profile, dob: "", gender: "", state: "", city: "", address: "", idNumber: "", occupation: "" });
   const [agreed, setAgreed] = useState(false);
@@ -155,8 +158,8 @@ function Onboarding() {
               Back
             </Button>
           )}
-          <Button full onClick={next} disabled={step === STEPS.length - 1 && !agreed}>
-            {step === STEPS.length - 1 ? "Submit & continue" : "Next"}
+          <Button full onClick={() => void next()} disabled={saving || (step === STEPS.length - 1 && !agreed)}>
+            {step === STEPS.length - 1 ? (saving ? "Saving…" : "Submit & continue") : "Next"}
           </Button>
         </div>
       </div>
