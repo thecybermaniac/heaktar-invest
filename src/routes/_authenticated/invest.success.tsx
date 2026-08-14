@@ -5,7 +5,7 @@ import { Button, Card } from "@/components/hk/ui";
 import { PLANS, SERVICE_FEE_RATE, money } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
 
-export const Route = createFileRoute("/invest/success")({
+export const Route = createFileRoute("/_authenticated/invest/success")({
   head: () => ({
     meta: [
       { title: "Investment confirmed — Heaktar" },

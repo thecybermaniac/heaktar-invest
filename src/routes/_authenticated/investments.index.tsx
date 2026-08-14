@@ -4,7 +4,7 @@ import { Card, Metric, StatusPill } from "@/components/hk/ui";
 import { ACTIVE_INVESTMENTS, money } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/investments/")({
+export const Route = createFileRoute("/_authenticated/investments/")({
   head: () => ({
     meta: [
       { title: "Active investments — Heaktar" },

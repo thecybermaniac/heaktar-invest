@@ -6,7 +6,7 @@ import { PLANS, money } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/invest/")({
+export const Route = createFileRoute("/_authenticated/invest/")({
   head: () => ({
     meta: [
       { title: "Choose a plan — Heaktar" },

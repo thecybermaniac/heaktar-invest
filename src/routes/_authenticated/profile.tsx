@@ -4,8 +4,10 @@ import { ArrowDown, Bell, Building, ChevronRight, Headphones, History, LogOut, M
 import { Screen } from "@/components/hk/shell";
 import { Button, Card, Field, Toggle } from "@/components/hk/ui";
 import { useApp } from "@/lib/app-store";
+import { useAuth } from "@/lib/auth";
+import { toast } from "@/components/hk/toast";
 
-export const Route = createFileRoute("/profile")({
+export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
     meta: [
       { title: "Profile & settings — Heaktar" },
@@ -20,6 +22,7 @@ export const Route = createFileRoute("/profile")({
 function ProfilePage() {
   const navigate = useNavigate();
   const { profile, theme, toggleTheme } = useApp();
+  const { signOut } = useAuth();
   const [pwOpen, setPwOpen] = useState(false);
 
   return (
@@ -66,7 +69,11 @@ function ProfilePage() {
       </section>
 
       <div className="px-5 pt-6">
-        <Button variant="danger" full onClick={() => navigate({ to: "/" })}>
+        <Button variant="danger" full onClick={async () => {
+          await signOut();
+          toast.success("Signed out", "See you soon.");
+          navigate({ to: "/", replace: true });
+        }}>
           <LogOut className="size-4" />
           Log out
         </Button>

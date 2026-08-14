@@ -3,9 +3,11 @@ import { useState } from "react";
 import { ArrowLeft, Briefcase, Building2, Check, CreditCard, Globe, Hash, Home, IdCard, MapPin, Users } from "lucide-react";
 import { Button, Chips, DatePicker, Field, Segmented, Select } from "@/components/hk/ui";
 import { useApp, type Profile } from "@/lib/app-store";
+import { useAuth } from "@/lib/auth";
+import { toast } from "@/components/hk/toast";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/onboarding")({
+export const Route = createFileRoute("/_authenticated/onboarding")({
   head: () => ({
     meta: [
       { title: "Complete your profile — Heaktar" },
@@ -26,15 +28,27 @@ const GENDER_OPTIONS = ["Female", "Male", "Other", "Prefer not to say"]
 function Onboarding() {
   const navigate = useNavigate();
   const { profile, setProfile } = useApp();
+  const { saveProfile } = useAuth();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<Profile>({ ...profile, dob: "", gender: "", state: "", city: "", address: "", idNumber: "", occupation: "" });
   const [agreed, setAgreed] = useState(false);
   const set = (k: keyof Profile, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
-  const next = () => {
+  const [saving, setSaving] = useState(false);
+
+  const next = async () => {
     if (step < STEPS.length - 1) return setStep((s) => s + 1);
-    setProfile(form);
-    navigate({ to: "/dashboard" });
+    setSaving(true);
+    try {
+      await saveProfile({ ...form, onboardingCompleted: true });
+      setProfile(form);
+      toast.success("Profile saved", "Your account is ready to invest.");
+      navigate({ to: "/dashboard" });
+    } catch {
+      toast.error("Couldn't save your profile", "Please check your connection and try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -144,8 +158,8 @@ function Onboarding() {
               Back
             </Button>
           )}
-          <Button full onClick={next} disabled={step === STEPS.length - 1 && !agreed}>
-            {step === STEPS.length - 1 ? "Submit & continue" : "Next"}
+          <Button full onClick={() => void next()} disabled={saving || (step === STEPS.length - 1 && !agreed)}>
+            {step === STEPS.length - 1 ? (saving ? "Saving…" : "Submit & continue") : "Next"}
           </Button>
         </div>
       </div>

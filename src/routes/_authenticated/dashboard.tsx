@@ -20,7 +20,7 @@ import { ACTIVE_INVESTMENTS, ACTIVITIES, PERFORMANCE_30D, money } from "@/lib/da
 import { useMarketQuotes } from "@/hooks/use-market";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
       { title: "Dashboard — Heaktar" },
