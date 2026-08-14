@@ -6,7 +6,7 @@ import { AuthShell } from "@/components/hk/auth-layout";
 import { toast } from "@/components/hk/toast";
 import { supabase } from "@/integrations/supabase/client";
 
-type Search = { email?: string; mode?: "signup" | "reset" };
+type Search = { email: string | undefined; mode: "signup" | "reset" };
 
 export const Route = createFileRoute("/verify-email")({
   validateSearch: (search: Record<string, unknown>): Search => ({
