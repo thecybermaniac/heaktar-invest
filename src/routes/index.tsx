@@ -53,7 +53,7 @@ function Login() {
     if (error) {
       if (error.message.toLowerCase().includes("email not confirmed")) {
         toast.error("Email not verified", "Check your inbox for the verification link.");
-        navigate({ to: "/verify-email", search: { email: parsed.data.email } });
+        navigate({ to: "/verify-email", search: { email: parsed.data.email, mode: "signup" as const } });
         return;
       }
       toast.error("Couldn't sign you in", "Your email or password is incorrect.");
