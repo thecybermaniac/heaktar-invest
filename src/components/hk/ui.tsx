@@ -24,7 +24,7 @@ export function Button({
     <button
       className={cn(
         "inline-flex items-center justify-center gap-2 rounded font-medium transition-all cursor-pointer active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50",
-        size === "lg" && "h-12 px-5 text-sm",
+        size === "lg" && "h-12 px-5 text-xs",
         size === "md" && "h-10 px-4 text-sm",
         size === "sm" && "h-8 px-3 text-xs",
         variant === "primary" && "bg-primary text-primary-foreground hover:brightness-105",
@@ -71,7 +71,7 @@ export function Field({
 }: FieldProps) {
   return (
     <label className="block">
-      {label && <span className="mb-1.5 block text-xs text-muted-foreground">{label}</span>}
+      {label && <span className="mb-1.5 block text-xs font-medium text-muted-foreground">{label}</span>}
       <div
         className={cn(
           "flex h-12 items-center gap-2 rounded border bg-input px-3 transition-colors focus-within:border-primary focus-within:bg-card",

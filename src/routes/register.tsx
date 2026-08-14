@@ -165,7 +165,7 @@ function Register() {
           </span>
         </button>
 
-        <Button full type="submit" disabled={busy}>
+        <Button full type="submit" disabled={busy || !agreed}>
           {busy ? "Creating account…" : "Register"}
         </Button>
         <Divider />

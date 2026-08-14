@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import {
@@ -41,8 +41,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function Dashboard() {
   const { profile, balance, netInvestment, netProfit, unread } = useApp();
+  const navigate = useNavigate();
   const [hidden, setHidden] = useState(false);
-  const isDarkMode = false;
   const mask = (v: string) => (hidden ? "••••••" : v);
 
   return (
@@ -83,7 +83,7 @@ function Dashboard() {
               </button>
             </div>
 
-            <button className="flex bg-primary text-xs items-center py-2 px-4 rounded-full gap-1 tracking-wide">
+            <button className="flex bg-primary text-xs items-center py-2 px-4 rounded-full gap-1 tracking-wide" onClick={() => navigate({ to: "/deposit" })} >
               <Plus size={15} />
               Deposit
             </button>

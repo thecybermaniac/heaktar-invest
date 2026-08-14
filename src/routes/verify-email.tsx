@@ -75,7 +75,7 @@ function VerifyEmail() {
       }
     >
       <div className="mt-8 space-y-4">
-        <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4">
+        <div className="flex items-center gap-3 rounded border border-border bg-card p-4">
           <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent text-primary">
             <MailCheck className="size-5" />
           </span>
