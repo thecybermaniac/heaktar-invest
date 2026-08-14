@@ -22,6 +22,7 @@ import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authentic
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedReferralRouteImport } from './routes/_authenticated/referral'
 import { Route as AuthenticatedWithdrawRouteImport } from './routes/_authenticated/withdraw'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedInvestIndexRouteImport } from './routes/_authenticated/invest.index'
 import { Route as AuthenticatedInvestDetailsRouteImport } from './routes/_authenticated/invest.details'
 import { Route as AuthenticatedInvestSuccessRouteImport } from './routes/_authenticated/invest.success'
@@ -93,6 +94,11 @@ const AuthenticatedWithdrawRoute = AuthenticatedWithdrawRouteImport.update({
   path: '/withdraw',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedInvestIndexRoute =
   AuthenticatedInvestIndexRouteImport.update({
     id: '/invest/',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/referral': typeof AuthenticatedReferralRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/invest/details': typeof AuthenticatedInvestDetailsRoute
   '/invest/success': typeof AuthenticatedInvestSuccessRoute
   '/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/referral': typeof AuthenticatedReferralRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/invest/details': typeof AuthenticatedInvestDetailsRoute
   '/invest/success': typeof AuthenticatedInvestSuccessRoute
   '/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/referral': typeof AuthenticatedReferralRoute
   '/_authenticated/withdraw': typeof AuthenticatedWithdrawRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/_authenticated/invest/details': typeof AuthenticatedInvestDetailsRoute
   '/_authenticated/invest/success': typeof AuthenticatedInvestSuccessRoute
   '/_authenticated/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/referral'
     | '/withdraw'
+    | '/auth/callback'
     | '/invest/details'
     | '/invest/success'
     | '/investments/history'
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/referral'
     | '/withdraw'
+    | '/auth/callback'
     | '/invest/details'
     | '/invest/success'
     | '/investments/history'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/_authenticated/referral'
     | '/_authenticated/withdraw'
+    | '/auth/callback'
     | '/_authenticated/invest/details'
     | '/_authenticated/invest/success'
     | '/_authenticated/investments/history'
@@ -251,6 +263,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -346,6 +359,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWithdrawRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/invest/': {
       id: '/_authenticated/invest/'
       path: '/invest'
@@ -424,6 +444,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   VerifyEmailRoute: VerifyEmailRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
