@@ -31,10 +31,21 @@ function Onboarding() {
   const [agreed, setAgreed] = useState(false);
   const set = (k: keyof Profile, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
-  const next = () => {
+  const [saving, setSaving] = useState(false);
+
+  const next = async () => {
     if (step < STEPS.length - 1) return setStep((s) => s + 1);
-    setProfile(form);
-    navigate({ to: "/dashboard" });
+    setSaving(true);
+    try {
+      await saveProfile({ ...form, onboardingCompleted: true });
+      setProfile(form);
+      toast.success("Profile saved", "Your account is ready to invest.");
+      navigate({ to: "/dashboard" });
+    } catch {
+      toast.error("Couldn't save your profile", "Please check your connection and try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
