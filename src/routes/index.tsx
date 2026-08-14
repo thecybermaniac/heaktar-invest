@@ -84,7 +84,7 @@ function Login() {
           </Button>
         </form>
 
-        <p className="mt-auto pt-10 text-center text-sm text-muted-foreground">
+        <p className="pt-10 text-center text-sm text-muted-foreground">
           New to Heaktar?{" "}
           <Link to="/register" className="text-primary hover:underline">
             Register

@@ -54,7 +54,7 @@ function SelectPlan() {
               <p className="mt-1.5 text-xs text-muted-foreground">{plan.tagline}</p>
               <div className="mt-4 grid grid-cols-3 gap-2 text-center">
                 <Metric label="Term" value={`${plan.term} days`} />
-                <Metric label="Min / Max" value={`${money(plan.minAmount, 0)} – ${money(plan.maxAmount, 0)}`} />
+                <Metric label="Min Investment" value={`${money(plan.minAmount, 0)}`} />
                 <Metric label="Total return" value={`${plan.totalReturn}%`} />
               </div>
               <p className="mt-3 text-[11px] text-muted-foreground">

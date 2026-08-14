@@ -47,7 +47,7 @@ function Dashboard() {
 
   return (
     <Screen>
-      <header className="flex items-center justify-between px-5 pt-5">
+      <header className="flex items-center justify-between px-4 pt-5">
         <Link to="/profile" className="flex items-center gap-3">
           <span className="grid size-11 place-items-center rounded-full bg-border">
             <User />

@@ -42,7 +42,7 @@ function Notifications() {
           </button>
         }
       />
-      <div className="space-y-2 px-5 pt-4">
+      <div className="space-y-2 px-4 pt-4">
         {items.map((n) => {
           const Icon = ICONS[n.kind];
           return (
