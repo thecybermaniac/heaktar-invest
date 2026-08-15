@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, TrendingUp } from "lucide-react";
-import { toast } from "@/components/hk/toast";
 
 export function AuthShell({
   title,
