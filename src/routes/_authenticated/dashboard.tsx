@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import {
   ArrowDownLeft,
@@ -38,6 +38,111 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   }),
   component: Dashboard,
 });
+
+const AUTO_ADVANCE_MS = 5000;
+const SWIPE_THRESHOLD = 40;
+
+function ActivePlansCarousel({ investments }: { investments: typeof ACTIVE_INVESTMENTS }) {
+  const [index, setIndex] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const total = investments.length;
+
+  useEffect(() => {
+    if (total <= 1) return;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % total);
+    }, AUTO_ADVANCE_MS);
+    return () => clearInterval(id);
+    // restarting on every index change means a manual swipe/dot click
+    // resets the auto-advance timer, instead of firing right after
+  }, [total, index]);
+
+  function goTo(i: number) {
+    setIndex(((i % total) + total) % total);
+  }
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    const startX = touchStartX.current;
+    if (startX === null) return;
+
+    const touch = e.changedTouches[0];
+    if (!touch) {
+      touchStartX.current = null;
+      return;
+    }
+
+    const delta = touch.clientX - startX;
+    if (delta > SWIPE_THRESHOLD) goTo(index - 1);
+    else if (delta < -SWIPE_THRESHOLD) goTo(index + 1);
+    touchStartX.current = null;
+  }
+
+  return (
+    <div>
+      <div
+        className="overflow-hidden px-5"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div
+          className="flex transition-transform duration-300 ease-out"
+          style={{ transform: `translateX(-${index * 100}%)` }}
+        >
+          {investments.map((inv) => {
+            const pct = Math.round((inv.daysElapsed / inv.term) * 100);
+            return (
+              <div key={inv.id} className="w-full shrink-0 px-1.5 first:pl-0 last:pr-0">
+                <Card>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-[15px] font-semibold">{inv.planName}</h2>
+                      <p className="text-[11px] text-muted-foreground">Started {inv.startedAt}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+                    <Metric label="Invested" value={money(inv.amount, 0)} />
+                    <Metric label="Daily return" value={`+${money(inv.dailyReturn)}`} accent />
+                    <Metric label="Earned" value={money(inv.earned)} />
+                  </div>
+
+                  <div className="mt-4">
+                    <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-input">
+                      <div
+                        className="h-full rounded-full bg-gradient-brand"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {total > 1 && (
+        <div className="mt-3 flex justify-center gap-1.5">
+          {investments.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to plan ${i + 1}`}
+              onClick={() => goTo(i)}
+              className={cn(
+                "h-1.5 rounded-full transition-all",
+                i === index ? "w-4 bg-primary" : "w-1.5 bg-border",
+              )}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function Dashboard() {
   const { profile, balance, netInvestment, netProfit, unread } = useApp();
@@ -83,7 +188,10 @@ function Dashboard() {
               </button>
             </div>
 
-            <button className="flex bg-primary text-xs items-center py-2 px-4 rounded-full gap-1 tracking-wide" onClick={() => navigate({ to: "/deposit" })} >
+            <button
+              className="flex bg-primary text-xs items-center py-2 px-4 rounded-full gap-1 tracking-wide"
+              onClick={() => navigate({ to: "/deposit" })}
+            >
               <Plus size={15} />
               Deposit
             </button>
@@ -117,36 +225,7 @@ function Dashboard() {
             See all
           </Link>
         </div>
-        <div className="no-scrollbar mt-3 flex gap-2 overflow-x-auto px-5 pb-1">
-          {ACTIVE_INVESTMENTS.map((inv) => {
-            const pct = Math.round((inv.daysElapsed / inv.term) * 100);
-            return (
-              <Card key={inv.id} className="min-w-full">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-[15px] font-semibold">{inv.planName}</h2>
-                    <p className="text-[11px] text-muted-foreground">Started {inv.startedAt}</p>
-                  </div>
-                </div>
-
-                <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-                  <Metric label="Invested" value={money(inv.amount, 0)} />
-                  <Metric label="Daily return" value={`+${money(inv.dailyReturn)}`} accent />
-                  <Metric label="Earned" value={money(inv.earned)} />
-                </div>
-
-                <div className="mt-4">
-                  <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-input">
-                    <div
-                      className="h-full rounded-full bg-gradient-brand"
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+        <ActivePlansCarousel investments={ACTIVE_INVESTMENTS} />
       </section>
 
       <section className="px-5 pt-6">

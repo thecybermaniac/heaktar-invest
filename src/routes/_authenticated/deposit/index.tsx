@@ -1,12 +1,14 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, DollarSign } from "lucide-react";
+import { Check } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
-import { Button, Card, Field, PageHeader } from "@/components/hk/ui";
+import { Button, Field, PageHeader } from "@/components/hk/ui";
 import { PAYMENT_METHODS, money } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { initializeDeposit } from "@/lib/paystack.server";
+import { useAuth } from "@/lib/auth";
 
-export const Route = createFileRoute("/_authenticated/deposit")({
+export const Route = createFileRoute("/_authenticated/deposit/")({
   head: () => ({
     meta: [
       { title: "Deposit funds — Heaktar" },
@@ -26,11 +28,27 @@ export const Route = createFileRoute("/_authenticated/deposit")({
 });
 
 function Deposit() {
-  const navigate = useNavigate();
+  const { user } = useAuth();
   const [amount, setAmount] = useState("");
   const [method, setMethod] = useState("bank");
-  const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const value = Number(amount) || 0;
+
+  async function handleDeposit() {
+    if (value <= 0 || !user?.email) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { authorizationUrl } = await initializeDeposit({
+        data: { amount: value, email: user.email, method: method as any },
+      });
+      window.location.href = authorizationUrl;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Try again.");
+      setLoading(false);
+    }
+  }
 
   return (
     <Screen>
@@ -89,25 +107,11 @@ function Deposit() {
           ))}
         </div>
 
-        {done ? (
-          <Card className="border-primary bg-accent/40">
-            <p className="text-[13px] font-medium text-accent-foreground">
-              Deposit of {money(value)} initiated. We'll notify you once it clears.
-            </p>
-            <Button
-              variant="outline"
-              full
-              className="mt-3"
-              onClick={() => navigate({ to: "/dashboard" })}
-            >
-              Back to dashboard
-            </Button>
-          </Card>
-        ) : (
-          <Button full disabled={value <= 0} onClick={() => setDone(true)}>
-            Continue Deposit
-          </Button>
-        )}
+        {error && <p className="text-[13px] font-medium text-destructive">{error}</p>}
+
+        <Button full disabled={value <= 0 || loading} onClick={handleDeposit}>
+          {loading ? "Redirecting to Paystack…" : "Continue Deposit"}
+        </Button>
       </div>
     </Screen>
   );
