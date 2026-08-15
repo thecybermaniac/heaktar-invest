@@ -145,3 +145,23 @@
 button {
   cursor: pointer;
 }
+
+/* Autofill: keep the field's own (transparent) background — unlayered so it beats UA styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-foreground) !important;
+  caret-color: var(--color-foreground);
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  transition: background-color 9999s ease-in-out 0s !important;
+}
+
+input:autofill,
+textarea:autofill {
+  background-color: transparent !important;
+  color: var(--color-foreground) !important;
+}
