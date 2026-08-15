@@ -132,24 +132,8 @@
     overscroll-behavior-y: none;
   }
 
-  /* Keep themed background on autofilled inputs (Chrome/Safari/Edge) */
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
-    -webkit-text-fill-color: var(--color-foreground);
-    caret-color: var(--color-foreground);
-    transition: background-color 9999s ease-in-out 0s;
-    -webkit-box-shadow: 0 0 0 1000px var(--color-input) inset;
-    box-shadow: 0 0 0 1000px var(--color-input) inset;
-  }
-
-  /* Firefox autofill */
-  input:autofill {
-    background-color: var(--color-input);
-    color: var(--color-foreground);
-  }
 }
+
 
 @utility no-scrollbar {
   scrollbar-width: none;
