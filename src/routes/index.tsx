@@ -6,6 +6,7 @@ import { AuthShell } from "@/components/hk/auth-layout";
 import { toast } from "@/components/hk/toast";
 import { supabase } from "@/integrations/supabase/client";
 import { loginSchema, firstIssue } from "@/lib/validation";
+import { landingRouteFor } from "@/lib/onboarding";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,8 +35,10 @@ function Login() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    void supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard", replace: true });
+    void supabase.auth.getSession().then(async ({ data }) => {
+      if (!data.session) return;
+      const to = await landingRouteFor(data.session.user.id);
+      navigate({ to, replace: true });
     });
   }, [navigate]);
 
@@ -48,9 +51,9 @@ function Login() {
       return;
     }
     setBusy(true);
-    const { error } = await supabase.auth.signInWithPassword(parsed.data);
-    setBusy(false);
+    const { data: signIn, error } = await supabase.auth.signInWithPassword(parsed.data);
     if (error) {
+      setBusy(false);
       if (error.message.toLowerCase().includes("email not confirmed")) {
         toast.error("Email not verified", "Check your inbox for the verification link.");
         navigate({ to: "/verify-email", search: { email: parsed.data.email, mode: "signup" as const } });
@@ -59,8 +62,14 @@ function Login() {
       toast.error("Couldn't sign you in", "Your email or password is incorrect.");
       return;
     }
-    toast.success("Welcome back", "Taking you to your dashboard.");
-    navigate({ to: "/dashboard" });
+    const to = await landingRouteFor(signIn.user.id);
+    setBusy(false);
+    if (to === "/onboarding") {
+      toast.success("Welcome back", "Let's finish setting up your profile.");
+    } else {
+      toast.success("Welcome back", "Taking you to your dashboard.");
+    }
+    navigate({ to, replace: true });
   }
 
   return (
