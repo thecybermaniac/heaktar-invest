@@ -132,24 +132,8 @@
     overscroll-behavior-y: none;
   }
 
-  /* Keep themed background on autofilled inputs (Chrome/Safari/Edge) */
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
-    -webkit-text-fill-color: var(--color-foreground);
-    caret-color: var(--color-foreground);
-    transition: background-color 9999s ease-in-out 0s;
-    -webkit-box-shadow: 0 0 0 1000px var(--color-input) inset;
-    box-shadow: 0 0 0 1000px var(--color-input) inset;
-  }
-
-  /* Firefox autofill */
-  input:autofill {
-    background-color: var(--color-input);
-    color: var(--color-foreground);
-  }
 }
+
 
 @utility no-scrollbar {
   scrollbar-width: none;
@@ -160,4 +144,24 @@
 
 button {
   cursor: pointer;
+}
+
+/* Autofill: keep the field's own (transparent) background — unlayered so it beats UA styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-foreground) !important;
+  caret-color: var(--color-foreground);
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  transition: background-color 9999s ease-in-out 0s !important;
+}
+
+input:autofill,
+textarea:autofill {
+  background-color: transparent !important;
+  color: var(--color-foreground) !important;
 }
