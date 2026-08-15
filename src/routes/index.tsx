@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Button, Field } from "@/components/hk/ui";
-import { AuthShell, Divider, GoogleButton } from "@/components/hk/auth-layout";
+import { AuthShell } from "@/components/hk/auth-layout";
 import { toast } from "@/components/hk/toast";
 import { supabase } from "@/integrations/supabase/client";
 import { loginSchema, firstIssue } from "@/lib/validation";
@@ -112,8 +112,6 @@ function Login() {
         <Button full type="submit" disabled={busy}>
           {busy ? "Signing in…" : "Log In"}
         </Button>
-        <Divider />
-        <GoogleButton label="Sign in with Google" />
       </form>
     </AuthShell>
   );

@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Mail, Lock, User, Gift, Eye, EyeOff, Check } from "lucide-react";
 import { Button, Field } from "@/components/hk/ui";
-import { AuthShell, Divider, GoogleButton } from "@/components/hk/auth-layout";
+import { AuthShell } from "@/components/hk/auth-layout";
 import { toast } from "@/components/hk/toast";
 import { supabase } from "@/integrations/supabase/client";
 import { registerSchema, firstIssue } from "@/lib/validation";
@@ -168,8 +168,6 @@ function Register() {
         <Button full type="submit" disabled={busy || !agreed}>
           {busy ? "Creating account…" : "Register"}
         </Button>
-        <Divider />
-        <GoogleButton label="Sign up with Google" />
       </form>
     </AuthShell>
   );
