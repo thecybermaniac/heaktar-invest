@@ -53,27 +53,36 @@ export function BottomNav() {
   );
 }
 
+const TAB_PATHS = ["/dashboard", "/investments", "/investments/history", "/invest", "/referral", "/profile"];
+
+function isTabRoute(pathname: string) {
+  return TAB_PATHS.includes(pathname.replace(/\/$/, "") || "/");
+}
+
 export function Screen({
   children,
-  nav = true,
+  nav,
   className,
 }: {
   children: ReactNode;
   nav?: boolean;
   className?: string;
 }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const showNav = nav ?? isTabRoute(pathname);
   return (
     <div className="flex min-h-screen justify-center bg-surface">
       <div
         className={cn(
           "relative w-full max-w-md bg-background",
-          nav ? "pb-28" : "pb-8",
+          showNav ? "pb-28" : "pb-8",
           className,
         )}
       >
         {children}
-        {nav && <BottomNav />}
+        {showNav && <BottomNav />}
       </div>
     </div>
   );
 }
+
