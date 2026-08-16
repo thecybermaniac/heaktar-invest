@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Briefcase, Building2, Check, CreditCard, Globe, Hash, Home, IdCard, MapPin, Users } from "lucide-react";
 import { Button, Chips, DatePicker, Field, Segmented, Select } from "@/components/hk/ui";
 import { useApp, type Profile } from "@/lib/app-store";
@@ -23,20 +23,48 @@ const STEPS = ["Personal", "Location", "Identity", "Financial", "Review"];
 
 const NATIONALITIES = ["Nigeria", "Ghana", "Kenya", "South Africa", "United Kingdom", "United States", "Canada"];
 const STATES = ["Lagos", "Abuja (FCT)", "Rivers", "Kano", "Oyo", "Enugu", "Kaduna"];
-const GENDER_OPTIONS = ["Female", "Male", "Other", "Prefer not to say"]
+const GENDER_OPTIONS = ["Female", "Male", "Other", "Prefer not to say"];
+
+const REQUIRED: [keyof Profile, string][][] = [
+  [["dob", "date of birth"], ["gender", "gender"], ["nationality", "nationality"]],
+  [["state", "state"], ["city", "city"], ["address", "residential address"]],
+  [["idType", "ID type"], ["idNumber", "ID number"]],
+  [
+    ["occupation", "occupation"],
+    ["employmentStatus", "employment status"],
+    ["sourceOfFunds", "primary source of funds"],
+    ["experience", "investment experience"],
+    ["riskTolerance", "risk tolerance"],
+  ],
+  [],
+];
 
 function Onboarding() {
   const navigate = useNavigate();
   const { profile, setProfile } = useApp();
-  const { saveProfile } = useAuth();
+  const { saveProfile, signOut } = useAuth();
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState<Profile>({ ...profile, dob: "", gender: "", state: "", city: "", address: "", idNumber: "", occupation: "" });
+  const [form, setForm] = useState<Profile>(profile);
   const [agreed, setAgreed] = useState(false);
-  const set = (k: keyof Profile, v: string) => setForm((f) => ({ ...f, [k]: v }));
+  const touched = useRef(false);
+  const set = (k: keyof Profile, v: string) => {
+    touched.current = true;
+    setForm((f) => ({ ...f, [k]: v }));
+  };
+
+  // Prefill from the saved profile once it arrives, unless the user already typed.
+  useEffect(() => {
+    if (!touched.current) setForm(profile);
+  }, [profile]);
 
   const [saving, setSaving] = useState(false);
 
   const next = async () => {
+    const missing = REQUIRED[step]?.find(([key]) => !String(form[key] ?? "").trim());
+    if (missing) {
+      toast.error("Missing information", `Please provide your ${missing[1]}.`);
+      return;
+    }
     if (step < STEPS.length - 1) return setStep((s) => s + 1);
     setSaving(true);
     try {
@@ -56,7 +84,10 @@ function Onboarding() {
       <div className="flex w-full max-w-md flex-col bg-background px-6 pb-10 pt-12">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => (step === 0 ? navigate({ to: "/register" }) : setStep((s) => s - 1))}
+            onClick={() => {
+              if (step > 0) return setStep((s) => s - 1);
+              void signOut().then(() => navigate({ to: "/", replace: true }));
+            }}
             className="grid size-9 place-items-center rounded-full border border-border bg-card"
             aria-label="Back"
           >

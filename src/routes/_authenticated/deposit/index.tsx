@@ -5,7 +5,7 @@ import { Screen } from "@/components/hk/shell";
 import { Button, Field, PageHeader } from "@/components/hk/ui";
 import { PAYMENT_METHODS, money } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { initializeDeposit } from "@/lib/paystack.server";
+import { initializeDeposit } from "@/lib/paystack.functions";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/_authenticated/deposit/")({
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/_authenticated/deposit/")({
 function Deposit() {
   const { user } = useAuth();
   const [amount, setAmount] = useState("");
-  const [method, setMethod] = useState("bank");
+  const [method, setMethod] = useState<"card" | "bank_transfer">("bank_transfer");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const value = Number(amount) || 0;
@@ -41,7 +41,7 @@ function Deposit() {
     setError(null);
     try {
       const { authorizationUrl } = await initializeDeposit({
-        data: { amount: value, email: user.email, method: method as any },
+        data: { amount: value, email: user.email, method },
       });
       window.location.href = authorizationUrl;
     } catch (err) {
@@ -62,7 +62,7 @@ function Deposit() {
             {PAYMENT_METHODS.map((m) => (
               <button
                 key={m.id}
-                onClick={() => setMethod(m.id)}
+                onClick={() => setMethod(m.id as "card" | "bank_transfer")}
                 className={cn(
                   "flex w-full items-center justify-between rounded border p-4 text-left",
                   method === m.id ? "border-primary bg-accent/40" : "border-border bg-card",
