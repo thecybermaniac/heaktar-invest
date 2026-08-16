@@ -53,7 +53,7 @@ export function BottomNav() {
   );
 }
 
-const TAB_PATHS = ["/dashboard", "/investments", "/invest", "/referral", "/profile"];
+const TAB_PATHS = ["/dashboard", "/investments", "/investments/history", "/invest", "/referral", "/profile"];
 
 function isTabRoute(pathname: string) {
   return TAB_PATHS.includes(pathname.replace(/\/$/, "") || "/");
