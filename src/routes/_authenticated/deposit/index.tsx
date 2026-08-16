@@ -62,7 +62,7 @@ function Deposit() {
             {PAYMENT_METHODS.map((m) => (
               <button
                 key={m.id}
-                onClick={() => setMethod(m.id)}
+                onClick={() => setMethod(m.id as "card" | "bank_transfer")}
                 className={cn(
                   "flex w-full items-center justify-between rounded border p-4 text-left",
                   method === m.id ? "border-primary bg-accent/40" : "border-border bg-card",
