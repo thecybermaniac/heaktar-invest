@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { Screen } from "@/components/hk/shell";
 import { PageHeader } from "@/components/hk/ui";
-import { checkDepositStatus } from "@/lib/paystack.server";
+import { checkDepositStatus } from "@/lib/paystack.functions";
 
 export const Route = createFileRoute("/_authenticated/deposit/callback")({
   validateSearch: (search: Record<string, unknown>) => ({
