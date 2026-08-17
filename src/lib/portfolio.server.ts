@@ -22,6 +22,8 @@ export type InvestmentView = {
   planId: string;
   planName: string;
   amount: number;
+  fee: number;
+  totalReturn: number;
   dailyReturn: number;
   startedAt: string;
   term: number;
@@ -127,6 +129,8 @@ function toInvestmentView(
     planId: inv.plan_id,
     planName: inv.plan_name,
     amount,
+    fee: Number(inv.fee),
+    totalReturn: Number(inv.total_return),
     dailyReturn: daily,
     startedAt: new Date(inv.started_at).toISOString().slice(0, 10),
     term: inv.term_days,
