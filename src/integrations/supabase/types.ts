@@ -14,6 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
+      investments: {
+        Row: {
+          amount: number
+          completed_at: string | null
+          created_at: string
+          daily_return: number
+          fee: number
+          id: string
+          plan_id: string
+          plan_name: string
+          started_at: string
+          status: string
+          term_days: number
+          total_return: number
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          completed_at?: string | null
+          created_at?: string
+          daily_return: number
+          fee?: number
+          id?: string
+          plan_id: string
+          plan_name: string
+          started_at?: string
+          status?: string
+          term_days: number
+          total_return: number
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          completed_at?: string | null
+          created_at?: string
+          daily_return?: number
+          fee?: number
+          id?: string
+          plan_id?: string
+          plan_name?: string
+          started_at?: string
+          status?: string
+          term_days?: number
+          total_return?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investments_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plans: {
+        Row: {
+          active: boolean
+          created_at: string
+          daily_interest: number
+          deposit_returned: boolean
+          id: string
+          max_amount: number
+          min_amount: number
+          name: string
+          sort_order: number
+          tagline: string
+          term_days: number
+          total_return: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          daily_interest: number
+          deposit_returned?: boolean
+          id: string
+          max_amount: number
+          min_amount: number
+          name: string
+          sort_order?: number
+          tagline?: string
+          term_days: number
+          total_return: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          daily_interest?: number
+          deposit_returned?: boolean
+          id?: string
+          max_amount?: number
+          min_amount?: number
+          name?: string
+          sort_order?: number
+          tagline?: string
+          term_days?: number
+          total_return?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           address: string | null
@@ -88,6 +189,50 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          investment_id: string | null
+          label: string
+          reference: string | null
+          status: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          investment_id?: string | null
+          label?: string
+          reference?: string | null
+          status?: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          investment_id?: string | null
+          label?: string
+          reference?: string | null
+          status?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_investment_id_fkey"
+            columns: ["investment_id"]
+            isOneToOne: false
+            referencedRelation: "investments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

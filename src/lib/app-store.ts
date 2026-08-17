@@ -47,9 +47,6 @@ type AppState = {
   toggleTheme: () => void;
   profile: Profile;
   setProfile: (p: Partial<Profile>) => void;
-  balance: number;
-  netInvestment: number;
-  netProfit: number;
   draft: Draft;
   setDraft: (d: Partial<Draft>) => void;
   unread: number;
@@ -80,9 +77,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
       toggleTheme: () => setTheme((t) => (t === "dark" ? "light" : "dark")),
       profile,
       setProfile: (p) => setProfileState((prev) => ({ ...prev, ...p })),
-      balance: 12680.45,
-      netInvestment: 10500,
-      netProfit: 3247.8,
       draft,
       setDraft: (d) => setDraftState((prev) => ({ ...prev, ...d })),
       unread,

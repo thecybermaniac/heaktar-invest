@@ -16,7 +16,9 @@ import {
 import { Screen } from "@/components/hk/shell";
 import { Card, Metric, StatusPill } from "@/components/hk/ui";
 import { useApp } from "@/lib/app-store";
-import { ACTIVE_INVESTMENTS, ACTIVITIES, PERFORMANCE_30D, money } from "@/lib/data";
+import { money } from "@/lib/data";
+import { usePortfolio } from "@/hooks/use-portfolio";
+import type { InvestmentView } from "@/lib/portfolio.server";
 import { useMarketQuotes } from "@/hooks/use-market";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +44,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 const AUTO_ADVANCE_MS = 5000;
 const SWIPE_THRESHOLD = 40;
 
-function ActivePlansCarousel({ investments }: { investments: typeof ACTIVE_INVESTMENTS }) {
+function ActivePlansCarousel({ investments }: { investments: InvestmentView[] }) {
   const [index, setIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
   const total = investments.length;
@@ -145,7 +147,14 @@ function ActivePlansCarousel({ investments }: { investments: typeof ACTIVE_INVES
 }
 
 function Dashboard() {
-  const { profile, balance, netInvestment, netProfit, unread } = useApp();
+  const { profile, unread } = useApp();
+  const { data: portfolio, isPending } = usePortfolio();
+  const balance = portfolio?.balance ?? 0;
+  const netInvestment = portfolio?.netInvestment ?? 0;
+  const netProfit = portfolio?.netProfit ?? 0;
+  const active = portfolio?.active ?? [];
+  const performance = portfolio?.performance ?? [];
+  const changePct = portfolio?.performanceChangePct ?? 0;
   const navigate = useNavigate();
   const [hidden, setHidden] = useState(false);
   const mask = (v: string) => (hidden ? "••••••" : v);
@@ -198,7 +207,7 @@ function Dashboard() {
           </div>
 
           <p className="mt-1 text-[34px] font-semibold leading-tight tracking-tight text-foreground dark:text-primary-foreground">
-            {mask(money(balance))}
+            {isPending ? "—" : mask(money(balance))}
           </p>
 
           <div className="mt-5 grid grid-cols-2 gap-3">
@@ -225,7 +234,23 @@ function Dashboard() {
             See all
           </Link>
         </div>
-        <ActivePlansCarousel investments={ACTIVE_INVESTMENTS} />
+        {active.length > 0 ? (
+          <ActivePlansCarousel investments={active} />
+        ) : (
+          <div className="px-5">
+            <Card>
+              <p className="text-[13px] text-muted-foreground">
+                No active plans yet. Pick a plan to start earning daily.
+              </p>
+              <Link
+                to="/invest"
+                className="mt-3 inline-block text-xs font-medium text-primary hover:underline"
+              >
+                Browse plans
+              </Link>
+            </Card>
+          </div>
+        )}
       </section>
 
       <section className="px-5 pt-6">
@@ -235,11 +260,11 @@ function Dashboard() {
               <h2 className="text-sm font-medium">Performance</h2>
               <p className="text-[11px] text-muted-foreground">Trailing 1 month</p>
             </div>
-            <StatusPill tone="success">+23.7%</StatusPill>
+            <StatusPill tone={changePct < 0 ? "muted" : "success"}>{`${changePct >= 0 ? "+" : ""}${changePct}%`}</StatusPill>
           </div>
           <div className="mt-4 h-40">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={PERFORMANCE_30D} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
+              <AreaChart data={performance} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
                 <defs>
                   <linearGradient id="perf" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.35} />
