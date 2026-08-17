@@ -166,8 +166,11 @@ export async function getPortfolio(supabase: DB, userId: string): Promise<Portfo
   const history = investments.filter((i) => i.status === "completed");
 
   const txs = txRows ?? [];
+  // pending debits (withdrawals in flight) are held against the balance
+  const counts = (status: string, amount: number) =>
+    status === "completed" || (status === "pending" && amount < 0);
   const balance = txs
-    .filter((t) => t.status === "completed")
+    .filter((t) => counts(t.status, Number(t.amount)))
     .reduce((sum, t) => sum + Number(t.amount), 0);
 
   const netInvestment = active.reduce((s, i) => s + i.amount, 0);
@@ -193,7 +196,7 @@ export async function getPortfolio(supabase: DB, userId: string): Promise<Portfo
   for (let offset = 29; offset >= 0; offset--) {
     const at = new Date(now.getTime() - offset * DAY_MS);
     const cash = txs
-      .filter((t) => t.status === "completed" && new Date(t.created_at) <= at)
+      .filter((t) => counts(t.status, Number(t.amount)) && new Date(t.created_at) <= at)
       .reduce((s, t) => s + Number(t.amount), 0);
 
     const locked = (invRows ?? [])
