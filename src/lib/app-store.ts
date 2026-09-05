@@ -40,6 +40,18 @@ export const DEFAULT_PROFILE: Profile = {
   riskTolerance: "Balanced",
 };
 
+export type InvestmentConfirmation = {
+  id: string;
+  planId: string;
+  planName: string;
+  amount: number;
+  fee: number;
+  dailyReturn: number;
+  term: number;
+  maturityPayout: number;
+  reference: string;
+};
+
 type Draft = { planId: string | null; amount: number };
 
 type AppState = {
@@ -49,6 +61,8 @@ type AppState = {
   setProfile: (p: Partial<Profile>) => void;
   draft: Draft;
   setDraft: (d: Partial<Draft>) => void;
+  lastInvestment: InvestmentConfirmation | null;
+  setLastInvestment: (investment: InvestmentConfirmation | null) => void;
   unread: number;
   markAllRead: () => void;
 };
@@ -59,6 +73,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [profile, setProfileState] = useState<Profile>(DEFAULT_PROFILE);
   const [draft, setDraftState] = useState<Draft>({ planId: null, amount: 0 });
+  const [lastInvestment, setLastInvestment] = useState<InvestmentConfirmation | null>(null);
   const [unread, setUnread] = useState(3);
 
   useEffect(() => {
@@ -79,10 +94,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setProfile: (p) => setProfileState((prev) => ({ ...prev, ...p })),
       draft,
       setDraft: (d) => setDraftState((prev) => ({ ...prev, ...d })),
+      lastInvestment,
+      setLastInvestment,
       unread,
       markAllRead: () => setUnread(0),
     }),
-    [theme, profile, draft, unread],
+    [theme, profile, draft, lastInvestment, unread],
   );
 
   return createElement(Ctx.Provider, { value }, children);

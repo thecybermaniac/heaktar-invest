@@ -296,7 +296,7 @@ function Dashboard() {
         </Card>
       </section>
 
-      {/* <section className="px-5 pt-6">
+      <section className="px-5 pt-6">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-medium">Recent Activity</h2>
           <Link
@@ -307,7 +307,7 @@ function Dashboard() {
           </Link>
         </div>
         <div className="space-y-2">
-          {ACTIVITIES.map((a) => {
+          {(portfolio?.activities ?? []).map((a) => {
             const positive = a.amount > 0;
             const Icon =
               a.type === "deposit"
@@ -353,8 +353,13 @@ function Dashboard() {
               </div>
             );
           })}
+          {!isPending && (portfolio?.activities.length ?? 0) === 0 && (
+            <Card>
+              <p className="text-[13px] text-muted-foreground">Your deposits, investments and payouts will appear here.</p>
+            </Card>
+          )}
         </div>
-      </section> */}
+      </section>
     </Screen>
   );
 }
