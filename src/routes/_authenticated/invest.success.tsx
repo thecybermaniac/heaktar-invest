@@ -1,8 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check } from "lucide-react";
+import { useEffect } from "react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Card } from "@/components/hk/ui";
-import { PLANS, SERVICE_FEE_RATE, money } from "@/lib/data";
+import { money } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
 
 export const Route = createFileRoute("/_authenticated/invest/success")({
@@ -19,10 +20,13 @@ export const Route = createFileRoute("/_authenticated/invest/success")({
 
 function InvestSuccess() {
   const navigate = useNavigate();
-  const { draft } = useApp();
-  const plan = PLANS.find((p) => p.id === draft.planId) ?? PLANS[0]!;
-  const amount = draft.amount || plan.minAmount;
-  const daily = (amount * plan.dailyInterest) / 100;
+  const { lastInvestment } = useApp();
+
+  useEffect(() => {
+    if (!lastInvestment) navigate({ to: "/invest", replace: true });
+  }, [lastInvestment, navigate]);
+
+  if (!lastInvestment) return null;
 
   return (
     <Screen>
@@ -34,20 +38,20 @@ function InvestSuccess() {
         </span>
         <h1 className="mt-6 text-xl font-semibold tracking-tight">Investment activated</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
-          Your {plan.name} plan is live. First payout lands within 24 hours.
+           Your {lastInvestment.planName} plan is live. First payout lands within 24 hours.
         </p>
       </div>
 
       <div className="px-5 pt-8">
         <Card>
           <div className="divide-y divide-border">
-            <Row label="Plan" value={plan.name} />
-            <Row label="Amount" value={money(amount)} />
-            <Row label="Service fee (2%)" value={money(amount * SERVICE_FEE_RATE)} />
-            <Row label="Daily payout" value={money(daily)} />
-            <Row label="Term" value={`${plan.term} days`} />
-            <Row label="Maturity payout" value={money(amount + (amount * plan.totalReturn) / 100)} />
-            <Row label="Reference" value={`HK-${Math.floor(Math.random() * 900000 + 100000)}`} />
+             <Row label="Plan" value={lastInvestment.planName} />
+             <Row label="Amount" value={money(lastInvestment.amount)} />
+             <Row label="Service fee (2%)" value={money(lastInvestment.fee)} />
+             <Row label="Daily payout" value={money(lastInvestment.dailyReturn)} />
+             <Row label="Term" value={`${lastInvestment.term} days`} />
+             <Row label="Maturity payout" value={money(lastInvestment.maturityPayout)} />
+             <Row label="Reference" value={lastInvestment.reference} />
           </div>
         </Card>
       </div>
