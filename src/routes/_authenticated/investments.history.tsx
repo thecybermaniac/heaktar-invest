@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Screen } from "@/components/hk/shell";
 import { Card, Chips, StatusPill } from "@/components/hk/ui";
-import { PAST_INVESTMENTS, money } from "@/lib/data";
+import { money } from "@/lib/data";
 import { Tabs } from "./investments.index";
+import { usePortfolio } from "@/hooks/use-portfolio";
 
 export const Route = createFileRoute("/_authenticated/investments/history")({
   head: () => ({
@@ -20,7 +21,8 @@ export const Route = createFileRoute("/_authenticated/investments/history")({
 function History() {
   const [filter, setFilter] = useState("All plans");
   const options = ["All plans", "Starter", "Silver", "Diamond", "Platinum"];
-  const rows = PAST_INVESTMENTS.filter((i) => filter === "All plans" || i.planName === filter);
+  const { data: portfolio, isPending, isError } = usePortfolio();
+  const rows = (portfolio?.history ?? []).filter((i) => filter === "All plans" || i.planName === filter);
   const totalProfit = rows.reduce((s, i) => s + i.earned, 0);
 
   return (
@@ -44,7 +46,9 @@ function History() {
       </div>
 
       <div className="mt-3 space-y-3 px-5">
-        {rows.map((inv) => (
+        {isPending && <p className="py-10 text-center text-sm text-muted-foreground">Loading history…</p>}
+        {isError && <p className="py-10 text-center text-sm text-destructive">History is unavailable right now. Please try again.</p>}
+        {!isPending && !isError && rows.map((inv) => (
           <Card key={inv.id}>
             <div className="flex items-center justify-between">
               <div>
@@ -61,7 +65,7 @@ function History() {
             </div>
           </Card>
         ))}
-        {rows.length === 0 && (
+        {!isPending && !isError && rows.length === 0 && (
           <p className="py-10 text-center text-sm text-muted-foreground">No investments in this plan yet.</p>
         )}
       </div>

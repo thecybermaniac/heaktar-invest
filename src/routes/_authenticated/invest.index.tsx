@@ -2,9 +2,10 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, ChevronRight } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, PageHeader, StatusPill } from "@/components/hk/ui";
-import { PLANS, money } from "@/lib/data";
+import { money } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
 import { cn } from "@/lib/utils";
+import { usePlans } from "@/hooks/use-portfolio";
 
 export const Route = createFileRoute("/_authenticated/invest/")({
   head: () => ({
@@ -21,12 +22,15 @@ export const Route = createFileRoute("/_authenticated/invest/")({
 function SelectPlan() {
   const navigate = useNavigate();
   const { draft, setDraft } = useApp();
+  const { data: plans, isPending, isError } = usePlans();
 
   return (
     <Screen>
       <PageHeader title="Select a plan" subtitle="Step 1 of 3" />
       <div className="space-y-3 px-5 pt-5">
-        {PLANS.map((plan) => {
+        {isPending && <p className="py-10 text-center text-sm text-muted-foreground">Loading plans…</p>}
+        {isError && <p className="py-10 text-center text-sm text-destructive">Plans are unavailable right now. Please try again.</p>}
+        {plans?.map((plan) => {
           const selected = draft.planId === plan.id;
           return (
             <button
@@ -66,7 +70,7 @@ function SelectPlan() {
       </div>
 
       <div className="px-5 pt-6">
-        <Button full disabled={!draft.planId} onClick={() => navigate({ to: "/invest/details" })}>
+        <Button full disabled={!draft.planId || !plans?.length} onClick={() => navigate({ to: "/invest/details" })}>
           Continue
           <ChevronRight className="size-4" />
         </Button>

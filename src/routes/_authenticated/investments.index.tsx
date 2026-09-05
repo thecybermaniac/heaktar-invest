@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Screen } from "@/components/hk/shell";
 import { Card, Metric, StatusPill } from "@/components/hk/ui";
-import { ACTIVE_INVESTMENTS, money } from "@/lib/data";
+import { money } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { usePortfolio } from "@/hooks/use-portfolio";
 
 export const Route = createFileRoute("/_authenticated/investments/")({
   head: () => ({
@@ -17,14 +18,16 @@ export const Route = createFileRoute("/_authenticated/investments/")({
 });
 
 function ActiveInvestments() {
-  const totalStaked = ACTIVE_INVESTMENTS.reduce((s, i) => s + i.amount, 0);
-  const dailyTotal = ACTIVE_INVESTMENTS.reduce((s, i) => s + i.dailyReturn, 0);
+  const { data: portfolio, isPending, isError } = usePortfolio();
+  const investments = portfolio?.active ?? [];
+  const totalStaked = investments.reduce((s, i) => s + i.amount, 0);
+  const dailyTotal = investments.reduce((s, i) => s + i.dailyReturn, 0);
 
   return (
     <Screen>
       <header className="px-5 pt-6">
         <h1 className="text-xl font-semibold">My investments</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{ACTIVE_INVESTMENTS.length} plans currently running.</p>
+        <p className="mt-1 text-sm text-muted-foreground">{investments.length} plans currently running.</p>
       </header>
 
       <Tabs active="active" />
@@ -41,7 +44,9 @@ function ActiveInvestments() {
       </div>
 
       <div className="mt-4 space-y-3 px-5">
-        {ACTIVE_INVESTMENTS.map((inv) => {
+        {isPending && <p className="py-10 text-center text-sm text-muted-foreground">Loading investments…</p>}
+        {isError && <p className="py-10 text-center text-sm text-destructive">Investments are unavailable right now. Please try again.</p>}
+        {!isPending && !isError && investments.map((inv) => {
           const pct = Math.round((inv.daysElapsed / inv.term) * 100);
           return (
             <Card key={inv.id}>
@@ -71,6 +76,9 @@ function ActiveInvestments() {
             </Card>
           );
         })}
+        {!isPending && !isError && investments.length === 0 && (
+          <Card><p className="text-[13px] text-muted-foreground">You have no active investments yet.</p></Card>
+        )}
       </div>
     </Screen>
   );
