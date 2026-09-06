@@ -3,8 +3,12 @@ import { useState } from "react";
 import { DollarSign } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Card, Field, PageHeader, StatusPill } from "@/components/hk/ui";
-import { PLANS, SERVICE_FEE_RATE, money } from "@/lib/data";
+import { SERVICE_FEE_RATE, money } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
+import { usePlans } from "@/hooks/use-portfolio";
+import { startInvestment } from "@/lib/portfolio.functions";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "@/components/hk/toast";
 
 export const Route = createFileRoute("/_authenticated/invest/details")({
   head: () => ({
@@ -20,9 +24,35 @@ export const Route = createFileRoute("/_authenticated/invest/details")({
 
 function InvestDetails() {
   const navigate = useNavigate();
-  const { draft, setDraft } = useApp();
-  const plan = PLANS.find((p) => p.id === draft.planId) ?? PLANS[0]!;
+  const { draft, setDraft, setLastInvestment } = useApp();
+  const { data: plans, isPending } = usePlans();
+  const start = useServerFn(startInvestment);
+  const [submitting, setSubmitting] = useState(false);
+  const plan = plans?.find((p) => p.id === draft.planId);
   const [raw, setRaw] = useState(draft.amount ? String(draft.amount) : "");
+
+  if (isPending) {
+    return (
+      <Screen>
+        <PageHeader title="Investment details" subtitle="Step 2 of 3" />
+        <p className="px-5 pt-10 text-center text-sm text-muted-foreground">Loading plan details…</p>
+      </Screen>
+    );
+  }
+
+  if (!plan) {
+    return (
+      <Screen>
+        <PageHeader title="Investment details" subtitle="Step 2 of 3" />
+        <div className="px-5 pt-10 text-center">
+          <p className="text-sm text-muted-foreground">Choose an available plan to continue.</p>
+          <Button className="mt-5" onClick={() => navigate({ to: "/invest" })}>
+            Choose a plan
+          </Button>
+        </div>
+      </Screen>
+    );
+  }
 
   const amount = Number(raw) || 0;
   const fee = amount * SERVICE_FEE_RATE;
@@ -39,6 +69,21 @@ function InvestDetails() {
           ? `Maximum for ${plan.name} is ${money(plan.maxAmount, 0)}`
           : undefined;
   const valid = !!raw && !error;
+
+  async function handleConfirm() {
+    if (!valid || submitting) return;
+    setSubmitting(true);
+    try {
+      const investment = await start({ data: { planId: plan.id, amount } });
+      setLastInvestment(investment);
+      toast.success("Investment activated", `${plan.name} is now earning daily returns.`);
+      navigate({ to: "/invest/success" });
+    } catch (err) {
+      toast.error("Investment not started", err instanceof Error ? err.message : "Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <Screen>
@@ -83,8 +128,8 @@ function InvestDetails() {
           </div>
         </Card>
 
-        <Button full disabled={!valid} onClick={() => navigate({ to: "/invest/success" })}>
-          Confirm
+        <Button full disabled={!valid || submitting} onClick={handleConfirm}>
+          {submitting ? "Activating…" : "Confirm investment"}
         </Button>
         <p className="pb-2 text-center text-[11px] text-muted-foreground">
           A 2% service fee is deducted from your wallet at activation.
