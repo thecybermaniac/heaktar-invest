@@ -1,0 +1,4 @@
+- [ ] Wire investment confirmation to live plans and database
+- [ ] Wire withdrawal to live balance and database
+- [ ] Credit verified Paystack deposits and refresh wallet data
+- [ ] Validate build and key flows
