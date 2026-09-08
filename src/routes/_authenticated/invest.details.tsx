@@ -54,6 +54,8 @@ function InvestDetails() {
     );
   }
 
+  const selectedPlan = plan;
+
   const amount = Number(raw) || 0;
   const fee = amount * SERVICE_FEE_RATE;
   const dailyPayout = (amount * plan.dailyInterest) / 100;
@@ -74,9 +76,9 @@ function InvestDetails() {
     if (!valid || submitting) return;
     setSubmitting(true);
     try {
-      const investment = await start({ data: { planId: plan.id, amount } });
+      const investment = await start({ data: { planId: selectedPlan.id, amount } });
       setLastInvestment(investment);
-      toast.success("Investment activated", `${plan.name} is now earning daily returns.`);
+      toast.success("Investment activated", `${selectedPlan.name} is now earning daily returns.`);
       navigate({ to: "/invest/success" });
     } catch (err) {
       toast.error("Investment not started", err instanceof Error ? err.message : "Please try again.");
