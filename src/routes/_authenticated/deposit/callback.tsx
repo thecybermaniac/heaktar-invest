@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { Screen } from "@/components/hk/shell";
 import { PageHeader } from "@/components/hk/ui";
-import { checkDepositStatus } from "@/lib/paystack.functions";
+import { confirmDeposit } from "@/lib/portfolio.functions";
 
 export const Route = createFileRoute("/_authenticated/deposit/callback")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -20,7 +20,7 @@ function DepositCallback() {
     if (hasRun.current || !reference) return;
     hasRun.current = true;
 
-    checkDepositStatus({ data: { reference } })
+    confirmDeposit({ data: { reference } })
       .then((result) => {
         if (result.success) {
           navigate({
