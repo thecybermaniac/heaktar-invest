@@ -1,6 +1,22 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowDown, Bell, Building, ChevronRight, Headphones, History, LogOut, Moon, Sheet, Shield, Star, User, UserCheck, UserCheck2, Wallet } from "lucide-react";
+import {
+  ArrowDown,
+  Bell,
+  Building,
+  ChevronRight,
+  Headphones,
+  History,
+  LogOut,
+  Moon,
+  Sheet,
+  Shield,
+  Star,
+  User,
+  UserCheck,
+  UserCheck2,
+  Wallet,
+} from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Card, Field, Toggle } from "@/components/hk/ui";
 import { useApp } from "@/lib/app-store";
@@ -11,9 +27,16 @@ export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
     meta: [
       { title: "Profile & settings — Heaktar" },
-      { name: "description", content: "Manage your Heaktar personal details, appearance theme, password security and session." },
+      {
+        name: "description",
+        content:
+          "Manage your Heaktar personal details, appearance theme, password security and session.",
+      },
       { property: "og:title", content: "Profile & settings — Heaktar" },
-      { property: "og:description", content: "Personal details, theme, security and session settings." },
+      {
+        property: "og:description",
+        content: "Personal details, theme, security and session settings.",
+      },
     ],
   }),
   component: ProfilePage,
@@ -43,9 +66,9 @@ function ProfilePage() {
           <div className="divide-y divide-border">
             <NavRow to="/notifications" icon={User} label="Personal Information" />
             <NavRow to="/notifications" icon={Shield} label="Change Password" />
-            <NavRow to="/investments" icon={ArrowDown} label="Withdraw Funds" />
+            <NavRow to="/withdraw" icon={ArrowDown} label="Withdraw Funds" />
             <NavRow to="/onboarding" icon={UserCheck2} label="Update KYC details" />
-                        <NavRow to="/investments" icon={Wallet} label="My Investments" />
+            <NavRow to="/investments" icon={Wallet} label="My Investments" />
           </div>
         </Card>
       </section>
@@ -69,11 +92,15 @@ function ProfilePage() {
       </section>
 
       <div className="px-5 pt-6">
-        <Button variant="danger" full onClick={async () => {
-          await signOut();
-          toast.success("Signed out", "See you soon.");
-          navigate({ to: "/", replace: true });
-        }}>
+        <Button
+          variant="danger"
+          full
+          onClick={async () => {
+            await signOut();
+            toast.success("Signed out", "See you soon.");
+            navigate({ to: "/", replace: true });
+          }}
+        >
           <LogOut className="size-4" />
           Log out
         </Button>

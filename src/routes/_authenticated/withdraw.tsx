@@ -55,7 +55,7 @@ function Withdraw() {
     <Screen>
       <PageHeader title="Withdraw" subtitle="Move money out of Heaktar" />
       <div className="space-y-4 px-5 pt-5">
-        <div className="rounded-2xl bg-gradient-brand p-4 text-primary-foreground shadow-float">
+        <div className="rounded bg-gradient-brand p-4 text-primary-foreground shadow-float">
           <span className="text-xs opacity-80">Available balance</span>
           <p className="mt-1 text-2xl font-semibold">
             {balanceLoading ? "Loading…" : money(balance)}
@@ -91,7 +91,7 @@ function Withdraw() {
                 key={b.id}
                 onClick={() => setDest(b.id)}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-2xl border p-4 text-left",
+                  "flex w-full items-center justify-between rounded border p-4 text-left",
                   dest === b.id ? "border-primary bg-accent/40" : "border-border bg-card",
                 )}
               >

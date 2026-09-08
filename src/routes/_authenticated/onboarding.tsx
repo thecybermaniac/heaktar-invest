@@ -107,7 +107,7 @@ function Onboarding() {
           ))}
         </div>
 
-        <div className="mt-8 flex-1 space-y-5">
+        <div className="mt-8 space-y-5">
           {step === 0 && (
             <>
               <Heading title="A bit about you" sub="We use this to verify your identity." />
@@ -129,8 +129,8 @@ function Onboarding() {
           {step === 2 && (
             <>
               <Heading title="Verify your identity" sub="Choose a government-issued document." />
-              <Segmented label="ID type" value={form.idType} onChange={(v) => set("idType", v)} options={["National ID", "Passport", "Driver's License"]} />
-              <Field icon={IdCard} label="ID number" placeholder="NIN-0000-0000" value={form.idNumber} onChange={(e) => set("idNumber", e.target.value)} />
+              <Segmented label="ID type" value={form.idType} onChange={(v) => set("idType", v)} options={["National ID", "Passport"]} />
+              <Field icon={IdCard} label="ID number" placeholder="0000-0000-000" value={form.idNumber} onChange={(e) => set("idNumber", e.target.value)} />
             </>
           )}
 
@@ -183,7 +183,7 @@ function Onboarding() {
           )}
         </div>
 
-        <div className="mt-8 flex gap-3">
+        <div className="mt-10 flex gap-3">
           {step > 0 && (
             <Button variant="outline" onClick={() => setStep((s) => s - 1)} className="w-28">
               Back

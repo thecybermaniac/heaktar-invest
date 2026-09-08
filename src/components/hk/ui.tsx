@@ -344,7 +344,7 @@ export function Segmented({
             onClick={() => onChange(opt)}
             className={cn(
               "h-10 flex-1 rounded text-xs font-medium transition-all",
-              value === opt ? "bg-card text-foreground shadow-card" : "text-muted-foreground",
+              value === opt ? "bg-primary text-foreground shadow-card" : "text-muted-foreground",
             )}
           >
             {opt}

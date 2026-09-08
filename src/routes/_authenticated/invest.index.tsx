@@ -11,9 +11,16 @@ export const Route = createFileRoute("/_authenticated/invest/")({
   head: () => ({
     meta: [
       { title: "Choose a plan — Heaktar" },
-      { name: "description", content: "Compare Heaktar's Starter, Silver, Diamond and Platinum plans by daily interest, term length and total return." },
+      {
+        name: "description",
+        content:
+          "Compare Heaktar's Starter, Silver, Diamond and Platinum plans by daily interest, term length and total return.",
+      },
       { property: "og:title", content: "Choose a plan — Heaktar" },
-      { property: "og:description", content: "Starter, Silver, Diamond and Platinum daily-yield investment plans." },
+      {
+        property: "og:description",
+        content: "Starter, Silver, Diamond and Platinum daily-yield investment plans.",
+      },
     ],
   }),
   component: SelectPlan,
@@ -28,8 +35,14 @@ function SelectPlan() {
     <Screen>
       <PageHeader title="Select a plan" subtitle="Step 1 of 3" />
       <div className="space-y-3 px-5 pt-5">
-        {isPending && <p className="py-10 text-center text-sm text-muted-foreground">Loading plans…</p>}
-        {isError && <p className="py-10 text-center text-sm text-destructive">Plans are unavailable right now. Please try again.</p>}
+        {isPending && (
+          <p className="py-10 text-center text-sm text-muted-foreground">Loading plans…</p>
+        )}
+        {isError && (
+          <p className="py-10 text-center text-sm text-destructive">
+            Plans are unavailable right now. Please try again.
+          </p>
+        )}
         {plans?.map((plan) => {
           const selected = draft.planId === plan.id;
           return (
@@ -49,7 +62,9 @@ function SelectPlan() {
                 <span
                   className={cn(
                     "grid size-5 place-items-center rounded-full border",
-                    selected ? "border-primary bg-primary text-primary-foreground" : "border-border",
+                    selected
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border",
                   )}
                 >
                   {selected && <Check className="size-3" strokeWidth={3} />}
@@ -62,19 +77,27 @@ function SelectPlan() {
                 <Metric label="Total return" value={`${plan.totalReturn}%`} />
               </div>
               <p className="mt-3 text-[11px] text-muted-foreground">
-                {plan.depositReturned ? "Capital returned at maturity" : "Capital reinvested at maturity"}
+                {plan.depositReturned
+                  ? "Capital returned at maturity"
+                  : "Capital reinvested at maturity"}
               </p>
             </button>
           );
         })}
       </div>
 
-      <div className="px-5 pt-6">
-        <Button full disabled={!draft.planId || !plans?.length} onClick={() => navigate({ to: "/invest/details" })}>
-          Continue
-          <ChevronRight className="size-4" />
-        </Button>
-      </div>
+      {!isPending && !isError && (
+        <div className="px-5 pt-6">
+          <Button
+            full
+            disabled={!draft.planId || !plans?.length}
+            onClick={() => navigate({ to: "/invest/details" })}
+          >
+            Continue
+            <ChevronRight className="size-4" />
+          </Button>
+        </div>
+      )}
     </Screen>
   );
 }

@@ -36,7 +36,7 @@ export function AuthShell({
         <h1 className="mt-6 text-2xl font-semibold">{title}</h1>
         <p className="mt-1 text-sm font-normal text-muted-foreground">{subtitle}</p>
         {children}
-        {footer && <div className="mt-auto pt-10">{footer}</div>}
+        {footer && <div className="pt-10">{footer}</div>}
       </div>
     </div>
   );

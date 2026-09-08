@@ -92,7 +92,7 @@ export function Tabs({ active }: { active: "active" | "history" }) {
           to="/investments"
           className={cn(
             "h-10 flex-1 rounded text-center text-xs font-medium leading-10 transition-all",
-            active === "active" ? "bg-card text-foreground shadow-card" : "text-muted-foreground",
+            active === "active" ? "bg-primary text-foreground shadow-card" : "text-muted-foreground",
           )}
         >
           Active
@@ -101,7 +101,7 @@ export function Tabs({ active }: { active: "active" | "history" }) {
           to="/investments/history"
           className={cn(
             "h-10 flex-1 rounded text-center text-xs font-medium leading-10 transition-all",
-            active === "history" ? "bg-card text-foreground shadow-card" : "text-muted-foreground",
+            active === "history" ? "bg-primary text-foreground shadow-card" : "text-muted-foreground",
           )}
         >
           History
