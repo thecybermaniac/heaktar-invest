@@ -1,4 +1,4 @@
 - [x] Wire investment confirmation to live plans and database
 - [x] Wire withdrawal to live balance and database
 - [x] Credit verified Paystack deposits and refresh wallet data
-- [ ] Validate build and key flows
+- [x] Validate build and key flows
