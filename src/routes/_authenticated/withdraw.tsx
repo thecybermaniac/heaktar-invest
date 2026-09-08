@@ -1,10 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Check, DollarSign } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Card, Field, PageHeader } from "@/components/hk/ui";
 import { BANK_ACCOUNTS, money } from "@/lib/data";
-import { useApp } from "@/lib/app-store";
+import { submitWithdrawal } from "@/lib/portfolio.functions";
+import { usePortfolio, useRefreshPortfolio } from "@/hooks/use-portfolio";
+import { toast } from "@/components/hk/toast";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/withdraw")({
@@ -21,12 +24,32 @@ export const Route = createFileRoute("/_authenticated/withdraw")({
 
 function Withdraw() {
   const navigate = useNavigate();
-  const { balance } = useApp();
+  const { data: portfolio, isPending: balanceLoading, isError: balanceError } = usePortfolio();
+  const refreshPortfolio = useRefreshPortfolio();
+  const withdraw = useServerFn(submitWithdrawal);
   const [amount, setAmount] = useState("");
   const [dest, setDest] = useState("b1");
   const [done, setDone] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const balance = portfolio?.balance ?? 0;
   const value = Number(amount) || 0;
   const error = value > balance ? "Amount exceeds available balance" : undefined;
+
+  async function handleConfirm() {
+    if (value <= 0 || error || submitting) return;
+    setSubmitting(true);
+    try {
+      const destination = BANK_ACCOUNTS.find((account) => account.id === dest)?.label ?? dest;
+      const result = await withdraw({ data: { amount: value, destination } });
+      await refreshPortfolio();
+      setDone(true);
+      toast.success("Withdrawal submitted", `${money(result.amount)} is being processed.`);
+    } catch (err) {
+      toast.error("Withdrawal not submitted", err instanceof Error ? err.message : "Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <Screen>
@@ -34,7 +57,10 @@ function Withdraw() {
       <div className="space-y-4 px-5 pt-5">
         <div className="rounded-2xl bg-gradient-brand p-4 text-primary-foreground shadow-float">
           <span className="text-xs opacity-80">Available balance</span>
-          <p className="mt-1 text-2xl font-semibold">{money(balance)}</p>
+          <p className="mt-1 text-2xl font-semibold">
+            {balanceLoading ? "Loading…" : money(balance)}
+          </p>
+          {balanceError && <p className="mt-1 text-xs text-primary-foreground/80">Balance unavailable. Please try again.</p>}
         </div>
 
         <Field
@@ -46,7 +72,12 @@ function Withdraw() {
           onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))}
           error={error}
           trailing={
-            <button className="text-xs font-medium text-primary" onClick={() => setAmount(String(balance))} type="button">
+            <button
+              className="text-xs font-medium text-primary disabled:opacity-50"
+              onClick={() => setAmount(String(balance))}
+              type="button"
+              disabled={balanceLoading || balance <= 0}
+            >
               Max
             </button>
           }
@@ -84,11 +115,11 @@ function Withdraw() {
         <Card>
           <div className="flex items-center justify-between py-1 text-xs">
             <span className="text-muted-foreground">Processing fee</span>
-            <span className="text-[13px] font-medium">{money(value ? 1.5 : 0)}</span>
+            <span className="text-[13px] font-medium">{money(0)}</span>
           </div>
           <div className="flex items-center justify-between py-1 text-xs">
             <span className="text-muted-foreground">You'll receive</span>
-            <span className="text-[13px] font-semibold">{money(Math.max(value - (value ? 1.5 : 0), 0))}</span>
+            <span className="text-[13px] font-semibold">{money(Math.max(value, 0))}</span>
           </div>
         </Card>
 
@@ -102,8 +133,8 @@ function Withdraw() {
             </Button>
           </Card>
         ) : (
-          <Button full disabled={value <= 0 || !!error} onClick={() => setDone(true)}>
-            Confirm withdrawal
+          <Button full disabled={value <= 0 || !!error || balanceLoading || balanceError || submitting} onClick={handleConfirm}>
+            {submitting ? "Submitting…" : "Confirm withdrawal"}
           </Button>
         )}
       </div>
