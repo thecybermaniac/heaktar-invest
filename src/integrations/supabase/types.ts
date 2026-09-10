@@ -239,7 +239,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      accrue_daily_investment_profits: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
