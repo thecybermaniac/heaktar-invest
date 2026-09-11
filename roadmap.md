@@ -2,3 +2,6 @@
 - [x] Wire withdrawal to live balance and database
 - [x] Credit verified Paystack deposits and refresh wallet data
 - [x] Validate build and key flows
+- [x] Schedule daily profit credits at 6:00 AM Nigerian time
+- [x] Show recorded profit credits in balances, investments, history, and performance
+- [x] Automatically move matured investments to history after the final daily credit
