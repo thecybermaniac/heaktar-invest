@@ -109,7 +109,7 @@ function ActivePlansCarousel({ investments }: { investments: InvestmentView[] })
                   <div className="mt-4 grid grid-cols-3 gap-2 text-center">
                     <Metric label="Invested" value={money(inv.amount, 0)} />
                     <Metric label="Daily return" value={`+${money(inv.dailyReturn)}`} accent />
-                    <Metric label="Earned" value={money(inv.earned)} />
+                    <Metric label="Profit paid" value={money(inv.earned)} />
                   </div>
 
                   <div className="mt-4">

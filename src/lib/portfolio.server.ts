@@ -54,6 +54,14 @@ export type PortfolioSummary = {
 
 const DAY_MS = 86_400_000;
 
+type InvestmentRow = Database["public"]["Tables"]["investments"]["Row"];
+type TransactionRow = Database["public"]["Tables"]["transactions"]["Row"];
+
+type AccrualSummary = {
+  amount: number;
+  days: number;
+};
+
 function daysBetween(from: string | Date, to: Date) {
   const start = new Date(from).getTime();
   return Math.max(0, Math.floor((to.getTime() - start) / DAY_MS));
@@ -79,51 +87,38 @@ export async function listPlans(supabase: DB): Promise<PlanRow[]> {
   }));
 }
 
-/** Credits matured plans exactly once, then marks them completed. */
-async function settleMatured(supabase: DB, userId: string) {
-  const { data } = await supabase
-    .from("investments")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("status", "active");
+function getAccrualsByInvestment(txs: TransactionRow[]) {
+  const accruals = new Map<string, AccrualSummary>();
+  const legacyPayouts = new Map<string, number>();
 
-  const now = new Date();
-  for (const inv of data ?? []) {
-    const elapsed = daysBetween(inv.started_at, now);
-    if (elapsed < inv.term_days) continue;
+  for (const tx of txs) {
+    if (tx.type !== "payout" || !tx.investment_id) continue;
 
-    const amount = Number(inv.amount);
-    const profit = (amount * Number(inv.total_return)) / 100;
-    const payout = profit + amount;
-
-    // reference is unique -> a duplicate settle attempt is rejected, never double-credited
-    const { error } = await supabase.from("transactions").insert({
-      user_id: userId,
-      type: "payout",
-      label: `Plan matured — ${inv.plan_name}`,
-      amount: payout,
-      status: "completed",
-      reference: `payout_${inv.id}`,
-      investment_id: inv.id,
-    });
-    if (error && !error.message.toLowerCase().includes("duplicate")) continue;
-
-    await supabase
-      .from("investments")
-      .update({ status: "completed", completed_at: now.toISOString() })
-      .eq("id", inv.id)
-      .eq("user_id", userId);
+    if (tx.reference?.startsWith("profit_")) {
+      const current = accruals.get(tx.investment_id) ?? { amount: 0, days: 0 };
+      accruals.set(tx.investment_id, {
+        amount: current.amount + Number(tx.amount),
+        days: current.days + 1,
+      });
+    } else if (tx.reference?.startsWith("payout_")) {
+      legacyPayouts.set(tx.investment_id, Number(tx.amount));
+    }
   }
+
+  return { accruals, legacyPayouts };
 }
 
 function toInvestmentView(
-  inv: Database["public"]["Tables"]["investments"]["Row"],
+  inv: InvestmentRow,
   now: Date,
+  accruals: AccrualSummary | undefined,
+  legacyPayout: number | undefined,
 ): InvestmentView {
   const amount = Number(inv.amount);
   const daily = Number(inv.daily_return);
   const elapsed = Math.min(daysBetween(inv.started_at, now), inv.term_days);
   const completed = inv.status === "completed";
+  const earned = accruals?.amount ?? (legacyPayout === undefined ? 0 : Math.max(0, legacyPayout - amount));
   return {
     id: inv.id,
     planId: inv.plan_id,
@@ -134,9 +129,9 @@ function toInvestmentView(
     dailyReturn: daily,
     startedAt: new Date(inv.started_at).toISOString().slice(0, 10),
     term: inv.term_days,
-    daysElapsed: completed ? inv.term_days : elapsed,
+    daysElapsed: completed ? inv.term_days : Math.min(accruals?.days ?? 0, elapsed),
     status: completed ? "completed" : "active",
-    earned: completed ? (amount * Number(inv.total_return)) / 100 : daily * elapsed,
+    earned,
   };
 }
 
@@ -149,8 +144,6 @@ const TX_LABEL_FALLBACK: Record<string, string> = {
 };
 
 export async function getPortfolio(supabase: DB, userId: string): Promise<PortfolioSummary> {
-  await settleMatured(supabase, userId);
-
   const [{ data: invRows }, { data: txRows }] = await Promise.all([
     supabase
       .from("investments")
@@ -165,11 +158,14 @@ export async function getPortfolio(supabase: DB, userId: string): Promise<Portfo
   ]);
 
   const now = new Date();
-  const investments = (invRows ?? []).map((i) => toInvestmentView(i, now));
+  const txs = txRows ?? [];
+  const { accruals, legacyPayouts } = getAccrualsByInvestment(txs);
+  const investments = (invRows ?? []).map((i) =>
+    toInvestmentView(i, now, accruals.get(i.id), legacyPayouts.get(i.id)),
+  );
   const active = investments.filter((i) => i.status === "active");
   const history = investments.filter((i) => i.status === "completed");
 
-  const txs = txRows ?? [];
   // pending debits (withdrawals in flight) are held against the balance
   const counts = (status: string, amount: number) =>
     status === "completed" || (status === "pending" && amount < 0);
@@ -178,8 +174,7 @@ export async function getPortfolio(supabase: DB, userId: string): Promise<Portfo
     .reduce((sum, t) => sum + Number(t.amount), 0);
 
   const netInvestment = active.reduce((s, i) => s + i.amount, 0);
-  const netProfit =
-    active.reduce((s, i) => s + i.earned, 0) + history.reduce((s, i) => s + i.earned, 0);
+  const netProfit = investments.reduce((s, i) => s + i.earned, 0);
 
   const activities: ActivityView[] = txs.slice(0, 20).map((t) => ({
     id: t.id,
@@ -195,7 +190,8 @@ export async function getPortfolio(supabase: DB, userId: string): Promise<Portfo
     status: (t.status as ActivityView["status"]) ?? "completed",
   }));
 
-  // 30-day equity curve: settled cash + locked principal + accrued (unrealised) profit
+  // 30-day equity curve: recorded cash plus principal still locked in active plans.
+  // Daily profits are already in cash as dated payout transactions; nothing is projected here.
   const performance: { day: string; value: number }[] = [];
   for (let offset = 29; offset >= 0; offset--) {
     const at = new Date(now.getTime() - offset * DAY_MS);
@@ -204,11 +200,12 @@ export async function getPortfolio(supabase: DB, userId: string): Promise<Portfo
       .reduce((s, t) => s + Number(t.amount), 0);
 
     const locked = (invRows ?? [])
-      .filter((i) => new Date(i.started_at) <= at && i.status === "active")
-      .reduce((s, i) => {
-        const elapsed = Math.min(daysBetween(i.started_at, at), i.term_days);
-        return s + Number(i.amount) + Number(i.daily_return) * elapsed;
-      }, 0);
+      .filter((i) => {
+        const started = new Date(i.started_at);
+        const completedAt = i.completed_at ? new Date(i.completed_at) : null;
+        return started <= at && (i.status === "active" || !completedAt || completedAt > at);
+      })
+      .reduce((s, i) => s + Number(i.amount), 0);
 
     performance.push({
       day: at.toLocaleDateString("en-US", { month: "short", day: "numeric" }),

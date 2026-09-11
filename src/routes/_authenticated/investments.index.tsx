@@ -21,7 +21,7 @@ function ActiveInvestments() {
   const { data: portfolio, isPending, isError } = usePortfolio();
   const investments = portfolio?.active ?? [];
   const totalStaked = investments.reduce((s, i) => s + i.amount, 0);
-  const dailyTotal = investments.reduce((s, i) => s + i.dailyReturn, 0);
+  const paidProfitTotal = investments.reduce((s, i) => s + i.earned, 0);
 
   return (
     <Screen>
@@ -38,8 +38,8 @@ function ActiveInvestments() {
           <p className="mt-1 text-lg font-semibold">{money(totalStaked, 0)}</p>
         </Card>
         <Card className="p-3.5">
-          <span className="text-[11px] text-muted-foreground">Total Profit</span>
-          <p className="mt-1 text-lg font-semibold text-success">+{money(dailyTotal)}</p>
+          <span className="text-[11px] text-muted-foreground">Profit paid</span>
+          <p className="mt-1 text-lg font-semibold text-success">+{money(paidProfitTotal)}</p>
         </Card>
       </div>
 
@@ -61,12 +61,12 @@ function ActiveInvestments() {
               <div className="mt-4 grid grid-cols-3 gap-2 text-center">
                 <Metric label="Invested" value={money(inv.amount, 0)} />
                 <Metric label="Daily return" value={`+${money(inv.dailyReturn)}`} accent />
-                <Metric label="Earned" value={money(inv.earned)} />
+                <Metric label="Profit paid" value={money(inv.earned)} />
               </div>
 
               <div className="mt-4">
                 <div className="flex justify-between text-[11px] text-muted-foreground">
-                  <span>{inv.daysElapsed} of {inv.term} days</span>
+                  <span>{inv.daysElapsed} of {inv.term} days credited</span>
                   <span>{inv.term - inv.daysElapsed} days left</span>
                 </div>
                 <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-input">
