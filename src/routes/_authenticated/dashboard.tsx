@@ -211,13 +211,13 @@ function Dashboard() {
           </p>
 
           <div className="mt-5 grid grid-cols-2 gap-3">
-            <div className="rounded bg-muted dark:bg-white/12 p-3">
+            <div className="rounded bg-muted dark:bg-white/5 p-3">
               <span className="block text-[11px] text-muted-foreground">Net investment</span>
               <span className="mt-0.5 block text-base font-semibold text-foreground dark:text-primary-foreground">
                 {mask(money(netInvestment))}
               </span>
             </div>
-            <div className="rounded bg-muted dark:bg-white/12 p-3">
+            <div className="rounded bg-muted dark:bg-white/5 p-3">
               <span className="block text-[11px] text-muted-foreground">Net profit</span>
               <span className="mt-0.5 block text-base font-semibold text-foreground dark:text-primary-foreground">
                 {hidden ? "••••••" : `${money(netProfit)}`}
@@ -230,21 +230,23 @@ function Dashboard() {
       <section className="pt-6">
         <div className="flex items-center justify-between mb-3 px-5">
           <h2 className="text-sm font-medium">Active Plans</h2>
-          <Link to="/investments" className="text-xs text-muted-foreground hover:text-primary">
-            See all
-          </Link>
+          {active.length > 0 && (
+            <Link to="/investments" className="text-xs text-muted-foreground hover:text-primary">
+              See all
+            </Link>
+          )}
         </div>
         {active.length > 0 ? (
           <ActivePlansCarousel investments={active} />
         ) : (
           <div className="px-5">
             <Card>
-              <p className="text-[13px] text-muted-foreground">
+              <p className="text-[13px] text-muted-foreground text-center">
                 No active plans yet. Pick a plan to start earning daily.
               </p>
               <Link
                 to="/invest"
-                className="mt-3 inline-block text-xs font-medium text-primary hover:underline"
+                className="mt-3 block text-center text-xs font-medium text-primary hover:underline"
               >
                 Browse plans
               </Link>
@@ -260,7 +262,9 @@ function Dashboard() {
               <h2 className="text-sm font-medium">Performance</h2>
               <p className="text-[11px] text-muted-foreground">Trailing 1 month</p>
             </div>
-            <StatusPill tone={changePct < 0 ? "muted" : "success"}>{`${changePct >= 0 ? "+" : ""}${changePct}%`}</StatusPill>
+            <StatusPill
+              tone={changePct < 0 ? "muted" : "success"}
+            >{`${changePct >= 0 ? "+" : ""}${changePct}%`}</StatusPill>
           </div>
           <div className="mt-4 h-40">
             <ResponsiveContainer width="100%" height="100%">
@@ -355,7 +359,9 @@ function Dashboard() {
           })}
           {!isPending && (portfolio?.activities.length ?? 0) === 0 && (
             <Card>
-              <p className="text-[13px] text-muted-foreground">Your deposits, investments and payouts will appear here.</p>
+              <p className="text-[13px] text-muted-foreground">
+                Your deposits, investments and payouts will appear here.
+              </p>
             </Card>
           )}
         </div>
