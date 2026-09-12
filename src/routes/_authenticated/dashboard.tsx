@@ -18,6 +18,7 @@ import { Card, Metric, StatusPill } from "@/components/hk/ui";
 import { useApp } from "@/lib/app-store";
 import { money } from "@/lib/data";
 import { usePortfolio } from "@/hooks/use-portfolio";
+import { useNotifications } from "@/hooks/use-notifications";
 import type { InvestmentView } from "@/lib/portfolio.server";
 import { useMarketQuotes } from "@/hooks/use-market";
 import { cn } from "@/lib/utils";
@@ -147,8 +148,9 @@ function ActivePlansCarousel({ investments }: { investments: InvestmentView[] })
 }
 
 function Dashboard() {
-  const { profile, unread } = useApp();
+  const { profile } = useApp();
   const { data: portfolio, isPending } = usePortfolio();
+  const { unread } = useNotifications();
   const balance = portfolio?.balance ?? 0;
   const netInvestment = portfolio?.netInvestment ?? 0;
   const netProfit = portfolio?.netProfit ?? 0;
