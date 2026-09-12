@@ -63,8 +63,6 @@ type AppState = {
   setDraft: (d: Partial<Draft>) => void;
   lastInvestment: InvestmentConfirmation | null;
   setLastInvestment: (investment: InvestmentConfirmation | null) => void;
-  unread: number;
-  markAllRead: () => void;
 };
 
 const Ctx = createContext<AppState | null>(null);
@@ -74,7 +72,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [profile, setProfileState] = useState<Profile>(DEFAULT_PROFILE);
   const [draft, setDraftState] = useState<Draft>({ planId: null, amount: 0 });
   const [lastInvestment, setLastInvestment] = useState<InvestmentConfirmation | null>(null);
-  const [unread, setUnread] = useState(3);
 
   useEffect(() => {
     const stored = window.localStorage.getItem("heaktar-theme");
@@ -96,10 +93,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setDraft: (d) => setDraftState((prev) => ({ ...prev, ...d })),
       lastInvestment,
       setLastInvestment,
-      unread,
-      markAllRead: () => setUnread(0),
     }),
-    [theme, profile, draft, lastInvestment, unread],
+    [theme, profile, draft, lastInvestment],
   );
 
   return createElement(Ctx.Provider, { value }, children);
