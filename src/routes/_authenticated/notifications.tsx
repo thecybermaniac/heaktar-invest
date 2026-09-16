@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Bell, BellOff, Gift, ShieldCheck, TrendingUp } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { PageHeader } from "@/components/hk/ui";
-import { useMarkAllNotificationsRead, useMarkNotificationRead, useNotifications } from "@/hooks/use-notifications";
+import { useMarkAllNotificationsRead, useMarkNotificationRead, useNotifications, notificationsQueryOptions } from "@/hooks/use-notifications";
 import { usePushNotifications } from "@/hooks/use-push-notifications";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +15,7 @@ export const Route = createFileRoute("/_authenticated/notifications")({
       { property: "og:description", content: "Payout, referral, withdrawal and security alerts." },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(notificationsQueryOptions()),
   component: Notifications,
 });
 

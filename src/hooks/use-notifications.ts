@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { fetchNotifications, markAllNotificationsRead, markNotificationRead } from "@/lib/notifications.functions";
 import { useAuth } from "@/lib/auth";
@@ -7,16 +7,22 @@ import { supabase } from "@/integrations/supabase/client";
 
 const QUERY_KEY = ["notifications"];
 
+// Shared with the dashboard/notifications route loaders — see use-portfolio.ts for why this
+// calls the server function directly rather than through useServerFn.
+export const notificationsQueryOptions = () =>
+  queryOptions({
+    queryKey: QUERY_KEY,
+    queryFn: () => fetchNotifications(),
+    staleTime: 15_000,
+  });
+
 export function useNotifications() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const load = useServerFn(fetchNotifications);
 
   const query = useQuery({
-    queryKey: QUERY_KEY,
-    queryFn: () => load(),
+    ...notificationsQueryOptions(),
     enabled: !!user,
-    staleTime: 15_000,
   });
 
   useEffect(() => {

@@ -4,17 +4,34 @@ import { isOnboarded } from "@/lib/onboarding";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
+  // Without this, beforeLoad below re-runs — and re-hits Supabase twice — on every single
+  // navigation between authenticated pages, since a router match with no staleTime is
+  // treated as immediately stale. 30s means most in-app navigation (bottom-nav taps, back
+  // button) reuses the cached auth/onboarding check instead of re-fetching it; a genuinely
+  // stale login (session revoked, expired) still gets caught within that window, and
+  // onboarding completion explicitly invalidates below rather than waiting it out.
+  staleTime: 30_000,
   beforeLoad: async ({ location }) => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/" });
+    // getSession() reads the already-verified session from local storage — no network call.
+    // getUser() re-validates the JWT against Supabase's Auth server every time, which is the
+    // right call to make once, but not on every navigation. Fall back to it only when there's
+    // no local session to trust in the first place.
+    const { data: sessionData } = await supabase.auth.getSession();
+    let user = sessionData.session?.user ?? null;
 
-    const onboarded = await isOnboarded(data.user.id);
+    if (!user) {
+      const { data: userData, error } = await supabase.auth.getUser();
+      if (error || !userData.user) throw redirect({ to: "/" });
+      user = userData.user;
+    }
+
+    const onboarded = await isOnboarded(user.id);
     const onOnboarding = location.pathname.startsWith("/onboarding");
 
     if (!onboarded && !onOnboarding) throw redirect({ to: "/onboarding", replace: true });
     if (onboarded && onOnboarding) throw redirect({ to: "/dashboard", replace: true });
 
-    return { user: data.user, onboarded };
+    return { user, onboarded };
   },
   component: () => <Outlet />,
 });

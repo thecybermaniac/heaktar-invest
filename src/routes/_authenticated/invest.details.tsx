@@ -5,7 +5,7 @@ import { Screen } from "@/components/hk/shell";
 import { Button, Card, Field, PageHeader, StatusPill } from "@/components/hk/ui";
 import { SERVICE_FEE_RATE, money } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
-import { usePlans } from "@/hooks/use-portfolio";
+import { usePlans, plansQueryOptions } from "@/hooks/use-portfolio";
 import { startInvestment } from "@/lib/portfolio.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "@/components/hk/toast";
@@ -19,6 +19,7 @@ export const Route = createFileRoute("/_authenticated/invest/details")({
       { property: "og:description", content: "Preview fees, daily payouts and total return before confirming." },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(plansQueryOptions()),
   component: InvestDetails,
 });
 

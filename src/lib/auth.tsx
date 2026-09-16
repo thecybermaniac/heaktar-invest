@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Session, User } from "@supabase/supabase-js";
+import { useRouter } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useApp, type Profile } from "@/lib/app-store";
 
@@ -44,6 +45,7 @@ const COLUMNS = {
 } as const;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const { setProfile } = useApp();
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -109,7 +111,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
     setSession(null);
-  }, []);
+    // the _authenticated route caches its auth/onboarding check for 30s (route.tsx) — without
+    // this, a different user signing in on the same tab within that window could briefly see
+    // the previous user's cached onboarded state.
+    await router.invalidate();
+  }, [router]);
 
   const value = useMemo<AuthState>(
     () => ({

@@ -4,7 +4,7 @@ import { Check, Copy, Share2 } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Card, StatusPill } from "@/components/hk/ui";
 import { money } from "@/lib/data";
-import { useReferrals } from "@/hooks/use-referrals";
+import { useReferrals, referralsQueryOptions } from "@/hooks/use-referrals";
 
 export const Route = createFileRoute("/_authenticated/referral")({
   head: () => ({
@@ -19,6 +19,7 @@ export const Route = createFileRoute("/_authenticated/referral")({
       { property: "og:description", content: "Earn 5% of every referral's first investment." },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(referralsQueryOptions()),
   component: Referral,
 });
 

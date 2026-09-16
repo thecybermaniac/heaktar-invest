@@ -9,7 +9,14 @@ export const getRouter = () => {
     routeTree,
     context: { queryClient },
     scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
+    // Preload a route's beforeLoad/loader as soon as a <Link> is hovered (or touched, on
+    // mobile) instead of waiting for the tap to land — the request is already in flight by
+    // the time the navigation actually happens.
+    defaultPreload: "intent",
+    // 0 meant every preload was immediately marked stale and thrown away, making the
+    // preload above pointless. This keeps a preloaded match usable for a few seconds if the
+    // user does follow through.
+    defaultPreloadStaleTime: 5_000,
   });
 
   return router;

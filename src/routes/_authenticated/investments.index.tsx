@@ -3,7 +3,7 @@ import { Screen } from "@/components/hk/shell";
 import { Card, Metric, StatusPill } from "@/components/hk/ui";
 import { money } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { usePortfolio } from "@/hooks/use-portfolio";
+import { usePortfolio, portfolioQueryOptions } from "@/hooks/use-portfolio";
 
 export const Route = createFileRoute("/_authenticated/investments/")({
   head: () => ({
@@ -14,6 +14,7 @@ export const Route = createFileRoute("/_authenticated/investments/")({
       { property: "og:description", content: "Every running plan with daily return and progress to maturity." },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(portfolioQueryOptions()),
   component: ActiveInvestments,
 });
 

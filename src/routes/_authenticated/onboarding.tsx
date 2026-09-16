@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Briefcase, Building2, Check, CreditCard, Globe, Hash, Home, IdCard, MapPin, Users } from "lucide-react";
 import { Button, Chips, DatePicker, Field, Segmented, Select } from "@/components/hk/ui";
@@ -41,6 +41,7 @@ const REQUIRED: [keyof Profile, string][][] = [
 
 function Onboarding() {
   const navigate = useNavigate();
+  const router = useRouter();
   const { profile, setProfile } = useApp();
   const { saveProfile, signOut } = useAuth();
   const [step, setStep] = useState(0);
@@ -71,6 +72,9 @@ function Onboarding() {
       await saveProfile({ ...form, onboardingCompleted: true });
       setProfile(form);
       toast.success("Profile saved", "Your account is ready to invest.");
+      // the _authenticated route's beforeLoad now caches its onboarded check for 30s
+      // (see route.tsx) — without this, dashboard could bounce back here on a stale read.
+      await router.invalidate();
       navigate({ to: "/dashboard" });
     } catch {
       toast.error("Couldn't save your profile", "Please check your connection and try again.");
