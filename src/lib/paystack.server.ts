@@ -72,8 +72,7 @@ export async function initializeTransaction(input: {
   };
 }
 
-export async function verifyTransaction(reference: string) {
-  const res = await fetch(
+export async function verifyTransaction(reference: string) {  const res = await fetch(
     `${PAYSTACK_BASE_URL}/transaction/verify/${encodeURIComponent(reference)}`,
     { headers: { Authorization: `Bearer ${paystackSecretKey()}` } },
   );
@@ -85,4 +84,57 @@ export async function verifyTransaction(reference: string) {
     reference: json.data.reference,
     amount: json.data.amount / 100,
   };
+}
+
+type ListBanksResponse = {
+  status: boolean;
+  message: string;
+  data: Array<{
+    name: string;
+    slug: string;
+    code: string;
+    active: boolean;
+    currency: string;
+    type: string;
+  }>;
+};
+
+type ResolveAccountResponse = {
+  status: boolean;
+  message: string;
+  data: { account_number: string; account_name: string };
+};
+
+export type Bank = { code: string; name: string };
+
+export async function listBanks(): Promise<Bank[]> {
+  const res = await fetch(`${PAYSTACK_BASE_URL}/bank?currency=NGN&perPage=100`, {
+    headers: { Authorization: `Bearer ${paystackSecretKey()}` },
+  });
+  const json = (await res.json()) as ListBanksResponse;
+  if (!res.ok || !json.status) throw new Error(json.message || "Could not load banks");
+
+  const seen = new Set<string>();
+  return json.data
+    .filter((b) => b.active && b.currency === "NGN")
+    // Paystack returns some banks under multiple entries (e.g. differing gateways);
+    // de-dupe on code so the picker doesn't show the same bank twice.
+    .filter((b) => (seen.has(b.code) ? false : (seen.add(b.code), true)))
+    .map((b) => ({ code: b.code, name: b.name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export async function resolveAccount(input: { accountNumber: string; bankCode: string }) {
+  const params = new URLSearchParams({
+    account_number: input.accountNumber,
+    bank_code: input.bankCode,
+  });
+  const res = await fetch(`${PAYSTACK_BASE_URL}/bank/resolve?${params}`, {
+    headers: { Authorization: `Bearer ${paystackSecretKey()}` },
+  });
+  const json = (await res.json()) as ResolveAccountResponse;
+  if (!res.ok || !json.status) {
+    throw new Error(json.message || "Could not verify that account number");
+  }
+  return { accountNumber: json.data.account_number, accountName: json.data.account_name };
 }

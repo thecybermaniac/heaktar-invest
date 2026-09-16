@@ -37,14 +37,3 @@ export const confirmDeposit = createServerFn({ method: "POST" })
     const { creditDeposit } = await import("./portfolio.server");
     return creditDeposit(context.supabase, context.userId, data.reference);
   });
-
-export const submitWithdrawal = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data: { amount: number; destination: string }) => {
-    if (!data.amount || data.amount <= 0) throw new Error("Enter an amount to withdraw");
-    return data;
-  })
-  .handler(async ({ data, context }) => {
-    const { requestWithdrawal } = await import("./portfolio.server");
-    return requestWithdrawal(context.supabase, context.userId, data);
-  });

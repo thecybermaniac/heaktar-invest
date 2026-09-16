@@ -20,7 +20,6 @@ import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authen
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedReferralRouteImport } from './routes/_authenticated/referral'
-import { Route as AuthenticatedWithdrawRouteImport } from './routes/_authenticated/withdraw'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedDepositIndexRouteImport } from './routes/_authenticated/deposit/index'
 import { Route as AuthenticatedDepositCallbackRouteImport } from './routes/_authenticated/deposit/callback'
@@ -30,6 +29,8 @@ import { Route as AuthenticatedInvestDetailsRouteImport } from './routes/_authen
 import { Route as AuthenticatedInvestSuccessRouteImport } from './routes/_authenticated/invest.success'
 import { Route as AuthenticatedInvestmentsIndexRouteImport } from './routes/_authenticated/investments.index'
 import { Route as AuthenticatedInvestmentsHistoryRouteImport } from './routes/_authenticated/investments.history'
+import { Route as AuthenticatedWithdrawIndexRouteImport } from './routes/_authenticated/withdraw.index'
+import { Route as AuthenticatedWithdrawMethodRouteImport } from './routes/_authenticated/withdraw.method'
 import { Route as ApiPaystackWebhookRouteImport } from './routes/api/paystack/webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -87,11 +88,6 @@ const AuthenticatedReferralRoute = AuthenticatedReferralRouteImport.update({
   path: '/referral',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedWithdrawRoute = AuthenticatedWithdrawRouteImport.update({
-  id: '/withdraw',
-  path: '/withdraw',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/auth/callback',
   path: '/auth/callback',
@@ -145,6 +141,18 @@ const AuthenticatedInvestmentsHistoryRoute =
     path: '/investments/history',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedWithdrawIndexRoute =
+  AuthenticatedWithdrawIndexRouteImport.update({
+    id: '/withdraw/',
+    path: '/withdraw/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWithdrawMethodRoute =
+  AuthenticatedWithdrawMethodRouteImport.update({
+    id: '/withdraw/method',
+    path: '/withdraw/method',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPaystackWebhookRoute = ApiPaystackWebhookRouteImport.update({
   id: '/api/paystack/webhook',
   path: '/api/paystack/webhook',
@@ -162,17 +170,18 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/referral': typeof AuthenticatedReferralRoute
-  '/withdraw': typeof AuthenticatedWithdrawRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/deposit/callback': typeof AuthenticatedDepositCallbackRoute
   '/deposit/success': typeof AuthenticatedDepositSuccessRoute
   '/invest/details': typeof AuthenticatedInvestDetailsRoute
   '/invest/success': typeof AuthenticatedInvestSuccessRoute
   '/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
+  '/withdraw/method': typeof AuthenticatedWithdrawMethodRoute
   '/api/paystack/webhook': typeof ApiPaystackWebhookRoute
   '/deposit/': typeof AuthenticatedDepositIndexRoute
   '/invest/': typeof AuthenticatedInvestIndexRoute
   '/investments/': typeof AuthenticatedInvestmentsIndexRoute
+  '/withdraw/': typeof AuthenticatedWithdrawIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -185,17 +194,18 @@ export interface FileRoutesByTo {
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/referral': typeof AuthenticatedReferralRoute
-  '/withdraw': typeof AuthenticatedWithdrawRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/deposit/callback': typeof AuthenticatedDepositCallbackRoute
   '/deposit/success': typeof AuthenticatedDepositSuccessRoute
   '/invest/details': typeof AuthenticatedInvestDetailsRoute
   '/invest/success': typeof AuthenticatedInvestSuccessRoute
   '/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
+  '/withdraw/method': typeof AuthenticatedWithdrawMethodRoute
   '/api/paystack/webhook': typeof ApiPaystackWebhookRoute
   '/deposit': typeof AuthenticatedDepositIndexRoute
   '/invest': typeof AuthenticatedInvestIndexRoute
   '/investments': typeof AuthenticatedInvestmentsIndexRoute
+  '/withdraw': typeof AuthenticatedWithdrawIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -210,17 +220,18 @@ export interface FileRoutesById {
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/referral': typeof AuthenticatedReferralRoute
-  '/_authenticated/withdraw': typeof AuthenticatedWithdrawRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/_authenticated/deposit/callback': typeof AuthenticatedDepositCallbackRoute
   '/_authenticated/deposit/success': typeof AuthenticatedDepositSuccessRoute
   '/_authenticated/invest/details': typeof AuthenticatedInvestDetailsRoute
   '/_authenticated/invest/success': typeof AuthenticatedInvestSuccessRoute
   '/_authenticated/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
+  '/_authenticated/withdraw/method': typeof AuthenticatedWithdrawMethodRoute
   '/api/paystack/webhook': typeof ApiPaystackWebhookRoute
   '/_authenticated/deposit/': typeof AuthenticatedDepositIndexRoute
   '/_authenticated/invest/': typeof AuthenticatedInvestIndexRoute
   '/_authenticated/investments/': typeof AuthenticatedInvestmentsIndexRoute
+  '/_authenticated/withdraw/': typeof AuthenticatedWithdrawIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -235,17 +246,18 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/profile'
     | '/referral'
-    | '/withdraw'
     | '/auth/callback'
     | '/deposit/callback'
     | '/deposit/success'
     | '/invest/details'
     | '/invest/success'
     | '/investments/history'
+    | '/withdraw/method'
     | '/api/paystack/webhook'
     | '/deposit/'
     | '/invest/'
     | '/investments/'
+    | '/withdraw/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -258,17 +270,18 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/profile'
     | '/referral'
-    | '/withdraw'
     | '/auth/callback'
     | '/deposit/callback'
     | '/deposit/success'
     | '/invest/details'
     | '/invest/success'
     | '/investments/history'
+    | '/withdraw/method'
     | '/api/paystack/webhook'
     | '/deposit'
     | '/invest'
     | '/investments'
+    | '/withdraw'
   id:
     | '__root__'
     | '/'
@@ -282,17 +295,18 @@ export interface FileRouteTypes {
     | '/_authenticated/onboarding'
     | '/_authenticated/profile'
     | '/_authenticated/referral'
-    | '/_authenticated/withdraw'
     | '/auth/callback'
     | '/_authenticated/deposit/callback'
     | '/_authenticated/deposit/success'
     | '/_authenticated/invest/details'
     | '/_authenticated/invest/success'
     | '/_authenticated/investments/history'
+    | '/_authenticated/withdraw/method'
     | '/api/paystack/webhook'
     | '/_authenticated/deposit/'
     | '/_authenticated/invest/'
     | '/_authenticated/investments/'
+    | '/_authenticated/withdraw/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -385,13 +399,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReferralRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/withdraw': {
-      id: '/_authenticated/withdraw'
-      path: '/withdraw'
-      fullPath: '/withdraw'
-      preLoaderRoute: typeof AuthenticatedWithdrawRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/auth/callback': {
       id: '/auth/callback'
       path: '/auth/callback'
@@ -455,6 +462,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInvestmentsHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/withdraw/': {
+      id: '/_authenticated/withdraw/'
+      path: '/withdraw'
+      fullPath: '/withdraw/'
+      preLoaderRoute: typeof AuthenticatedWithdrawIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/withdraw/method': {
+      id: '/_authenticated/withdraw/method'
+      path: '/withdraw/method'
+      fullPath: '/withdraw/method'
+      preLoaderRoute: typeof AuthenticatedWithdrawMethodRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/paystack/webhook': {
       id: '/api/paystack/webhook'
       path: '/api/paystack/webhook'
@@ -471,15 +492,16 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedReferralRoute: typeof AuthenticatedReferralRoute
-  AuthenticatedWithdrawRoute: typeof AuthenticatedWithdrawRoute
   AuthenticatedDepositCallbackRoute: typeof AuthenticatedDepositCallbackRoute
   AuthenticatedDepositSuccessRoute: typeof AuthenticatedDepositSuccessRoute
   AuthenticatedInvestDetailsRoute: typeof AuthenticatedInvestDetailsRoute
   AuthenticatedInvestSuccessRoute: typeof AuthenticatedInvestSuccessRoute
   AuthenticatedInvestmentsHistoryRoute: typeof AuthenticatedInvestmentsHistoryRoute
+  AuthenticatedWithdrawMethodRoute: typeof AuthenticatedWithdrawMethodRoute
   AuthenticatedDepositIndexRoute: typeof AuthenticatedDepositIndexRoute
   AuthenticatedInvestIndexRoute: typeof AuthenticatedInvestIndexRoute
   AuthenticatedInvestmentsIndexRoute: typeof AuthenticatedInvestmentsIndexRoute
+  AuthenticatedWithdrawIndexRoute: typeof AuthenticatedWithdrawIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -488,15 +510,16 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedReferralRoute: AuthenticatedReferralRoute,
-  AuthenticatedWithdrawRoute: AuthenticatedWithdrawRoute,
   AuthenticatedDepositCallbackRoute: AuthenticatedDepositCallbackRoute,
   AuthenticatedDepositSuccessRoute: AuthenticatedDepositSuccessRoute,
   AuthenticatedInvestDetailsRoute: AuthenticatedInvestDetailsRoute,
   AuthenticatedInvestSuccessRoute: AuthenticatedInvestSuccessRoute,
   AuthenticatedInvestmentsHistoryRoute: AuthenticatedInvestmentsHistoryRoute,
+  AuthenticatedWithdrawMethodRoute: AuthenticatedWithdrawMethodRoute,
   AuthenticatedDepositIndexRoute: AuthenticatedDepositIndexRoute,
   AuthenticatedInvestIndexRoute: AuthenticatedInvestIndexRoute,
   AuthenticatedInvestmentsIndexRoute: AuthenticatedInvestmentsIndexRoute,
+  AuthenticatedWithdrawIndexRoute: AuthenticatedWithdrawIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

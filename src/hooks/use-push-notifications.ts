@@ -54,8 +54,8 @@ export function usePushNotifications() {
         {
           user_id: user.id,
           endpoint: raw.endpoint!,
-          p256dh: raw.keys!.p256dh,
-          auth: raw.keys!.auth,
+          p256dh: raw.keys!["p256dh"],
+          auth: raw.keys!["auth"],
         } as never,
         { onConflict: "endpoint" },
       );
