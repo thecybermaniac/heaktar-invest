@@ -7,6 +7,8 @@ import { Button, Card, Field, PageHeader } from "@/components/hk/ui";
 import { resolveBankAccount } from "@/lib/paystack.functions";
 import { saveWithdrawalMethod } from "@/lib/withdrawals.functions";
 import { useBanks, useRefreshWithdrawalMethod, useWithdrawalMethod } from "@/hooks/use-withdrawal";
+import { useApp } from "@/lib/app-store";
+import { namesLikelyMatch } from "@/lib/name-match";
 import { toast } from "@/components/hk/toast";
 import { cn } from "@/lib/utils";
 
@@ -117,6 +119,7 @@ function BankPicker({
 
 function WithdrawalMethod() {
   const navigate = useNavigate();
+  const { profile } = useApp();
   const { data: banks, isPending: banksLoading, isError: banksError } = useBanks();
   const { data: existing } = useWithdrawalMethod();
   const refreshMethod = useRefreshWithdrawalMethod();
@@ -129,6 +132,11 @@ function WithdrawalMethod() {
   const [resolving, setResolving] = useState(false);
   const [resolveError, setResolveError] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
+
+  const profileName = `${profile.firstName} ${profile.lastName}`.trim();
+  const nameMismatch =
+    !!accountName && !resolving && profileName ? !namesLikelyMatch(profileName, accountName) : false;
+  const canSave = !!bank && !!accountName && !resolving && !saving && !nameMismatch;
 
   // prefill from the saved method so this doubles as the "update" screen
   useEffect(() => {
@@ -166,7 +174,7 @@ function WithdrawalMethod() {
   }, [bank, accountNumber, resolve]);
 
   async function handleSave() {
-    if (!bank || !accountName || saving) return;
+    if (!bank || !accountName || saving || nameMismatch) return;
     setSaving(true);
     try {
       await save({
@@ -214,17 +222,24 @@ function WithdrawalMethod() {
         />
 
         {(resolving || accountName) && (
-          <Card className={cn(accountName && "border-primary bg-accent/40")}>
+          <Card className={cn(accountName && (nameMismatch ? "border-destructive bg-destructive/5" : "border-primary bg-accent/40"))}>
             <span className="block text-xs text-muted-foreground">Account name</span>
             <p className="mt-0.5 text-[15px] font-semibold">
               {resolving ? "Verifying…" : accountName}
             </p>
+            {nameMismatch && (
+              <p className="mt-2 text-[11px] text-destructive">
+                This doesn't look like your name on file ({profileName}). For your security,
+                withdrawal accounts must belong to you — use an account in your own name, or
+                update your profile name if it's out of date.
+              </p>
+            )}
           </Card>
         )}
 
         <Button
           full
-          disabled={!bank || !accountName || resolving || saving}
+          disabled={!canSave}
           onClick={handleSave}
         >
           {saving ? "Saving…" : existing ? "Update method" : "Save method"}

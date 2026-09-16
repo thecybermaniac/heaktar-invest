@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { getPortfolio } from "./portfolio.server";
+import { namesLikelyMatch } from "./name-match";
 
 type DB = SupabaseClient<Database>;
 
@@ -36,6 +37,26 @@ export async function saveWithdrawalMethod(
   userId: string,
   input: WithdrawalMethodView,
 ) {
+  // This check is the actual security control (we don't require reauth for withdrawals),
+  // so it has to happen here, not just in the UI — anyone calling this function directly
+  // must still go through it.
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("first_name, last_name")
+    .eq("id", userId)
+    .maybeSingle();
+  if (profileError) throw new Error(profileError.message);
+
+  const profileName = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ").trim();
+  if (!profileName) {
+    throw new Error("Complete your profile name before adding a withdrawal method");
+  }
+  if (!namesLikelyMatch(profileName, input.accountName)) {
+    throw new Error(
+      "This account name doesn't match your profile name. Withdrawal accounts must belong to you.",
+    );
+  }
+
   // one method per user — user_id is UNIQUE, so this updates in place on re-save
   const { error } = await supabase.from("withdrawal_methods").upsert(
     {
