@@ -50,6 +50,15 @@ function Register() {
       toast.error(issue.title, issue.description);
       return;
     }
+    if (parsed.data.ref) {
+      const { data: valid, error: refError } = await supabase.rpc("is_valid_referral_code", {
+        code: parsed.data.ref,
+      });
+      if (refError || !valid) {
+        toast.error("Check your referral code", "We couldn't find an account with that referral code.");
+        return;
+      }
+    }
     setBusy(true);
     const { data, error } = await supabase.auth.signUp({
       email: parsed.data.email,

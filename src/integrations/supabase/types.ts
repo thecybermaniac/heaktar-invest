@@ -311,6 +311,18 @@ export type Database = {
     }
     Functions: {
       accrue_daily_investment_profits: { Args: never; Returns: undefined }
+      credit_referral_bonus: { Args: never; Returns: unknown }
+      is_valid_referral_code: { Args: { code: string }; Returns: boolean }
+      list_my_referrals: {
+        Args: never
+        Returns: {
+          id: string
+          name: string
+          joined_at: string
+          earned: number
+          status: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
