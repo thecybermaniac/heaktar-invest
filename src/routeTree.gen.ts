@@ -29,6 +29,11 @@ import { Route as AuthenticatedInvestDetailsRouteImport } from './routes/_authen
 import { Route as AuthenticatedInvestSuccessRouteImport } from './routes/_authenticated/invest.success'
 import { Route as AuthenticatedInvestmentsIndexRouteImport } from './routes/_authenticated/investments.index'
 import { Route as AuthenticatedInvestmentsHistoryRouteImport } from './routes/_authenticated/investments.history'
+import { Route as AuthenticatedProfileKycRouteImport } from './routes/_authenticated/profile.kyc'
+import { Route as AuthenticatedProfilePasswordRouteImport } from './routes/_authenticated/profile.password'
+import { Route as AuthenticatedProfilePersonalRouteImport } from './routes/_authenticated/profile.personal'
+import { Route as AuthenticatedProfileStatementRouteImport } from './routes/_authenticated/profile.statement'
+import { Route as AuthenticatedProfileTransactionsRouteImport } from './routes/_authenticated/profile.transactions'
 import { Route as AuthenticatedWithdrawIndexRouteImport } from './routes/_authenticated/withdraw.index'
 import { Route as AuthenticatedWithdrawMethodRouteImport } from './routes/_authenticated/withdraw.method'
 import { Route as ApiPaystackWebhookRouteImport } from './routes/api/paystack/webhook'
@@ -141,6 +146,35 @@ const AuthenticatedInvestmentsHistoryRoute =
     path: '/investments/history',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedProfileKycRoute = AuthenticatedProfileKycRouteImport.update({
+  id: '/kyc',
+  path: '/kyc',
+  getParentRoute: () => AuthenticatedProfileRoute,
+} as any)
+const AuthenticatedProfilePasswordRoute =
+  AuthenticatedProfilePasswordRouteImport.update({
+    id: '/password',
+    path: '/password',
+    getParentRoute: () => AuthenticatedProfileRoute,
+  } as any)
+const AuthenticatedProfilePersonalRoute =
+  AuthenticatedProfilePersonalRouteImport.update({
+    id: '/personal',
+    path: '/personal',
+    getParentRoute: () => AuthenticatedProfileRoute,
+  } as any)
+const AuthenticatedProfileStatementRoute =
+  AuthenticatedProfileStatementRouteImport.update({
+    id: '/statement',
+    path: '/statement',
+    getParentRoute: () => AuthenticatedProfileRoute,
+  } as any)
+const AuthenticatedProfileTransactionsRoute =
+  AuthenticatedProfileTransactionsRouteImport.update({
+    id: '/transactions',
+    path: '/transactions',
+    getParentRoute: () => AuthenticatedProfileRoute,
+  } as any)
 const AuthenticatedWithdrawIndexRoute =
   AuthenticatedWithdrawIndexRouteImport.update({
     id: '/withdraw/',
@@ -168,7 +202,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
-  '/profile': typeof AuthenticatedProfileRoute
+  '/profile': typeof AuthenticatedProfileRouteWithChildren
   '/referral': typeof AuthenticatedReferralRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/deposit/callback': typeof AuthenticatedDepositCallbackRoute
@@ -176,6 +210,11 @@ export interface FileRoutesByFullPath {
   '/invest/details': typeof AuthenticatedInvestDetailsRoute
   '/invest/success': typeof AuthenticatedInvestSuccessRoute
   '/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
+  '/profile/kyc': typeof AuthenticatedProfileKycRoute
+  '/profile/password': typeof AuthenticatedProfilePasswordRoute
+  '/profile/personal': typeof AuthenticatedProfilePersonalRoute
+  '/profile/statement': typeof AuthenticatedProfileStatementRoute
+  '/profile/transactions': typeof AuthenticatedProfileTransactionsRoute
   '/withdraw/method': typeof AuthenticatedWithdrawMethodRoute
   '/api/paystack/webhook': typeof ApiPaystackWebhookRoute
   '/deposit/': typeof AuthenticatedDepositIndexRoute
@@ -192,7 +231,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
-  '/profile': typeof AuthenticatedProfileRoute
+  '/profile': typeof AuthenticatedProfileRouteWithChildren
   '/referral': typeof AuthenticatedReferralRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/deposit/callback': typeof AuthenticatedDepositCallbackRoute
@@ -200,6 +239,11 @@ export interface FileRoutesByTo {
   '/invest/details': typeof AuthenticatedInvestDetailsRoute
   '/invest/success': typeof AuthenticatedInvestSuccessRoute
   '/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
+  '/profile/kyc': typeof AuthenticatedProfileKycRoute
+  '/profile/password': typeof AuthenticatedProfilePasswordRoute
+  '/profile/personal': typeof AuthenticatedProfilePersonalRoute
+  '/profile/statement': typeof AuthenticatedProfileStatementRoute
+  '/profile/transactions': typeof AuthenticatedProfileTransactionsRoute
   '/withdraw/method': typeof AuthenticatedWithdrawMethodRoute
   '/api/paystack/webhook': typeof ApiPaystackWebhookRoute
   '/deposit': typeof AuthenticatedDepositIndexRoute
@@ -218,7 +262,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
-  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRouteWithChildren
   '/_authenticated/referral': typeof AuthenticatedReferralRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/_authenticated/deposit/callback': typeof AuthenticatedDepositCallbackRoute
@@ -226,6 +270,11 @@ export interface FileRoutesById {
   '/_authenticated/invest/details': typeof AuthenticatedInvestDetailsRoute
   '/_authenticated/invest/success': typeof AuthenticatedInvestSuccessRoute
   '/_authenticated/investments/history': typeof AuthenticatedInvestmentsHistoryRoute
+  '/_authenticated/profile/kyc': typeof AuthenticatedProfileKycRoute
+  '/_authenticated/profile/password': typeof AuthenticatedProfilePasswordRoute
+  '/_authenticated/profile/personal': typeof AuthenticatedProfilePersonalRoute
+  '/_authenticated/profile/statement': typeof AuthenticatedProfileStatementRoute
+  '/_authenticated/profile/transactions': typeof AuthenticatedProfileTransactionsRoute
   '/_authenticated/withdraw/method': typeof AuthenticatedWithdrawMethodRoute
   '/api/paystack/webhook': typeof ApiPaystackWebhookRoute
   '/_authenticated/deposit/': typeof AuthenticatedDepositIndexRoute
@@ -252,6 +301,11 @@ export interface FileRouteTypes {
     | '/invest/details'
     | '/invest/success'
     | '/investments/history'
+    | '/profile/kyc'
+    | '/profile/password'
+    | '/profile/personal'
+    | '/profile/statement'
+    | '/profile/transactions'
     | '/withdraw/method'
     | '/api/paystack/webhook'
     | '/deposit/'
@@ -276,6 +330,11 @@ export interface FileRouteTypes {
     | '/invest/details'
     | '/invest/success'
     | '/investments/history'
+    | '/profile/kyc'
+    | '/profile/password'
+    | '/profile/personal'
+    | '/profile/statement'
+    | '/profile/transactions'
     | '/withdraw/method'
     | '/api/paystack/webhook'
     | '/deposit'
@@ -301,6 +360,11 @@ export interface FileRouteTypes {
     | '/_authenticated/invest/details'
     | '/_authenticated/invest/success'
     | '/_authenticated/investments/history'
+    | '/_authenticated/profile/kyc'
+    | '/_authenticated/profile/password'
+    | '/_authenticated/profile/personal'
+    | '/_authenticated/profile/statement'
+    | '/_authenticated/profile/transactions'
     | '/_authenticated/withdraw/method'
     | '/api/paystack/webhook'
     | '/_authenticated/deposit/'
@@ -462,6 +526,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInvestmentsHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/profile/kyc': {
+      id: '/_authenticated/profile/kyc'
+      path: '/kyc'
+      fullPath: '/profile/kyc'
+      preLoaderRoute: typeof AuthenticatedProfileKycRouteImport
+      parentRoute: typeof AuthenticatedProfileRoute
+    }
+    '/_authenticated/profile/password': {
+      id: '/_authenticated/profile/password'
+      path: '/password'
+      fullPath: '/profile/password'
+      preLoaderRoute: typeof AuthenticatedProfilePasswordRouteImport
+      parentRoute: typeof AuthenticatedProfileRoute
+    }
+    '/_authenticated/profile/personal': {
+      id: '/_authenticated/profile/personal'
+      path: '/personal'
+      fullPath: '/profile/personal'
+      preLoaderRoute: typeof AuthenticatedProfilePersonalRouteImport
+      parentRoute: typeof AuthenticatedProfileRoute
+    }
+    '/_authenticated/profile/statement': {
+      id: '/_authenticated/profile/statement'
+      path: '/statement'
+      fullPath: '/profile/statement'
+      preLoaderRoute: typeof AuthenticatedProfileStatementRouteImport
+      parentRoute: typeof AuthenticatedProfileRoute
+    }
+    '/_authenticated/profile/transactions': {
+      id: '/_authenticated/profile/transactions'
+      path: '/transactions'
+      fullPath: '/profile/transactions'
+      preLoaderRoute: typeof AuthenticatedProfileTransactionsRouteImport
+      parentRoute: typeof AuthenticatedProfileRoute
+    }
     '/_authenticated/withdraw/': {
       id: '/_authenticated/withdraw/'
       path: '/withdraw'
@@ -486,11 +585,30 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedProfileRouteChildren {
+  AuthenticatedProfileKycRoute: typeof AuthenticatedProfileKycRoute
+  AuthenticatedProfilePasswordRoute: typeof AuthenticatedProfilePasswordRoute
+  AuthenticatedProfilePersonalRoute: typeof AuthenticatedProfilePersonalRoute
+  AuthenticatedProfileStatementRoute: typeof AuthenticatedProfileStatementRoute
+  AuthenticatedProfileTransactionsRoute: typeof AuthenticatedProfileTransactionsRoute
+}
+
+const AuthenticatedProfileRouteChildren: AuthenticatedProfileRouteChildren = {
+  AuthenticatedProfileKycRoute: AuthenticatedProfileKycRoute,
+  AuthenticatedProfilePasswordRoute: AuthenticatedProfilePasswordRoute,
+  AuthenticatedProfilePersonalRoute: AuthenticatedProfilePersonalRoute,
+  AuthenticatedProfileStatementRoute: AuthenticatedProfileStatementRoute,
+  AuthenticatedProfileTransactionsRoute: AuthenticatedProfileTransactionsRoute,
+}
+
+const AuthenticatedProfileRouteWithChildren =
+  AuthenticatedProfileRoute._addFileChildren(AuthenticatedProfileRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
-  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRouteWithChildren
   AuthenticatedReferralRoute: typeof AuthenticatedReferralRoute
   AuthenticatedDepositCallbackRoute: typeof AuthenticatedDepositCallbackRoute
   AuthenticatedDepositSuccessRoute: typeof AuthenticatedDepositSuccessRoute
@@ -508,7 +626,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
-  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRouteWithChildren,
   AuthenticatedReferralRoute: AuthenticatedReferralRoute,
   AuthenticatedDepositCallbackRoute: AuthenticatedDepositCallbackRoute,
   AuthenticatedDepositSuccessRoute: AuthenticatedDepositSuccessRoute,
