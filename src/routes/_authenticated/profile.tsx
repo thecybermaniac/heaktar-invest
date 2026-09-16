@@ -1,5 +1,4 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import {
   ArrowDown,
   Bell,
@@ -18,7 +17,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
-import { Button, Card, Field, Toggle } from "@/components/hk/ui";
+import { Button, Card, Toggle } from "@/components/hk/ui";
 import { useApp } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/components/hk/toast";
@@ -46,7 +45,6 @@ function ProfilePage() {
   const navigate = useNavigate();
   const { profile, theme, toggleTheme } = useApp();
   const { signOut } = useAuth();
-  const [pwOpen, setPwOpen] = useState(false);
 
   return (
     <Screen>
@@ -64,11 +62,10 @@ function ProfilePage() {
       <section className="px-5 pt-6">
         <Card className="p-0">
           <div className="divide-y divide-border">
-            <NavRow to="/notifications" icon={User} label="Personal Information" />
-            <NavRow to="/notifications" icon={Shield} label="Change Password" />
+            <NavRow to="/profile/personal" icon={User} label="Personal Information" />
+            <NavRow to="/profile/password" icon={Shield} label="Change Password" />
             <NavRow to="/withdraw" icon={ArrowDown} label="Withdraw Funds" />
-            <NavRow to="/onboarding" icon={UserCheck2} label="Update KYC details" />
-            <NavRow to="/investments" icon={Wallet} label="My Investments" />
+            <NavRow to="/profile/kyc" icon={UserCheck2} label="Update KYC details" />
           </div>
         </Card>
       </section>
@@ -81,11 +78,9 @@ function ProfilePage() {
               <span className="flex-1 text-[13px] font-medium">Dark mode</span>
               <Toggle checked={theme === "dark"} onChange={toggleTheme} />
             </div>
-            <NavRow to="/onboarding" icon={History} label="Transaction History" />
-            <NavRow to="/notifications" icon={Bell} label="Notifications" />
-            <NavRow to="/onboarding" icon={Sheet} label="Account Statement" />
+            <NavRow to="/profile/transactions" icon={History} label="Transaction History" />
+            <NavRow to="/profile/statement" icon={Sheet} label="Account Statement" />
             <NavRow to="/onboarding" icon={Headphones} label="Get Support" />
-            <NavRow to="/onboarding" icon={Star} label="Write a Review" />
             <NavRow to="/onboarding" icon={Building} label="About Heaktar" />
           </div>
         </Card>
@@ -104,7 +99,6 @@ function ProfilePage() {
           <LogOut className="size-4" />
           Log out
         </Button>
-        <p className="mt-4 text-center text-[11px] text-muted-foreground">Heaktar v1.0.0</p>
       </div>
     </Screen>
   );
