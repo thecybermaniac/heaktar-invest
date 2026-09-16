@@ -68,7 +68,6 @@ function ProfilePage() {
             <NavRow to="/notifications" icon={Shield} label="Change Password" />
             <NavRow to="/withdraw" icon={ArrowDown} label="Withdraw Funds" />
             <NavRow to="/onboarding" icon={UserCheck2} label="Update KYC details" />
-            <NavRow to="/investments" icon={Wallet} label="My Investments" />
           </div>
         </Card>
       </section>
@@ -82,10 +81,8 @@ function ProfilePage() {
               <Toggle checked={theme === "dark"} onChange={toggleTheme} />
             </div>
             <NavRow to="/onboarding" icon={History} label="Transaction History" />
-            <NavRow to="/notifications" icon={Bell} label="Notifications" />
             <NavRow to="/onboarding" icon={Sheet} label="Account Statement" />
             <NavRow to="/onboarding" icon={Headphones} label="Get Support" />
-            <NavRow to="/onboarding" icon={Star} label="Write a Review" />
             <NavRow to="/onboarding" icon={Building} label="About Heaktar" />
           </div>
         </Card>
@@ -104,7 +101,6 @@ function ProfilePage() {
           <LogOut className="size-4" />
           Log out
         </Button>
-        <p className="mt-4 text-center text-[11px] text-muted-foreground">Heaktar v1.0.0</p>
       </div>
     </Screen>
   );
