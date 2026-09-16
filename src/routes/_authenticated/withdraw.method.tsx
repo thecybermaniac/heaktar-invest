@@ -6,7 +6,7 @@ import { Screen } from "@/components/hk/shell";
 import { Button, Card, Field, PageHeader } from "@/components/hk/ui";
 import { resolveBankAccount } from "@/lib/paystack.functions";
 import { saveWithdrawalMethod } from "@/lib/withdrawals.functions";
-import { useBanks, useRefreshWithdrawalMethod, useWithdrawalMethod } from "@/hooks/use-withdrawal";
+import { useBanks, useRefreshWithdrawalMethod, useWithdrawalMethod, banksQueryOptions, withdrawalMethodQueryOptions } from "@/hooks/use-withdrawal";
 import { useApp } from "@/lib/app-store";
 import { namesLikelyMatch } from "@/lib/name-match";
 import { toast } from "@/components/hk/toast";
@@ -24,6 +24,12 @@ export const Route = createFileRoute("/_authenticated/withdraw/method")({
       { property: "og:description", content: "Add your payout bank account." },
     ],
   }),
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(banksQueryOptions()),
+      context.queryClient.ensureQueryData(withdrawalMethodQueryOptions()),
+    ]);
+  },
   component: WithdrawalMethod,
 });
 

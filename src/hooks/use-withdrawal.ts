@@ -1,15 +1,26 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
+import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchBanks } from "@/lib/paystack.functions";
 import { fetchWithdrawalMethod } from "@/lib/withdrawals.functions";
 
-export function useWithdrawalMethod() {
-  const load = useServerFn(fetchWithdrawalMethod);
-  return useQuery({
+// Shared with the withdraw route loaders — see use-portfolio.ts for why these call the
+// server function directly rather than through useServerFn.
+export const withdrawalMethodQueryOptions = () =>
+  queryOptions({
     queryKey: ["withdrawal-method"],
-    queryFn: () => load(),
+    queryFn: () => fetchWithdrawalMethod(),
     staleTime: 60_000,
   });
+
+export const banksQueryOptions = () =>
+  queryOptions({
+    queryKey: ["banks"],
+    queryFn: () => fetchBanks(),
+    // the Nigerian bank list barely changes; cache it hard to avoid hammering Paystack
+    staleTime: 24 * 60 * 60_000,
+  });
+
+export function useWithdrawalMethod() {
+  return useQuery(withdrawalMethodQueryOptions());
 }
 
 export function useRefreshWithdrawalMethod() {
@@ -18,11 +29,5 @@ export function useRefreshWithdrawalMethod() {
 }
 
 export function useBanks() {
-  const load = useServerFn(fetchBanks);
-  return useQuery({
-    queryKey: ["banks"],
-    queryFn: () => load(),
-    // the Nigerian bank list barely changes; cache it hard to avoid hammering Paystack
-    staleTime: 24 * 60 * 60_000,
-  });
+  return useQuery(banksQueryOptions());
 }

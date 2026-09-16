@@ -4,7 +4,7 @@ import { Screen } from "@/components/hk/shell";
 import { Card, Chips, StatusPill } from "@/components/hk/ui";
 import { money } from "@/lib/data";
 import { Tabs } from "./investments.index";
-import { usePortfolio } from "@/hooks/use-portfolio";
+import { usePortfolio, portfolioQueryOptions } from "@/hooks/use-portfolio";
 
 export const Route = createFileRoute("/_authenticated/investments/history")({
   head: () => ({
@@ -15,6 +15,7 @@ export const Route = createFileRoute("/_authenticated/investments/history")({
       { property: "og:description", content: "Every matured plan with capital returned and profit earned." },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(portfolioQueryOptions()),
   component: History,
 });
 

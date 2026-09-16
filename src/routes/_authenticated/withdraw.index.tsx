@@ -6,8 +6,8 @@ import { Screen } from "@/components/hk/shell";
 import { Button, Card, Field, PageHeader } from "@/components/hk/ui";
 import { money } from "@/lib/data";
 import { submitWithdrawal } from "@/lib/withdrawals.functions";
-import { usePortfolio, useRefreshPortfolio } from "@/hooks/use-portfolio";
-import { useWithdrawalMethod } from "@/hooks/use-withdrawal";
+import { usePortfolio, useRefreshPortfolio, portfolioQueryOptions } from "@/hooks/use-portfolio";
+import { useWithdrawalMethod, withdrawalMethodQueryOptions } from "@/hooks/use-withdrawal";
 import { toast } from "@/components/hk/toast";
 
 export const Route = createFileRoute("/_authenticated/withdraw/")({
@@ -22,6 +22,12 @@ export const Route = createFileRoute("/_authenticated/withdraw/")({
       { property: "og:description", content: "Cash out to your saved bank account." },
     ],
   }),
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(portfolioQueryOptions()),
+      context.queryClient.ensureQueryData(withdrawalMethodQueryOptions()),
+    ]);
+  },
   component: Withdraw,
 });
 

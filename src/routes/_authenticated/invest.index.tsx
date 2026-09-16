@@ -5,7 +5,7 @@ import { Button, PageHeader, StatusPill } from "@/components/hk/ui";
 import { money } from "@/lib/data";
 import { useApp } from "@/lib/app-store";
 import { cn } from "@/lib/utils";
-import { usePlans } from "@/hooks/use-portfolio";
+import { usePlans, plansQueryOptions } from "@/hooks/use-portfolio";
 
 export const Route = createFileRoute("/_authenticated/invest/")({
   head: () => ({
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/_authenticated/invest/")({
       },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(plansQueryOptions()),
   component: SelectPlan,
 });
 

@@ -1,12 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import { fetchReferralSummary } from "@/lib/referrals.functions";
 
-export function useReferrals() {
-  const load = useServerFn(fetchReferralSummary);
-  return useQuery({
+// Shared with the referral route's loader — see use-portfolio.ts for why this calls the
+// server function directly rather than through useServerFn.
+export const referralsQueryOptions = () =>
+  queryOptions({
     queryKey: ["referrals"],
-    queryFn: () => load(),
+    queryFn: () => fetchReferralSummary(),
     staleTime: 30_000,
   });
+
+export function useReferrals() {
+  return useQuery(referralsQueryOptions());
 }

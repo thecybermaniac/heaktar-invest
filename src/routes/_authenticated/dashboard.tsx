@@ -17,8 +17,8 @@ import { Screen } from "@/components/hk/shell";
 import { Card, Metric, StatusPill } from "@/components/hk/ui";
 import { useApp } from "@/lib/app-store";
 import { money } from "@/lib/data";
-import { usePortfolio } from "@/hooks/use-portfolio";
-import { useNotifications } from "@/hooks/use-notifications";
+import { usePortfolio, portfolioQueryOptions } from "@/hooks/use-portfolio";
+import { useNotifications, notificationsQueryOptions } from "@/hooks/use-notifications";
 import type { InvestmentView } from "@/lib/portfolio.server";
 import { useMarketQuotes } from "@/hooks/use-market";
 import { cn } from "@/lib/utils";
@@ -39,6 +39,15 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
       },
     ],
   }),
+  // Starts these fetching during the route transition instead of after Dashboard mounts —
+  // ensureQueryData reuses an in-flight/fresh cache entry rather than re-fetching, so this
+  // is free when the data's already warm (e.g. navigating back from another tab).
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(portfolioQueryOptions()),
+      context.queryClient.ensureQueryData(notificationsQueryOptions()),
+    ]);
+  },
   component: Dashboard,
 });
 
