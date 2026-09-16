@@ -310,26 +310,3 @@ export async function creditDeposit(supabase: DB, userId: string, reference: str
 
   return { success: true, amount: verified.amount, reference: verified.reference };
 }
-
-export async function requestWithdrawal(
-  supabase: DB,
-  userId: string,
-  input: { amount: number; destination: string },
-) {
-  const amount = Math.round(input.amount * 100) / 100;
-  if (amount <= 0) throw new Error("Enter an amount to withdraw");
-
-  const { balance } = await getPortfolio(supabase, userId);
-  if (amount > balance) throw new Error("Amount exceeds your available balance");
-
-  const { error } = await supabase.from("transactions").insert({
-    user_id: userId,
-    type: "withdrawal",
-    label: `Withdrawal — ${input.destination}`,
-    amount: -amount,
-    status: "pending",
-  });
-  if (error) throw new Error(error.message);
-
-  return { amount };
-}
