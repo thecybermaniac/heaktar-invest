@@ -71,7 +71,9 @@ export function Field({
 }: FieldProps) {
   return (
     <label className="block">
-      {label && <span className="mb-1.5 block text-xs font-medium text-muted-foreground">{label}</span>}
+      {label && (
+        <span className="mb-1.5 block text-xs font-medium text-muted-foreground">{label}</span>
+      )}
       <div
         className={cn(
           "flex h-12 items-center gap-2 rounded border bg-input px-3 transition-colors focus-within:border-primary focus-within:bg-card",
@@ -318,6 +320,135 @@ export function DatePicker({
   );
 }
 
+/* ---------------- Month/year picker ---------------- */
+
+export function MonthPicker({
+  value,
+  onChange,
+  label,
+  minMonth,
+  maxMonth,
+}: {
+  /** "YYYY-MM" */
+  value: string;
+  onChange: (v: string) => void;
+  label?: string;
+  /** "YYYY-MM" — months before this are disabled */
+  minMonth?: string | undefined;
+  /** "YYYY-MM" — months after this are disabled */
+  maxMonth?: string | undefined;
+}) {
+  const [open, setOpen] = useState(false);
+  const [year, setYear] = useState(value ? Number(value.slice(0, 4)) : new Date().getFullYear());
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onDoc = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+  const minYear = minMonth ? Number(minMonth.slice(0, 4)) : undefined;
+  const minMonthNum = minMonth ? Number(minMonth.slice(5, 7)) : undefined;
+  const maxYear = maxMonth ? Number(maxMonth.slice(0, 4)) : undefined;
+  const maxMonthNum = maxMonth ? Number(maxMonth.slice(5, 7)) : undefined;
+
+  const canGoPrevYear = minYear === undefined || year - 1 >= minYear;
+  const canGoNextYear = maxYear === undefined || year + 1 <= maxYear;
+
+  function isMonthDisabled(monthIndex: number) {
+    const m = monthIndex + 1;
+    if (minYear !== undefined && minMonthNum !== undefined) {
+      if (year < minYear || (year === minYear && m < minMonthNum)) return true;
+    }
+    if (maxYear !== undefined && maxMonthNum !== undefined) {
+      if (year > maxYear || (year === maxYear && m > maxMonthNum)) return true;
+    }
+    return false;
+  }
+
+  const pretty = value
+    ? new Date(Number(value.slice(0, 4)), Number(value.slice(5, 7)) - 1, 1).toLocaleDateString(
+        "en-US",
+        { month: "long", year: "numeric" },
+      )
+    : "";
+
+  return (
+    <div ref={ref} className="relative">
+      {label && (
+        <span className="mb-1.5 block text-xs font-medium text-muted-foreground">{label}</span>
+      )}
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className={cn(
+          "flex h-12 w-full items-center gap-2 rounded border bg-input px-3 text-left text-[15px]",
+          open ? "border-primary bg-card" : "border-transparent",
+        )}
+      >
+        <Calendar className="size-4.5 text-muted-foreground" strokeWidth={1.8} />
+        <span className={cn("flex-1", !value && "text-muted-foreground/70")}>
+          {pretty || "Select month"}
+        </span>
+      </button>
+      {open && (
+        <div className="absolute z-40 mt-2 w-full rounded border border-border bg-popover p-3 shadow-float">
+          <div className="mb-2 flex items-center justify-between">
+            <button
+              type="button"
+              disabled={!canGoPrevYear}
+              onClick={() => setYear((y) => y - 1)}
+              className="rounded-lg p-1.5 hover:bg-muted disabled:opacity-30 disabled:hover:bg-transparent"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            <span className="text-sm font-medium">{year}</span>
+            <button
+              type="button"
+              disabled={!canGoNextYear}
+              onClick={() => setYear((y) => y + 1)}
+              className="rounded-lg p-1.5 hover:bg-muted disabled:opacity-30 disabled:hover:bg-transparent"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </div>
+          <div className="grid grid-cols-3 gap-1.5">
+            {MONTHS.map((m, i) => {
+              const iso = `${year}-${String(i + 1).padStart(2, "0")}`;
+              const selected = value === iso;
+              const disabled = isMonthDisabled(i);
+              return (
+                <button
+                  key={m}
+                  type="button"
+                  disabled={disabled}
+                  onClick={() => {
+                    onChange(iso);
+                    setOpen(false);
+                  }}
+                  className={cn(
+                    "rounded-lg py-2 text-xs transition-colors",
+                    selected
+                      ? "bg-primary text-primary-foreground"
+                      : disabled
+                        ? "cursor-not-allowed text-muted-foreground/40"
+                        : "hover:bg-muted",
+                  )}
+                >
+                  {m.slice(0, 3)}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ---------------- Segmented control ---------------- */
 
 export function Segmented({
@@ -479,11 +610,21 @@ export function StatusPill({
   );
 }
 
-export function Metric({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+export function Metric({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
   return (
     <div className="rounded bg-muted px-2 py-2">
       <span className="block text-[10px] text-muted-foreground">{label}</span>
-      <span className={cn("mt-0.5 block text-[12px] font-semibold", accent && "text-success")}>{value}</span>
+      <span className={cn("mt-0.5 block text-[12px] font-semibold", accent && "text-success")}>
+        {value}
+      </span>
     </div>
   );
 }

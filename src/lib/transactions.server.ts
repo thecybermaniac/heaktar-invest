@@ -85,3 +85,15 @@ export async function listTransactionsInRange(
 
   return (data ?? []).map(toView);
 }
+
+export async function getAccountCreatedAt(supabase: DB, userId: string): Promise<string> {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("created_at")
+    .eq("id", userId)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  // Falls back to now if somehow missing, so the picker still opens rather than breaking —
+  // in practice this row always exists once handle_new_user() has run at signup.
+  return data?.created_at ?? new Date().toISOString();
+}

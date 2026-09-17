@@ -20,3 +20,10 @@ export const fetchStatementTransactions = createServerFn({ method: "GET" })
     const { listTransactionsInRange } = await import("./transactions.server");
     return listTransactionsInRange(context.supabase, context.userId, data);
   });
+
+export const fetchAccountCreatedAt = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { getAccountCreatedAt } = await import("./transactions.server");
+    return getAccountCreatedAt(context.supabase, context.userId);
+  });
