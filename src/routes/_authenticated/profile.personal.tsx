@@ -108,6 +108,8 @@ function PersonalInformation() {
   const set = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
 
+  const isUnchanged = JSON.stringify(form) === JSON.stringify(profile);
+
   async function handleSave() {
     setSaving(true);
     try {
@@ -140,7 +142,7 @@ function PersonalInformation() {
           onChange={(e) => set("lastName", e.target.value)}
         />
 
-        <Button full disabled={saving} onClick={handleSave}>
+        <Button full disabled={saving || isUnchanged} onClick={handleSave}>
           {saving ? "Saving…" : "Save changes"}
         </Button>
       </div>

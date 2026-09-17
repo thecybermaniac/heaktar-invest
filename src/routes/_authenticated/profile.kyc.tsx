@@ -49,8 +49,10 @@ function UpdateKyc() {
   const { saveProfile } = useAuth();
   const [saving, setSaving] = useState(false);
 
-  const set = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) =>
-    setForm((f) => ({ ...f, [key]: value }));
+const set = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) =>
+  setForm((f) => ({ ...f, [key]: value }));
+
+const isUnchanged = JSON.stringify(form) === JSON.stringify(profile);
 
   async function handleSave() {
     setSaving(true);
@@ -69,34 +71,6 @@ function UpdateKyc() {
     <Screen>
       <PageHeader title="Update KYC details" subtitle="Your identification on file" />
       <div className="space-y-4 px-5 pt-5">
-        <DatePicker label="Date of birth" value={form.dob} onChange={(v) => set("dob", v)} />
-        <Select
-          label="Gender"
-          icon={Users}
-          value={form.gender}
-          onChange={(v) => set("gender", v)}
-          options={GENDER_OPTIONS}
-        />
-        <Select
-          label="Nationality"
-          icon={Globe}
-          value={form.nationality}
-          onChange={(v) => set("nationality", v)}
-          options={NATIONALITIES}
-        />
-        <Select
-          label="State"
-          icon={MapPin}
-          value={form.state}
-          onChange={(v) => set("state", v)}
-          options={STATES}
-        />
-        <Field
-          icon={Building2}
-          label="City"
-          value={form.city}
-          onChange={(e) => set("city", e.target.value)}
-        />
         <Field
           icon={Home}
           label="Residential address"
@@ -135,7 +109,7 @@ function UpdateKyc() {
           options={["Conservative", "Balanced", "Aggressive"]}
         />
 
-        <Button full disabled={saving} onClick={handleSave}>
+        <Button full disabled={saving || isUnchanged} onClick={handleSave}>
           {saving ? "Saving…" : "Save changes"}
         </Button>
       </div>
