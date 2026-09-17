@@ -22,7 +22,7 @@ import { useApp } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/components/hk/toast";
 
-export const Route = createFileRoute("/_authenticated/profile")({
+export const Route = createFileRoute("/_authenticated/profile/")({
   head: () => ({
     meta: [
       { title: "Profile & settings — Heaktar" },

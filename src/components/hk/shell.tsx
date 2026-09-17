@@ -1,12 +1,12 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutGrid, Wallet, Plus, Users, User, Trophy } from "lucide-react";
+import { LayoutGrid, Wallet, Plus, Users, User, Trophy, PlusCircle } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const TABS = [
   { to: "/dashboard", label: "Home", icon: LayoutGrid },
   { to: "/investments", label: "Portfolio", icon: Wallet },
-  { to: "/invest", label: "Invest", icon: Plus, center: true },
+  { to: "/invest", label: "Invest", icon: PlusCircle },
   { to: "/referral", label: "Rewards", icon: Trophy },
   { to: "/profile", label: "Profile", icon: User },
 ] as const;
@@ -19,22 +19,7 @@ export function BottomNav() {
       <div className="pointer-events-auto w-full max-w-md border-t border-border bg-background/95 px-3 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2 backdrop-blur-xl">
         <div className="flex items-end justify-between">
           {TABS.map(({ to, label, icon: Icon, ...rest }) => {
-            const center = "center" in rest && rest.center;
             const active = pathname === to || pathname.startsWith(`${to}/`);
-            if (center) {
-              return (
-                <Link
-                  key={to}
-                  to={to}
-                  className="-mt-7 flex w-14 flex-col items-center gap-1"
-                  aria-label="Invest"
-                >
-                  <span className="grid size-14 place-items-center rounded-full bg-gradient-brand text-primary-foreground shadow-float ring-4 ring-background">
-                    <Icon className="size-6" strokeWidth={2.2} />
-                  </span>
-                </Link>
-              );
-            }
             return (
               <Link key={to} to={to} className="flex w-16 flex-col items-center gap-1 py-1.5">
                 <Icon

@@ -18,7 +18,6 @@ import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
-import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedReferralRouteImport } from './routes/_authenticated/referral'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedDepositIndexRouteImport } from './routes/_authenticated/deposit/index'
@@ -29,6 +28,7 @@ import { Route as AuthenticatedInvestDetailsRouteImport } from './routes/_authen
 import { Route as AuthenticatedInvestSuccessRouteImport } from './routes/_authenticated/invest.success'
 import { Route as AuthenticatedInvestmentsIndexRouteImport } from './routes/_authenticated/investments.index'
 import { Route as AuthenticatedInvestmentsHistoryRouteImport } from './routes/_authenticated/investments.history'
+import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authenticated/profile.index'
 import { Route as AuthenticatedProfileKycRouteImport } from './routes/_authenticated/profile.kyc'
 import { Route as AuthenticatedProfilePasswordRouteImport } from './routes/_authenticated/profile.password'
 import { Route as AuthenticatedProfilePersonalRouteImport } from './routes/_authenticated/profile.personal'
@@ -81,11 +81,6 @@ const AuthenticatedNotificationsRoute =
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedReferralRoute = AuthenticatedReferralRouteImport.update({
@@ -146,34 +141,40 @@ const AuthenticatedInvestmentsHistoryRoute =
     path: '/investments/history',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedProfileIndexRoute =
+  AuthenticatedProfileIndexRouteImport.update({
+    id: '/profile/',
+    path: '/profile/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedProfileKycRoute = AuthenticatedProfileKycRouteImport.update({
-  id: '/kyc',
-  path: '/kyc',
-  getParentRoute: () => AuthenticatedProfileRoute,
+  id: '/profile/kyc',
+  path: '/profile/kyc',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedProfilePasswordRoute =
   AuthenticatedProfilePasswordRouteImport.update({
-    id: '/password',
-    path: '/password',
-    getParentRoute: () => AuthenticatedProfileRoute,
+    id: '/profile/password',
+    path: '/profile/password',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedProfilePersonalRoute =
   AuthenticatedProfilePersonalRouteImport.update({
-    id: '/personal',
-    path: '/personal',
-    getParentRoute: () => AuthenticatedProfileRoute,
+    id: '/profile/personal',
+    path: '/profile/personal',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedProfileStatementRoute =
   AuthenticatedProfileStatementRouteImport.update({
-    id: '/statement',
-    path: '/statement',
-    getParentRoute: () => AuthenticatedProfileRoute,
+    id: '/profile/statement',
+    path: '/profile/statement',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedProfileTransactionsRoute =
   AuthenticatedProfileTransactionsRouteImport.update({
-    id: '/transactions',
-    path: '/transactions',
-    getParentRoute: () => AuthenticatedProfileRoute,
+    id: '/profile/transactions',
+    path: '/profile/transactions',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedWithdrawIndexRoute =
   AuthenticatedWithdrawIndexRouteImport.update({
@@ -202,7 +203,6 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
-  '/profile': typeof AuthenticatedProfileRouteWithChildren
   '/referral': typeof AuthenticatedReferralRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/deposit/callback': typeof AuthenticatedDepositCallbackRoute
@@ -220,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/deposit/': typeof AuthenticatedDepositIndexRoute
   '/invest/': typeof AuthenticatedInvestIndexRoute
   '/investments/': typeof AuthenticatedInvestmentsIndexRoute
+  '/profile/': typeof AuthenticatedProfileIndexRoute
   '/withdraw/': typeof AuthenticatedWithdrawIndexRoute
 }
 export interface FileRoutesByTo {
@@ -231,7 +232,6 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
-  '/profile': typeof AuthenticatedProfileRouteWithChildren
   '/referral': typeof AuthenticatedReferralRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/deposit/callback': typeof AuthenticatedDepositCallbackRoute
@@ -249,6 +249,7 @@ export interface FileRoutesByTo {
   '/deposit': typeof AuthenticatedDepositIndexRoute
   '/invest': typeof AuthenticatedInvestIndexRoute
   '/investments': typeof AuthenticatedInvestmentsIndexRoute
+  '/profile': typeof AuthenticatedProfileIndexRoute
   '/withdraw': typeof AuthenticatedWithdrawIndexRoute
 }
 export interface FileRoutesById {
@@ -262,7 +263,6 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
-  '/_authenticated/profile': typeof AuthenticatedProfileRouteWithChildren
   '/_authenticated/referral': typeof AuthenticatedReferralRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/_authenticated/deposit/callback': typeof AuthenticatedDepositCallbackRoute
@@ -280,6 +280,7 @@ export interface FileRoutesById {
   '/_authenticated/deposit/': typeof AuthenticatedDepositIndexRoute
   '/_authenticated/invest/': typeof AuthenticatedInvestIndexRoute
   '/_authenticated/investments/': typeof AuthenticatedInvestmentsIndexRoute
+  '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/withdraw/': typeof AuthenticatedWithdrawIndexRoute
 }
 export interface FileRouteTypes {
@@ -293,7 +294,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/notifications'
     | '/onboarding'
-    | '/profile'
     | '/referral'
     | '/auth/callback'
     | '/deposit/callback'
@@ -311,6 +311,7 @@ export interface FileRouteTypes {
     | '/deposit/'
     | '/invest/'
     | '/investments/'
+    | '/profile/'
     | '/withdraw/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -322,7 +323,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/notifications'
     | '/onboarding'
-    | '/profile'
     | '/referral'
     | '/auth/callback'
     | '/deposit/callback'
@@ -340,6 +340,7 @@ export interface FileRouteTypes {
     | '/deposit'
     | '/invest'
     | '/investments'
+    | '/profile'
     | '/withdraw'
   id:
     | '__root__'
@@ -352,7 +353,6 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/notifications'
     | '/_authenticated/onboarding'
-    | '/_authenticated/profile'
     | '/_authenticated/referral'
     | '/auth/callback'
     | '/_authenticated/deposit/callback'
@@ -370,6 +370,7 @@ export interface FileRouteTypes {
     | '/_authenticated/deposit/'
     | '/_authenticated/invest/'
     | '/_authenticated/investments/'
+    | '/_authenticated/profile/'
     | '/_authenticated/withdraw/'
   fileRoutesById: FileRoutesById
 }
@@ -449,13 +450,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/profile': {
-      id: '/_authenticated/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AuthenticatedProfileRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/referral': {
       id: '/_authenticated/referral'
       path: '/referral'
@@ -526,40 +520,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInvestmentsHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/profile/': {
+      id: '/_authenticated/profile/'
+      path: '/profile'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof AuthenticatedProfileIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profile/kyc': {
       id: '/_authenticated/profile/kyc'
-      path: '/kyc'
+      path: '/profile/kyc'
       fullPath: '/profile/kyc'
       preLoaderRoute: typeof AuthenticatedProfileKycRouteImport
-      parentRoute: typeof AuthenticatedProfileRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/profile/password': {
       id: '/_authenticated/profile/password'
-      path: '/password'
+      path: '/profile/password'
       fullPath: '/profile/password'
       preLoaderRoute: typeof AuthenticatedProfilePasswordRouteImport
-      parentRoute: typeof AuthenticatedProfileRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/profile/personal': {
       id: '/_authenticated/profile/personal'
-      path: '/personal'
+      path: '/profile/personal'
       fullPath: '/profile/personal'
       preLoaderRoute: typeof AuthenticatedProfilePersonalRouteImport
-      parentRoute: typeof AuthenticatedProfileRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/profile/statement': {
       id: '/_authenticated/profile/statement'
-      path: '/statement'
+      path: '/profile/statement'
       fullPath: '/profile/statement'
       preLoaderRoute: typeof AuthenticatedProfileStatementRouteImport
-      parentRoute: typeof AuthenticatedProfileRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/profile/transactions': {
       id: '/_authenticated/profile/transactions'
-      path: '/transactions'
+      path: '/profile/transactions'
       fullPath: '/profile/transactions'
       preLoaderRoute: typeof AuthenticatedProfileTransactionsRouteImport
-      parentRoute: typeof AuthenticatedProfileRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/withdraw/': {
       id: '/_authenticated/withdraw/'
@@ -585,40 +586,26 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedProfileRouteChildren {
-  AuthenticatedProfileKycRoute: typeof AuthenticatedProfileKycRoute
-  AuthenticatedProfilePasswordRoute: typeof AuthenticatedProfilePasswordRoute
-  AuthenticatedProfilePersonalRoute: typeof AuthenticatedProfilePersonalRoute
-  AuthenticatedProfileStatementRoute: typeof AuthenticatedProfileStatementRoute
-  AuthenticatedProfileTransactionsRoute: typeof AuthenticatedProfileTransactionsRoute
-}
-
-const AuthenticatedProfileRouteChildren: AuthenticatedProfileRouteChildren = {
-  AuthenticatedProfileKycRoute: AuthenticatedProfileKycRoute,
-  AuthenticatedProfilePasswordRoute: AuthenticatedProfilePasswordRoute,
-  AuthenticatedProfilePersonalRoute: AuthenticatedProfilePersonalRoute,
-  AuthenticatedProfileStatementRoute: AuthenticatedProfileStatementRoute,
-  AuthenticatedProfileTransactionsRoute: AuthenticatedProfileTransactionsRoute,
-}
-
-const AuthenticatedProfileRouteWithChildren =
-  AuthenticatedProfileRoute._addFileChildren(AuthenticatedProfileRouteChildren)
-
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
-  AuthenticatedProfileRoute: typeof AuthenticatedProfileRouteWithChildren
   AuthenticatedReferralRoute: typeof AuthenticatedReferralRoute
   AuthenticatedDepositCallbackRoute: typeof AuthenticatedDepositCallbackRoute
   AuthenticatedDepositSuccessRoute: typeof AuthenticatedDepositSuccessRoute
   AuthenticatedInvestDetailsRoute: typeof AuthenticatedInvestDetailsRoute
   AuthenticatedInvestSuccessRoute: typeof AuthenticatedInvestSuccessRoute
   AuthenticatedInvestmentsHistoryRoute: typeof AuthenticatedInvestmentsHistoryRoute
+  AuthenticatedProfileKycRoute: typeof AuthenticatedProfileKycRoute
+  AuthenticatedProfilePasswordRoute: typeof AuthenticatedProfilePasswordRoute
+  AuthenticatedProfilePersonalRoute: typeof AuthenticatedProfilePersonalRoute
+  AuthenticatedProfileStatementRoute: typeof AuthenticatedProfileStatementRoute
+  AuthenticatedProfileTransactionsRoute: typeof AuthenticatedProfileTransactionsRoute
   AuthenticatedWithdrawMethodRoute: typeof AuthenticatedWithdrawMethodRoute
   AuthenticatedDepositIndexRoute: typeof AuthenticatedDepositIndexRoute
   AuthenticatedInvestIndexRoute: typeof AuthenticatedInvestIndexRoute
   AuthenticatedInvestmentsIndexRoute: typeof AuthenticatedInvestmentsIndexRoute
+  AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedWithdrawIndexRoute: typeof AuthenticatedWithdrawIndexRoute
 }
 
@@ -626,17 +613,22 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
-  AuthenticatedProfileRoute: AuthenticatedProfileRouteWithChildren,
   AuthenticatedReferralRoute: AuthenticatedReferralRoute,
   AuthenticatedDepositCallbackRoute: AuthenticatedDepositCallbackRoute,
   AuthenticatedDepositSuccessRoute: AuthenticatedDepositSuccessRoute,
   AuthenticatedInvestDetailsRoute: AuthenticatedInvestDetailsRoute,
   AuthenticatedInvestSuccessRoute: AuthenticatedInvestSuccessRoute,
   AuthenticatedInvestmentsHistoryRoute: AuthenticatedInvestmentsHistoryRoute,
+  AuthenticatedProfileKycRoute: AuthenticatedProfileKycRoute,
+  AuthenticatedProfilePasswordRoute: AuthenticatedProfilePasswordRoute,
+  AuthenticatedProfilePersonalRoute: AuthenticatedProfilePersonalRoute,
+  AuthenticatedProfileStatementRoute: AuthenticatedProfileStatementRoute,
+  AuthenticatedProfileTransactionsRoute: AuthenticatedProfileTransactionsRoute,
   AuthenticatedWithdrawMethodRoute: AuthenticatedWithdrawMethodRoute,
   AuthenticatedDepositIndexRoute: AuthenticatedDepositIndexRoute,
   AuthenticatedInvestIndexRoute: AuthenticatedInvestIndexRoute,
   AuthenticatedInvestmentsIndexRoute: AuthenticatedInvestmentsIndexRoute,
+  AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedWithdrawIndexRoute: AuthenticatedWithdrawIndexRoute,
 }
 

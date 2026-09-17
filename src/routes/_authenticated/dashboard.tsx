@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import {
   ArrowDownLeft,
   ArrowUpRight,
@@ -286,7 +286,16 @@ function Dashboard() {
                     <stop offset="100%" stopColor="var(--primary)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
+
+                <CartesianGrid
+                  stroke="var(--border)"
+                  strokeOpacity={1}
+                  strokeDasharray="2 2"
+                  vertical={true}
+                />
+
                 <YAxis hide domain={["dataMin - 300", "dataMax + 200"]} />
+
                 <Tooltip
                   cursor={{ stroke: "var(--border)" }}
                   contentStyle={{
@@ -298,6 +307,7 @@ function Dashboard() {
                   }}
                   formatter={(v: number) => [money(v), "Value"]}
                 />
+
                 <Area
                   type="monotone"
                   dataKey="value"
@@ -322,7 +332,7 @@ function Dashboard() {
           </Link>
         </div>
         <div className="space-y-2">
-          {(portfolio?.activities ?? []).map((a) => {
+          {(portfolio?.activities ?? []).slice(0, 3).map((a) => {
             const positive = a.amount > 0;
             const Icon =
               a.type === "deposit"
