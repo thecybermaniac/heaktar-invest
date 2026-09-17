@@ -62,9 +62,20 @@ type AccrualSummary = {
   days: number;
 };
 
+// Lagos is a fixed UTC+1 offset with no DST, so shifting by an hour before taking the
+// UTC date components gives the Lagos calendar date cheaply, without a timezone library.
+function toLagosDateNumber(d: Date) {
+  const shifted = new Date(d.getTime() + 60 * 60 * 1000);
+  return Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate());
+}
+
+// Calendar-date difference in Africa/Lagos, matching accrue_daily_investment_profits()'s
+// due-date logic exactly — a rolling 24-hour diff under-counts investments started later
+// in the day, even after the cron has already paid them.
 function daysBetween(from: string | Date, to: Date) {
-  const start = new Date(from).getTime();
-  return Math.max(0, Math.floor((to.getTime() - start) / DAY_MS));
+  const start = toLagosDateNumber(new Date(from));
+  const end = toLagosDateNumber(to);
+  return Math.max(0, Math.round((end - start) / DAY_MS));
 }
 
 export async function listPlans(supabase: DB): Promise<PlanRow[]> {
@@ -118,7 +129,8 @@ function toInvestmentView(
   const daily = Number(inv.daily_return);
   const elapsed = Math.min(daysBetween(inv.started_at, now), inv.term_days);
   const completed = inv.status === "completed";
-  const earned = accruals?.amount ?? (legacyPayout === undefined ? 0 : Math.max(0, legacyPayout - amount));
+  const earned =
+    accruals?.amount ?? (legacyPayout === undefined ? 0 : Math.max(0, legacyPayout - amount));
   return {
     id: inv.id,
     planId: inv.plan_id,
