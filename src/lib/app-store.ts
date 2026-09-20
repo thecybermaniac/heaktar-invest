@@ -1,9 +1,18 @@
-import { createContext, createElement, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  createElement,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
 export type Profile = {
   firstName: string;
   lastName: string;
   email: string;
+  avatarUrl: string;
   referralCode: string;
   dob: string;
   gender: string;
@@ -24,6 +33,7 @@ export const DEFAULT_PROFILE: Profile = {
   firstName: "Adaeze",
   lastName: "Heaktar",
   email: "adaeze@heaktar.app",
+  avatarUrl: "",
   referralCode: "HEAK-8241",
   dob: "1994-06-12",
   gender: "Female",
