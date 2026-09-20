@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { getPortfolio } from "./portfolio.server";
 
 type DB = SupabaseClient<Database>;
 
@@ -96,4 +97,26 @@ export async function getAccountCreatedAt(supabase: DB, userId: string): Promise
   // Falls back to now if somehow missing, so the picker still opens rather than breaking —
   // in practice this row always exists once handle_new_user() has run at signup.
   return data?.created_at ?? new Date().toISOString();
+}
+
+export type StatementHeaderInfo = {
+  customerName: string;
+  balance: number;
+};
+
+export async function getStatementHeaderInfo(
+  supabase: DB,
+  userId: string,
+): Promise<StatementHeaderInfo> {
+  const [{ data: profileRow, error: profileError }, portfolio] = await Promise.all([
+    supabase.from("profiles").select("first_name, last_name").eq("id", userId).maybeSingle(),
+    getPortfolio(supabase, userId),
+  ]);
+  if (profileError) throw new Error(profileError.message);
+
+  const customerName = [profileRow?.first_name, profileRow?.last_name]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  return { customerName: customerName || "Heaktar customer", balance: portfolio.balance };
 }

@@ -28,6 +28,7 @@ const COLUMNS = {
   firstName: "first_name",
   lastName: "last_name",
   email: "email",
+  avatarUrl: "avatar_url",
   referralCode: "referral_code",
   dob: "dob",
   gender: "gender",

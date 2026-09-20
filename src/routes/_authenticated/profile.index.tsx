@@ -1,8 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useRef } from "react";
 import {
   ArrowDown,
   Bell,
   Building,
+  Camera,
   ChevronRight,
   Headphones,
   History,
@@ -18,8 +20,10 @@ import {
 } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Card, Toggle } from "@/components/hk/ui";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useApp } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
+import { useAvatarUpload } from "@/hooks/use-avatar-upload";
 import { toast } from "@/components/hk/toast";
 
 export const Route = createFileRoute("/_authenticated/profile/")({
@@ -45,14 +49,50 @@ function ProfilePage() {
   const navigate = useNavigate();
   const { profile, theme, toggleTheme } = useApp();
   const { signOut } = useAuth();
+  const { upload, uploading } = useAvatarUpload();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file later
+    if (file) void upload(file);
+  }
 
   return (
     <Screen>
       <header className="flex flex-col items-center px-5 pt-8">
-        <span className="grid size-20 place-items-center rounded-full bg-gradient-brand text-xl font-semibold text-primary-foreground shadow-float">
-          {profile.firstName[0]}
-          {profile.lastName[0]}
-        </span>
+        <button
+          type="button"
+          onClick={() => !uploading && fileInputRef.current?.click()}
+          disabled={uploading}
+          className="group relative size-20 shrink-0 rounded-full"
+          aria-label="Change profile photo"
+        >
+          <Avatar className="size-20 shadow-float">
+            <AvatarImage src={profile.avatarUrl || undefined} alt="" />
+            <AvatarFallback className="bg-gradient-brand text-xl font-semibold text-primary-foreground">
+              {profile.firstName[0]}
+              {profile.lastName[0]}
+            </AvatarFallback>
+          </Avatar>
+          <span className="absolute inset-0 grid place-items-center rounded-full bg-black/40 text-white opacity-0 transition-opacity group-hover:opacity-100">
+            {uploading ? (
+              <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            ) : (
+              <Camera className="size-5" strokeWidth={1.8} />
+            )}
+          </span>
+          <span className="absolute -bottom-0.5 -right-0.5 grid size-6 place-items-center rounded-full border-2 border-background bg-primary text-primary-foreground">
+            <Camera className="size-3" strokeWidth={2} />
+          </span>
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          className="hidden"
+          onChange={handleFileChange}
+        />
         <h1 className="mt-3 text-lg font-semibold">
           {profile.firstName} {profile.lastName}
         </h1>
