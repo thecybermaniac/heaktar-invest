@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/onboarding")({
   head: () => ({
     meta: [
-      { title: "Complete your profile — Heaktar" },
+      { title: "Complete your profile — Heaktar Nigeria" },
       { name: "description", content: "Tell us about yourself so we can tailor investment plans and keep your Heaktar account compliant." },
-      { property: "og:title", content: "Complete your profile — Heaktar" },
+      { property: "og:title", content: "Complete your profile — Heaktar Nigeria" },
       { property: "og:description", content: "A short guided setup before your first Heaktar investment." },
     ],
   }),

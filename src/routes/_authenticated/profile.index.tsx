@@ -2,6 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useRef } from "react";
 import {
   ArrowDown,
+  ArrowLeftSquareIcon,
+  ArrowUpRightFromSquareIcon,
   Bell,
   Building,
   Camera,
@@ -29,13 +31,13 @@ import { toast } from "@/components/hk/toast";
 export const Route = createFileRoute("/_authenticated/profile/")({
   head: () => ({
     meta: [
-      { title: "Profile & settings — Heaktar" },
+      { title: "Profile & settings — Heaktar Nigeria" },
       {
         name: "description",
         content:
           "Manage your Heaktar personal details, appearance theme, password security and session.",
       },
-      { property: "og:title", content: "Profile & settings — Heaktar" },
+      { property: "og:title", content: "Profile & settings — Heaktar Nigeria" },
       {
         property: "og:description",
         content: "Personal details, theme, security and session settings.",
@@ -82,7 +84,7 @@ function ProfilePage() {
               <Camera className="size-5" strokeWidth={1.8} />
             )}
           </span>
-          <span className="absolute -bottom-0.5 -right-0.5 grid size-6 place-items-center rounded-full border-2 border-background bg-primary text-primary-foreground">
+          <span className="absolute -bottom-0.5 -right-0.5 grid size-6 place-items-center rounded-full border-2 border-background bg-muted text-primary-foreground">
             <Camera className="size-3" strokeWidth={2} />
           </span>
         </button>
@@ -120,8 +122,8 @@ function ProfilePage() {
             </div>
             <NavRow to="/profile/transactions" icon={History} label="Transaction History" />
             <NavRow to="/profile/statement" icon={Sheet} label="Account Statement" />
-            <NavRow to="/onboarding" icon={Headphones} label="Get Support" />
-            <NavRow to="/onboarding" icon={Building} label="About Heaktar" />
+            <NavRow to="https://heaktar.com/support" icon={Headphones} label="Get Support" external />
+            <NavRow to="https://heaktar.com/about" icon={Building} label="About Heaktar" external />
           </div>
         </Card>
       </section>
@@ -153,12 +155,20 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
-function NavRow({ to, icon: Icon, label }: { to: string; icon: typeof Bell; label: string }) {
+function NavRow({ to, icon: Icon, label, external }: { to: string; icon: typeof Bell; label: string; external?: boolean }) {
   return (
-    <Link to={to} className="flex items-center gap-3 px-4 py-3.5">
+    <Link
+      to={to}
+      {...(external ? { target: "_blank" } : {})}
+      className="flex items-center gap-3 px-4 py-3.5"
+    >
       <Icon className="size-4.5 text-muted-foreground" strokeWidth={1.8} />
       <span className="flex-1 text-[13px] font-medium">{label}</span>
-      <ChevronRight className="size-4 text-muted-foreground" />
+      {external ? (
+        <ArrowUpRightFromSquareIcon className="size-4 text-muted-foreground" strokeWidth={1.8} />
+      ) : (
+        <ChevronRight className="size-4 text-muted-foreground" strokeWidth={1.8} />
+      )}
     </Link>
   );
 }

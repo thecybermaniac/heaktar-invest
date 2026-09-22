@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Building, Building2, Check, CreditCard, Home } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Field, PageHeader } from "@/components/hk/ui";
 import { PAYMENT_METHODS, money } from "@/lib/data";
@@ -11,16 +11,16 @@ import { useAuth } from "@/lib/auth";
 export const Route = createFileRoute("/_authenticated/deposit/")({
   head: () => ({
     meta: [
-      { title: "Deposit funds — Heaktar" },
+      { title: "Deposit funds — Heaktar Nigeria" },
       {
         name: "description",
         content:
-          "Top up your Heaktar wallet by bank transfer, debit card or USDT and start investing immediately.",
+          "Top up your Heaktar wallet by bank transfer or debit card and start investing immediately.",
       },
-      { property: "og:title", content: "Deposit funds — Heaktar" },
+      { property: "og:title", content: "Deposit funds — Heaktar Nigeria" },
       {
         property: "og:description",
-        content: "Top up by bank transfer, card or USDT and invest immediately.",
+        content: "Top up by bank transfer or card and invest immediately.",
       },
     ],
   }),
@@ -69,7 +69,14 @@ function Deposit() {
                 )}
               >
                 <span>
-                  <span className="block text-[13px] font-medium">{m.label}</span>
+                  <div className="mb-1.5 flex items-center text-[13px] font-medium">
+                    {m.id === "bank_transfer" ? (
+                      <Building2 className="mr-2 inline size-4" />
+                    ) : (
+                      <CreditCard className="mr-2 inline size-4" />
+                    )}
+                    <span className="block text-[13px] font-medium">{m.label}</span>
+                  </div>
                   <span className="block text-[11px] text-muted-foreground">{m.hint}</span>
                 </span>
                 <span
@@ -96,13 +103,13 @@ function Deposit() {
           onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))}
         />
         <div className="flex gap-2">
-          {[100, 500, 1000, 5000].map((v) => (
+          {[1000, 2500, 5000, 10000].map((v) => (
             <button
               key={v}
               onClick={() => setAmount(String(v))}
               className="flex-1 rounded-xl border border-border bg-card py-2 text-xs font-medium"
             >
-              ₦{v}
+              ₦{v.toLocaleString("en-US")}
             </button>
           ))}
         </div>

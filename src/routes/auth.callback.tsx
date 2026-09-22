@@ -8,9 +8,9 @@ export const Route = createFileRoute("/auth/callback")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Signing you in — Heaktar" },
+      { title: "Signing you in — Heaktar Nigeria" },
       { name: "description", content: "Completing your secure Heaktar sign-in." },
-      { property: "og:title", content: "Signing you in — Heaktar" },
+      { property: "og:title", content: "Signing you in — Heaktar Nigeria" },
       { property: "og:description", content: "Completing your secure Heaktar sign-in." },
       { name: "robots", content: "noindex" },
     ],

@@ -29,9 +29,7 @@ export function AuthShell({
             {back.label}
           </Link>
         ) : (
-          <div className="grid size-12 place-items-center rounded-2xl bg-gradient-brand text-primary-foreground shadow-float">
-            <TrendingUp className="size-6" strokeWidth={2.4} />
-          </div>
+            <img src="/icons/logo.png" alt="logo" className="size-14" />
         )}
         <h1 className="mt-6 text-2xl font-semibold">{title}</h1>
         <p className="mt-1 text-sm font-normal text-muted-foreground">{subtitle}</p>

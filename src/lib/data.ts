@@ -214,8 +214,8 @@ export const REFERRALS = [
 ];
 
 export const PAYMENT_METHODS = [
-  { id: "bank_transfer", label: "Bank transfer", hint: "1 – 3 hours" },
-  { id: "card", label: "Debit card", hint: "Instant" },
+  { id: "bank_transfer", label: "Bank transfer", hint: "Takes a few minutes" },
+  { id: "card", label: "Debit card", hint: "Credited instantly" },
 ];
 
 export const BANK_ACCOUNTS = [

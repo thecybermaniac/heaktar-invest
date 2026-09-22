@@ -10,13 +10,13 @@ import { usePlans, plansQueryOptions } from "@/hooks/use-portfolio";
 export const Route = createFileRoute("/_authenticated/invest/")({
   head: () => ({
     meta: [
-      { title: "Choose a plan — Heaktar" },
+      { title: "Choose a plan — Heaktar Nigeria" },
       {
         name: "description",
         content:
           "Compare Heaktar's Starter, Silver, Diamond and Platinum plans by daily interest, term length and total return.",
       },
-      { property: "og:title", content: "Choose a plan — Heaktar" },
+      { property: "og:title", content: "Choose a plan — Heaktar Nigeria" },
       {
         property: "og:description",
         content: "Starter, Silver, Diamond and Platinum daily-yield investment plans.",
@@ -77,11 +77,6 @@ function SelectPlan() {
                 <Metric label="Min Investment" value={`${money(plan.minAmount, 0)}`} />
                 <Metric label="Total return" value={`${plan.totalReturn}%`} />
               </div>
-              <p className="mt-3 text-[11px] text-muted-foreground">
-                {plan.depositReturned
-                  ? "Capital returned at maturity"
-                  : "Capital reinvested at maturity"}
-              </p>
             </button>
           );
         })}

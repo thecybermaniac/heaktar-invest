@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/notifications")({
   head: () => ({
     meta: [
-      { title: "Notifications — Heaktar" },
+      { title: "Notifications — Heaktar Nigeria" },
       { name: "description", content: "Payout alerts, referral bonuses, withdrawal updates and security notices from your Heaktar account." },
-      { property: "og:title", content: "Notifications — Heaktar" },
+      { property: "og:title", content: "Notifications — Heaktar Nigeria" },
       { property: "og:description", content: "Payout, referral, withdrawal and security alerts." },
     ],
   }),

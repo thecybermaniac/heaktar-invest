@@ -11,13 +11,13 @@ import { landingRouteFor } from "@/lib/onboarding";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Sign in — Heaktar Investments" },
+      { title: "Sign in — Heaktar Nigeria" },
       {
         name: "description",
         content:
           "Sign in to Heaktar to track your portfolio, invest in daily-yield plans and withdraw anytime.",
       },
-      { property: "og:title", content: "Sign in — Heaktar Investments" },
+      { property: "og:title", content: "Sign in — Heaktar Nigeria" },
       {
         property: "og:description",
         content: "Sign in to Heaktar to track your portfolio and invest in daily-yield plans.",

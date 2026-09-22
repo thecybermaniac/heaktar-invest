@@ -11,12 +11,12 @@ export const Route = createFileRoute("/reset-password")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Set a new password — Heaktar" },
+      { title: "Set a new password — Heaktar Nigeria" },
       {
         name: "description",
         content: "Choose a new password for your Heaktar account and get back to investing.",
       },
-      { property: "og:title", content: "Set a new password — Heaktar" },
+      { property: "og:title", content: "Set a new password — Heaktar Nigeria" },
       { property: "og:description", content: "Choose a new password for your Heaktar account." },
     ],
   }),

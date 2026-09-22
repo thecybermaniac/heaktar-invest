@@ -11,13 +11,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/register")({
   head: () => ({
     meta: [
-      { title: "Create Account — Heaktar" },
+      { title: "Create Account — Heaktar Nigeria" },
       {
         name: "description",
         content:
           "Open a Heaktar account in minutes and start earning daily returns on curated investment plans.",
       },
-      { property: "og:title", content: "Create account — Heaktar" },
+      { property: "og:title", content: "Create account — Heaktar Nigeria" },
       {
         property: "og:description",
         content: "Open a Heaktar account and start earning daily returns.",
@@ -32,12 +32,15 @@ function Register() {
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
   const [agreed, setAgreed] = useState(false);
+
+  const referralCode = window.location.pathname.match(/^\/register\/([^/]+)\/?$/)?.[1] ?? "";
+
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-    ref: "",
+    ref: referralCode,
   });
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -55,7 +58,10 @@ function Register() {
         code: parsed.data.ref,
       });
       if (refError || !valid) {
-        toast.error("Check your referral code", "We couldn't find an account with that referral code.");
+        toast.error(
+          "Check your referral code",
+          "We couldn't find an account with that referral code.",
+        );
         return;
       }
     }
@@ -108,14 +114,14 @@ function Register() {
           <Field
             icon={User}
             label="First name"
-            placeholder="Adaeze"
+            placeholder="John"
             value={form.firstName}
             onChange={set("firstName")}
           />
           <Field
             icon={User}
             label="Last name"
-            placeholder="Heaktar"
+            placeholder="Doe"
             value={form.lastName}
             onChange={set("lastName")}
           />
@@ -169,7 +175,11 @@ function Register() {
             {agreed && <Check className="size-3.5" strokeWidth={3} />}
           </span>
           <span className="text-xs text-muted-foreground">
-            I agree to Heaktar's Terms &amp; Conditions and Privacy Policy, and to receive emails
+            I agree to Heaktar's <a href="#" className="underline hover:no-underline">
+              Terms &amp; Conditions
+            </a> and <a href="#" className="underline hover:no-underline">
+              Privacy Policy
+            </a>, and to receive emails
             with account updates.
           </span>
         </button>

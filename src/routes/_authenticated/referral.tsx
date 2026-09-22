@@ -9,13 +9,13 @@ import { useReferrals, referralsQueryOptions } from "@/hooks/use-referrals";
 export const Route = createFileRoute("/_authenticated/referral")({
   head: () => ({
     meta: [
-      { title: "Referrals — Heaktar" },
+      { title: "Referrals — Heaktar Nigeria" },
       {
         name: "description",
         content:
           "Share your Heaktar code, track invited friends and earn 5% of every referral's first investment.",
       },
-      { property: "og:title", content: "Referrals — Heaktar" },
+      { property: "og:title", content: "Referrals — Heaktar Nigeria" },
       { property: "og:description", content: "Earn 5% of every referral's first investment." },
     ],
   }),
@@ -27,7 +27,7 @@ function Referral() {
   const { data, isPending } = useReferrals();
   const [copied, setCopied] = useState(false);
   const referralCode = data?.referralCode ?? "";
-  const link = referralCode ? `https://heaktar.app/r/${referralCode}` : "";
+  const link = referralCode ? `https://heaktar.com.ng/register/${referralCode}` : "";
   const referrals = data?.referrals ?? [];
 
   const copy = async () => {
@@ -61,8 +61,8 @@ function Referral() {
   return (
     <Screen>
       <header className="px-5 pt-6">
-        <h1 className="text-xl font-semibold">Refer & earn</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <h1 className="text-lg font-semibold">Refer & earn</h1>
+        <p className="mt-1 text-xs text-muted-foreground">
           Earn 5% of every friend's first investment — paid instantly.
         </p>
       </header>
@@ -73,6 +73,7 @@ function Referral() {
           <p className="mt-1 text-3xl font-semibold tracking-[0.14em]">
             {isPending ? "…" : referralCode}
           </p>
+          <p className="mt-1 truncate text-xs font-medium text-primary">{isPending ? "…" : link}</p>
           <div className="mt-4 grid grid-cols-2 gap-2">
             <button
               onClick={copy}
@@ -100,7 +101,9 @@ function Referral() {
           <span className="text-xs text-muted-foreground">Referrals</span>
         </Card>
         <Card className="p-3.5 text-center">
-          <p className="mt-1 text-xl font-semibold text-success">{money(data?.totalEarned ?? 0, 0)}</p>
+          <p className="mt-1 text-xl font-semibold text-success">
+            {money(data?.totalEarned ?? 0, 0)}
+          </p>
           <span className="text-xs text-muted-foreground">Earned</span>
         </Card>
       </div>
@@ -108,7 +111,9 @@ function Referral() {
       <section className="px-5 pt-6">
         <h2 className="mb-3 text-sm font-medium">Referred Users</h2>
         <div className="space-y-2">
-          {isPending && <p className="px-1 py-6 text-center text-xs text-muted-foreground">Loading…</p>}
+          {isPending && (
+            <p className="px-1 py-6 text-center text-xs text-muted-foreground">Loading…</p>
+          )}
           {!isPending && referrals.length === 0 && (
             <p className="px-1 py-6 text-center text-xs text-muted-foreground">
               No referrals yet — share your code to start earning.
@@ -131,7 +136,9 @@ function Referral() {
               </div>
               <div className="flex flex-col items-end gap-1.5">
                 <span className="text-[13px] font-semibold text-success">+{money(r.earned)}</span>
-                <StatusPill tone={r.status === "active" ? "success" : "muted"}>{r.status}</StatusPill>
+                <StatusPill tone={r.status === "active" ? "success" : "muted"}>
+                  {r.status}
+                </StatusPill>
               </div>
             </div>
           ))}

@@ -11,12 +11,12 @@ import { toast } from "@/components/hk/toast";
 export const Route = createFileRoute("/_authenticated/profile/personal")({
   head: () => ({
     meta: [
-      { title: "Personal information — Heaktar" },
+      { title: "Personal information — Heaktar Nigeria" },
       {
         name: "description",
         content: "Update your personal, location and financial details on your Heaktar profile.",
       },
-      { property: "og:title", content: "Personal information — Heaktar" },
+      { property: "og:title", content: "Personal information — Heaktar Nigeria" },
       { property: "og:description", content: "Update your profile details." },
     ],
   }),
@@ -125,7 +125,7 @@ function PersonalInformation() {
 
   return (
     <Screen>
-      <PageHeader title="Personal Information" subtitle="Your details on file" />
+      <PageHeader title="Personal Information" subtitle="Your basic details" />
       <div className="space-y-4 px-5 pt-5">
         <EmailCard currentEmail={profile.email} />
 

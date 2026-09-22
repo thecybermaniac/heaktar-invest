@@ -17,12 +17,12 @@ import { toast } from "@/components/hk/toast";
 export const Route = createFileRoute("/_authenticated/profile/statement")({
   head: () => ({
     meta: [
-      { title: "Account Statement — Heaktar" },
+      { title: "Account Statement — Heaktar Nigeria" },
       {
         name: "description",
         content: "Download a PDF statement of your Heaktar transactions for any month range.",
       },
-      { property: "og:title", content: "Account Statement — Heaktar" },
+      { property: "og:title", content: "Account Statement — Heaktar Nigeria" },
       { property: "og:description", content: "Download a PDF of your account activity." },
     ],
   }),
@@ -134,11 +134,11 @@ function AccountStatement() {
         doc.text(value, margin + 110, y);
         y += 16;
       };
-      detailLine("Customer Name:", header.customerName);
-      detailLine("Statement Period:", period);
-      detailLine("Current Account Balance:", formatNaira(header.balance));
+      detailLine("Customer Name: ", header.customerName);
+      detailLine("Statement Period: ", period);
+      detailLine("Current Account Balance: ", formatNaira(header.balance));
       detailLine(
-        "Generated On:",
+        "Generated On: ",
         new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }),
       );
 
@@ -200,7 +200,7 @@ function AccountStatement() {
     <Screen>
       <PageHeader title="Account Statement" subtitle="Download your activity as a PDF" />
       <div className="space-y-4 px-5 pt-5">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3">
           <MonthPicker
             label="From"
             value={from}

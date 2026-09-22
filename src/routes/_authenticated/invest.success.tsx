@@ -9,9 +9,9 @@ import { useApp } from "@/lib/app-store";
 export const Route = createFileRoute("/_authenticated/invest/success")({
   head: () => ({
     meta: [
-      { title: "Investment confirmed — Heaktar" },
+      { title: "Investment confirmed — Heaktar Nigeria" },
       { name: "description", content: "Your Heaktar plan is active. Daily payouts start within 24 hours and land straight in your wallet." },
-      { property: "og:title", content: "Investment confirmed — Heaktar" },
+      { property: "og:title", content: "Investment confirmed — Heaktar Nigeria" },
       { property: "og:description", content: "Your plan is active and daily payouts start within 24 hours." },
     ],
   }),

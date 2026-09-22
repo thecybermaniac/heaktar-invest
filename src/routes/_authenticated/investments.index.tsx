@@ -8,9 +8,9 @@ import { usePortfolio, portfolioQueryOptions } from "@/hooks/use-portfolio";
 export const Route = createFileRoute("/_authenticated/investments/")({
   head: () => ({
     meta: [
-      { title: "Active investments — Heaktar" },
+      { title: "Active investments — Heaktar Nigeria" },
       { name: "description", content: "Monitor every running Heaktar plan: amount staked, daily return, days remaining and progress to maturity." },
-      { property: "og:title", content: "Active investments — Heaktar" },
+      { property: "og:title", content: "Active investments — Heaktar Nigeria" },
       { property: "og:description", content: "Every running plan with daily return and progress to maturity." },
     ],
   }),
@@ -27,8 +27,8 @@ function ActiveInvestments() {
   return (
     <Screen>
       <header className="px-5 pt-6">
-        <h1 className="text-xl font-semibold">My investments</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{investments.length} plans currently running.</p>
+        <h1 className="text-lg font-semibold">My Investments</h1>
+        <p className="mt-1 text-xs text-muted-foreground">{investments.length} plans currently running.</p>
       </header>
 
       <Tabs active="active" />

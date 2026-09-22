@@ -13,9 +13,9 @@ import { toast } from "@/components/hk/toast";
 export const Route = createFileRoute("/_authenticated/invest/details")({
   head: () => ({
     meta: [
-      { title: "Investment details — Heaktar" },
+      { title: "Investment details — Heaktar Nigeria" },
       { name: "description", content: "Enter your amount and preview the 2% service fee, daily payout and total return before you confirm." },
-      { property: "og:title", content: "Investment details — Heaktar" },
+      { property: "og:title", content: "Investment details — Heaktar Nigeria" },
       { property: "og:description", content: "Preview fees, daily payouts and total return before confirming." },
     ],
   }),
@@ -132,7 +132,7 @@ function InvestDetails() {
         </Card>
 
         <Button full disabled={!valid || submitting} onClick={handleConfirm}>
-          {submitting ? "Activating…" : "Confirm investment"}
+          {submitting ? "Activating…" : "Confirm Investment"}
         </Button>
         <p className="pb-2 text-center text-[11px] text-muted-foreground">
           A 2% service fee is deducted from your wallet at activation.

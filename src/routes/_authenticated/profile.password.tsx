@@ -10,9 +10,9 @@ import { toast } from "@/components/hk/toast";
 export const Route = createFileRoute("/_authenticated/profile/password")({
   head: () => ({
     meta: [
-      { title: "Change password — Heaktar" },
+      { title: "Change password — Heaktar Nigeria" },
       { name: "description", content: "Update your Heaktar account password." },
-      { property: "og:title", content: "Change password — Heaktar" },
+      { property: "og:title", content: "Change password — Heaktar Nigeria" },
       { property: "og:description", content: "Update your account password." },
     ],
   }),
@@ -72,6 +72,7 @@ function ChangePassword() {
           icon={Lock}
           type="password"
           label="Current password"
+          placeholder="Enter your current password"
           value={current}
           onChange={(e) => {
             setCurrent(e.target.value);
@@ -83,6 +84,7 @@ function ChangePassword() {
           icon={Lock}
           type="password"
           label="New password"
+          placeholder="Enter a new password"
           value={next}
           onChange={(e) => setNext(e.target.value)}
           hint={!tooShort ? "At least 8 characters" : undefined}
@@ -92,6 +94,7 @@ function ChangePassword() {
           icon={Lock}
           type="password"
           label="Confirm new password"
+          placeholder="Re-enter your new password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
           error={mismatch ? "Passwords don't match" : undefined}

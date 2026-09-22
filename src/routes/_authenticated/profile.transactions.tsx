@@ -9,13 +9,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/profile/transactions")({
   head: () => ({
     meta: [
-      { title: "Transaction History — Heaktar" },
+      { title: "Transaction History — Heaktar Nigeria" },
       {
         name: "description",
         content:
           "Every deposit, withdrawal, investment, payout and referral bonus on your Heaktar account.",
       },
-      { property: "og:title", content: "Transaction History — Heaktar" },
+      { property: "og:title", content: "Transaction History — Heaktar Nigeria" },
       { property: "og:description", content: "Your full Heaktar transaction history." },
     ],
   }),

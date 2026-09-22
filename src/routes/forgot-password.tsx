@@ -10,13 +10,13 @@ import { forgotSchema, firstIssue } from "@/lib/validation";
 export const Route = createFileRoute("/forgot-password")({
   head: () => ({
     meta: [
-      { title: "Reset your password — Heaktar" },
+      { title: "Reset your password — Heaktar Nigeria" },
       {
         name: "description",
         content:
           "Forgot your Heaktar password? Enter your email and we'll send you a secure reset link.",
       },
-      { property: "og:title", content: "Reset your password — Heaktar" },
+      { property: "og:title", content: "Reset your password — Heaktar Nigeria" },
       {
         property: "og:description",
         content: "Request a secure password reset link for your Heaktar account.",

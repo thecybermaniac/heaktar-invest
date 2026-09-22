@@ -13,12 +13,12 @@ import { toast } from "@/components/hk/toast";
 export const Route = createFileRoute("/_authenticated/withdraw/")({
   head: () => ({
     meta: [
-      { title: "Withdraw funds — Heaktar" },
+      { title: "Withdraw funds — Heaktar Nigeria" },
       {
         name: "description",
         content: "Cash out your Heaktar balance to your saved Nigerian bank account.",
       },
-      { property: "og:title", content: "Withdraw funds — Heaktar" },
+      { property: "og:title", content: "Withdraw funds — Heaktar Nigeria" },
       { property: "og:description", content: "Cash out to your saved bank account." },
     ],
   }),

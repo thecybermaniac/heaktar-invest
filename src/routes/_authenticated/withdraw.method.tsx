@@ -15,12 +15,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/withdraw/method")({
   head: () => ({
     meta: [
-      { title: "Withdrawal method — Heaktar" },
+      { title: "Withdrawal method — Heaktar Nigeria" },
       {
         name: "description",
         content: "Add the Nigerian bank account you want your Heaktar withdrawals paid into.",
       },
-      { property: "og:title", content: "Withdrawal method — Heaktar" },
+      { property: "og:title", content: "Withdrawal method — Heaktar Nigeria" },
       { property: "og:description", content: "Add your payout bank account." },
     ],
   }),

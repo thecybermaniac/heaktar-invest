@@ -9,9 +9,9 @@ import { usePortfolio, portfolioQueryOptions } from "@/hooks/use-portfolio";
 export const Route = createFileRoute("/_authenticated/investments/history")({
   head: () => ({
     meta: [
-      { title: "Investment history — Heaktar" },
+      { title: "Investment history — Heaktar Nigeria" },
       { name: "description", content: "Review every matured Heaktar plan with capital returned, profit earned and completion dates." },
-      { property: "og:title", content: "Investment history — Heaktar" },
+      { property: "og:title", content: "Investment history — Heaktar Nigeria" },
       { property: "og:description", content: "Every matured plan with capital returned and profit earned." },
     ],
   }),

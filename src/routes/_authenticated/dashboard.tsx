@@ -22,6 +22,7 @@ import { useNotifications, notificationsQueryOptions } from "@/hooks/use-notific
 import type { InvestmentView } from "@/lib/portfolio.server";
 import { useMarketQuotes } from "@/hooks/use-market";
 import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -174,9 +175,13 @@ function Dashboard() {
     <Screen>
       <header className="flex items-center justify-between px-4 pt-5">
         <Link to="/profile" className="flex items-center gap-3">
-          <span className="grid size-11 place-items-center rounded-full bg-border">
-            <User />
-          </span>
+          <Avatar className="size-10 shadow-float">
+            <AvatarImage src={profile.avatarUrl || undefined} alt="" />
+            <AvatarFallback className="bg-gradient-brand text-xl font-semibold text-primary-foreground">
+              {profile.firstName[0]}
+              {profile.lastName[0]}
+            </AvatarFallback>
+          </Avatar>
           <span>
             <span className="block text-xs text-muted-foreground">Welcome back,</span>
             <span className="block text-sm font-semibold">{profile.firstName}</span>

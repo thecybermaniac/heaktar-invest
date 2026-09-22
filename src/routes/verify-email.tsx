@@ -15,12 +15,12 @@ export const Route = createFileRoute("/verify-email")({
   }),
   head: () => ({
     meta: [
-      { title: "Verify your email — Heaktar" },
+      { title: "Verify your email — Heaktar Nigeria" },
       {
         name: "description",
         content: "Confirm your email address to activate your Heaktar account and start investing.",
       },
-      { property: "og:title", content: "Verify your email — Heaktar" },
+      { property: "og:title", content: "Verify your email — Heaktar Nigeria" },
       { property: "og:description", content: "Confirm your email to activate your Heaktar account." },
     ],
   }),

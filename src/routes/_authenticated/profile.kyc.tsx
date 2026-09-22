@@ -19,12 +19,12 @@ import { toast } from "@/components/hk/toast";
 export const Route = createFileRoute("/_authenticated/profile/kyc")({
   head: () => ({
     meta: [
-      { title: "Update KYC details — Heaktar" },
+      { title: "Update KYC details — Heaktar Nigeria" },
       {
         name: "description",
-        content: "Update the government-issued ID on file for your Heaktar account.",
+        content: "Update the KYC details for your Heaktar account.",
       },
-      { property: "og:title", content: "Update KYC details — Heaktar" },
+      { property: "og:title", content: "Update KYC details — Heaktar Nigeria" },
       { property: "og:description", content: "Update your identity verification details." },
     ],
   }),
@@ -69,7 +69,7 @@ const isUnchanged = JSON.stringify(form) === JSON.stringify(profile);
 
   return (
     <Screen>
-      <PageHeader title="Update KYC details" subtitle="Your identification on file" />
+      <PageHeader title="Update KYC details" subtitle="Your identification details" />
       <div className="space-y-4 px-5 pt-5">
         <Field
           icon={Home}
