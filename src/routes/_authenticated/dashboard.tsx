@@ -179,7 +179,6 @@ function Dashboard() {
             <AvatarImage src={profile.avatarUrl || undefined} alt="" />
             <AvatarFallback className="bg-gradient-brand text-xl font-semibold text-primary-foreground">
               {profile.firstName[0]}
-              {profile.lastName[0]}
             </AvatarFallback>
           </Avatar>
           <span>
@@ -300,18 +299,6 @@ function Dashboard() {
                 />
 
                 <YAxis hide domain={["dataMin - 300", "dataMax + 200"]} />
-
-                <Tooltip
-                  cursor={{ stroke: "var(--border)" }}
-                  contentStyle={{
-                    borderRadius: 12,
-                    border: "1px solid var(--border)",
-                    background: "var(--popover)",
-                    fontSize: 12,
-                    color: "var(--popover-foreground)",
-                  }}
-                  formatter={(v: number) => [money(v), "Value"]}
-                />
 
                 <Area
                   type="monotone"
