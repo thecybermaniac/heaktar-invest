@@ -1,7 +1,24 @@
 import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
+import { renderDesktopBlockedPage } from "./lib/desktop-blocked-page";
+import { isPhoneUserAgent } from "./lib/device";
 import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
+
+// The app is mobile-only: anything that isn't a phone browser (desktop, tablet, bots,
+// curl, ...) gets a static "use your phone" page instead of the app shell. Runs for
+// page/asset requests ("router") only — server function calls ("serverFn") are never
+// reachable on their own since the client bundle that issues them never loads for a
+// blocked visitor in the first place.
+const deviceGateMiddleware = createMiddleware().server(async ({ request, handlerType, next }) => {
+  if (handlerType === "router" && !isPhoneUserAgent(request.headers.get("user-agent") ?? "")) {
+    return new Response(renderDesktopBlockedPage(), {
+      status: 403,
+      headers: { "content-type": "text/html; charset=utf-8" },
+    });
+  }
+  return next();
+});
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
@@ -27,5 +44,5 @@ const csrfMiddleware = createCsrfMiddleware({
 
 export const startInstance = createStart(() => ({
   functionMiddleware: [attachSupabaseAuth],
-  requestMiddleware: [errorMiddleware, csrfMiddleware],
+  requestMiddleware: [errorMiddleware, deviceGateMiddleware, csrfMiddleware],
 }));
