@@ -19,6 +19,7 @@ import { useApp } from "@/lib/app-store";
 import { money } from "@/lib/data";
 import { usePortfolio, portfolioQueryOptions } from "@/hooks/use-portfolio";
 import { useNotifications, notificationsQueryOptions } from "@/hooks/use-notifications";
+import { profileQueryOptions } from "@/hooks/use-profile";
 import type { InvestmentView } from "@/lib/portfolio.server";
 import { useMarketQuotes } from "@/hooks/use-market";
 import { cn } from "@/lib/utils";
@@ -47,6 +48,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
     await Promise.all([
       context.queryClient.ensureQueryData(portfolioQueryOptions()),
       context.queryClient.ensureQueryData(notificationsQueryOptions()),
+      context.queryClient.ensureQueryData(profileQueryOptions()),
     ]);
   },
   component: Dashboard,

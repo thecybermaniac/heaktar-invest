@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { isOnboarded } from "@/lib/onboarding";
+import { profileQueryOptions } from "@/hooks/use-profile";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated")({
   // stale login (session revoked, expired) still gets caught within that window, and
   // onboarding completion explicitly invalidates below rather than waiting it out.
   staleTime: 30_000,
-  beforeLoad: async ({ location }) => {
+  beforeLoad: async ({ location, context }) => {
     // getSession() reads the already-verified session from local storage — no network call.
     // getUser() re-validates the JWT against Supabase's Auth server every time, which is the
     // right call to make once, but not on every navigation. Fall back to it only when there's
@@ -25,7 +25,14 @@ export const Route = createFileRoute("/_authenticated")({
       user = userData.user;
     }
 
-    const onboarded = await isOnboarded(user.id);
+    // ensureQueryData reuses a fresh cache entry rather than re-fetching (see
+    // dashboard.tsx's loader), and — more importantly here — this is what starts the
+    // profile fetch as early as possible: during this auth gate, before any child route
+    // or AuthProvider's own effect gets a chance to run. Every other authenticated route
+    // shares this same query, so profile only travels the network once per staleTime
+    // window instead of once per consumer.
+    const profile = await context.queryClient.ensureQueryData(profileQueryOptions());
+    const onboarded = profile.onboardingCompleted;
     const onOnboarding = location.pathname.startsWith("/onboarding");
 
     if (!onboarded && !onOnboarding) throw redirect({ to: "/onboarding", replace: true });

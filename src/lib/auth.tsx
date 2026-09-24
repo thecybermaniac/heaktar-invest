@@ -9,8 +9,11 @@ import {
 } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { useRouter } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useApp, type Profile } from "@/lib/app-store";
+import { profileQueryOptions } from "@/hooks/use-profile";
+import { PROFILE_COLUMNS } from "@/lib/profile-columns";
 
 type AuthState = {
   session: Session | null;
@@ -24,54 +27,28 @@ type AuthState = {
 
 const Ctx = createContext<AuthState | null>(null);
 
-const COLUMNS = {
-  firstName: "first_name",
-  lastName: "last_name",
-  email: "email",
-  avatarUrl: "avatar_url",
-  referralCode: "referral_code",
-  dob: "dob",
-  gender: "gender",
-  nationality: "nationality",
-  state: "state",
-  city: "city",
-  address: "address",
-  idType: "id_type",
-  idNumber: "id_number",
-  occupation: "occupation",
-  employmentStatus: "employment_status",
-  sourceOfFunds: "source_of_funds",
-  experience: "experience",
-  riskTolerance: "risk_tolerance",
-} as const;
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { setProfile } = useApp();
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
 
-  const loadProfile = useCallback(
-    async (userId: string) => {
-      const { data } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
-      if (!data) return;
-      const patch: Partial<Profile> = {};
-      (Object.keys(COLUMNS) as (keyof typeof COLUMNS)[]).forEach((key) => {
-        const value = (data as Record<string, unknown>)[COLUMNS[key]];
-        if (typeof value === "string" && value.length > 0) patch[key] = value;
-      });
-      setProfile(patch);
-      setOnboardingCompleted(Boolean(data.onboarding_completed));
-    },
-    [setProfile],
-  );
+  // fetchQuery shares the exact cache entry _authenticated's beforeLoad and the dashboard
+  // loader warm (see hooks/use-profile.ts) — usually already resolved by the time this
+  // runs, instead of firing a second, uncached round trip straight to Supabase.
+  const loadProfile = useCallback(async () => {
+    const { onboardingCompleted: onboarded, ...patch } = await queryClient.fetchQuery(profileQueryOptions());
+    setProfile(patch);
+    setOnboardingCompleted(onboarded);
+  }, [queryClient, setProfile]);
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
       setSession(next);
       if (next?.user) {
-        setTimeout(() => void loadProfile(next.user.id), 0);
+        setTimeout(() => void loadProfile(), 0);
       } else {
         setOnboardingCompleted(false);
       }
@@ -79,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     void supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
-      if (data.session?.user) void loadProfile(data.session.user.id);
+      if (data.session?.user) void loadProfile();
       setLoading(false);
     });
 
@@ -87,16 +64,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [loadProfile]);
 
   const refreshProfile = useCallback(async () => {
-    if (session?.user) await loadProfile(session.user.id);
-  }, [session, loadProfile]);
+    if (!session?.user) return;
+    await queryClient.invalidateQueries({ queryKey: ["profile"] });
+    await loadProfile();
+  }, [session, queryClient, loadProfile]);
 
   const saveProfile = useCallback(
     async (patch: Partial<Profile> & { onboardingCompleted?: boolean }) => {
       if (!session?.user) return;
       const row: Record<string, unknown> = { id: session.user.id };
-      (Object.keys(COLUMNS) as (keyof typeof COLUMNS)[]).forEach((key) => {
+      (Object.keys(PROFILE_COLUMNS) as (keyof Profile)[]).forEach((key) => {
         const value = patch[key];
-        if (typeof value === "string") row[COLUMNS[key]] = value;
+        if (typeof value === "string") row[PROFILE_COLUMNS[key]] = value;
       });
       if (patch.onboardingCompleted !== undefined) {
         row["onboarding_completed"] = patch.onboardingCompleted;
@@ -105,18 +84,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error } = await supabase.from("profiles").upsert(row as never, { onConflict: "id" });
       if (error) throw error;
       setProfile(patch);
+      // Without this, the "profile" query cache (shared with _authenticated's beforeLoad —
+      // see route.tsx) can still hand back the pre-save onboardingCompleted for up to its
+      // staleTime, which is exactly the stale-read bounce route.tsx's comment warns about.
+      await queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
-    [session, setProfile],
+    [session, setProfile, queryClient],
   );
 
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
     setSession(null);
-    // the _authenticated route caches its auth/onboarding check for 30s (route.tsx) — without
-    // this, a different user signing in on the same tab within that window could briefly see
-    // the previous user's cached onboarded state.
+    setOnboardingCompleted(false);
+    // None of the query keys here (profile, portfolio, notifications, ...) are scoped by
+    // user id, so without this, a different user signing in on the same tab shortly after
+    // could briefly see the previous user's cached data — profile included, now that it's
+    // cached client-side too. Clearing the whole cache on sign-out is the safe reset.
+    queryClient.clear();
+    // the _authenticated route also caches its own auth/onboarding check for 30s (route.tsx);
+    // this forces that to re-run rather than wait it out.
     await router.invalidate();
-  }, [router]);
+  }, [router, queryClient]);
 
   const value = useMemo<AuthState>(
     () => ({
