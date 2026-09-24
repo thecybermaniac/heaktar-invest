@@ -102,7 +102,7 @@ function Withdraw() {
         </div>
 
         <Field
-          icon={DollarSign}
+          icon={"₦"}
           label="Amount"
           inputMode="decimal"
           placeholder="0.00"
