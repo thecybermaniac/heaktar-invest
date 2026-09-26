@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppProvider } from "../lib/app-store";
 import { AuthProvider } from "../lib/auth";
 import { Toaster } from "../components/hk/toast";
+import { Analytics } from "@vercel/analytics/react"
 
 function NotFoundComponent() {
   return (
@@ -141,6 +142,7 @@ function RootComponent() {
         <AuthProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
+          <Analytics />
           <Toaster />
         </AuthProvider>
       </AppProvider>
