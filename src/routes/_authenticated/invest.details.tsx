@@ -4,7 +4,7 @@ import { DollarSign } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Card, Field, PageHeader, StatusPill } from "@/components/hk/ui";
 import { SERVICE_FEE_RATE, money } from "@/lib/data";
-import { useApp } from "@/lib/app-store";
+import { useInvestmentFlow } from "@/lib/app-store";
 import { usePlans, plansQueryOptions } from "@/hooks/use-portfolio";
 import { startInvestment } from "@/lib/portfolio.functions";
 import { useServerFn } from "@tanstack/react-start";
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/_authenticated/invest/details")({
 
 function InvestDetails() {
   const navigate = useNavigate();
-  const { draft, setDraft, setLastInvestment } = useApp();
+  const { draft, setDraft, setLastInvestment } = useInvestmentFlow();
   const { data: plans, isPending } = usePlans();
   const start = useServerFn(startInvestment);
   const [submitting, setSubmitting] = useState(false);

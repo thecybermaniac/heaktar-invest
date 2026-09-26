@@ -3,7 +3,7 @@ import { Check, ChevronRight } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, PageHeader, StatusPill } from "@/components/hk/ui";
 import { money } from "@/lib/data";
-import { useApp } from "@/lib/app-store";
+import { useInvestmentFlow } from "@/lib/app-store";
 import { cn } from "@/lib/utils";
 import { usePlans, plansQueryOptions } from "@/hooks/use-portfolio";
 
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/invest/")({
 
 function SelectPlan() {
   const navigate = useNavigate();
-  const { draft, setDraft } = useApp();
+  const { draft, setDraft } = useInvestmentFlow();
   const { data: plans, isPending, isError } = usePlans();
 
   return (

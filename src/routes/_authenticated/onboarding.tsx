@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router"
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Briefcase, Building2, Check, CreditCard, Globe, Hash, Home, IdCard, MapPin, Users } from "lucide-react";
 import { Button, Chips, DatePicker, Field, Segmented, Select } from "@/components/hk/ui";
-import { useApp, type Profile } from "@/lib/app-store";
+import { useProfileStore, type Profile } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/components/hk/toast";
 import { cn } from "@/lib/utils";
@@ -42,7 +42,7 @@ const REQUIRED: [keyof Profile, string][][] = [
 function Onboarding() {
   const navigate = useNavigate();
   const router = useRouter();
-  const { profile, setProfile } = useApp();
+  const { profile, setProfile } = useProfileStore();
   const { saveProfile, signOut } = useAuth();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<Profile>(profile);

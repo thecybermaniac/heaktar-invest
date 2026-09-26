@@ -23,7 +23,7 @@ import {
 import { Screen } from "@/components/hk/shell";
 import { Button, Card, Toggle } from "@/components/hk/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useApp } from "@/lib/app-store";
+import { useProfileStore, useTheme } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { useAvatarUpload } from "@/hooks/use-avatar-upload";
 import { toast } from "@/components/hk/toast";
@@ -49,7 +49,8 @@ export const Route = createFileRoute("/_authenticated/profile/")({
 
 function ProfilePage() {
   const navigate = useNavigate();
-  const { profile, theme, toggleTheme } = useApp();
+  const { profile } = useProfileStore();
+  const { theme, toggleTheme } = useTheme();
   const { signOut } = useAuth();
   const { upload, uploading } = useAvatarUpload();
   const fileInputRef = useRef<HTMLInputElement>(null);

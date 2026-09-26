@@ -64,24 +64,17 @@ export type InvestmentConfirmation = {
 
 type Draft = { planId: string | null; amount: number };
 
-type AppState = {
-  theme: "light" | "dark";
-  toggleTheme: () => void;
-  profile: Profile;
-  setProfile: (p: Partial<Profile>) => void;
-  draft: Draft;
-  setDraft: (d: Partial<Draft>) => void;
-  lastInvestment: InvestmentConfirmation | null;
-  setLastInvestment: (investment: InvestmentConfirmation | null) => void;
-};
+// --- Theme -------------------------------------------------------------
+// Split out of the old single AppState: toggling theme used to re-render every
+// useApp() consumer app-wide (profile forms, investment flow, dashboard) even
+// though none of them read theme. Now only components that call useTheme() do.
 
-const Ctx = createContext<AppState | null>(null);
+type ThemeState = { theme: "light" | "dark"; toggleTheme: () => void };
 
-export function AppProvider({ children }: { children: ReactNode }) {
+const ThemeCtx = createContext<ThemeState | null>(null);
+
+function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [profile, setProfileState] = useState<Profile>(DEFAULT_PROFILE);
-  const [draft, setDraftState] = useState<Draft>({ planId: null, amount: 0 });
-  const [lastInvestment, setLastInvestment] = useState<InvestmentConfirmation | null>(null);
 
   useEffect(() => {
     const stored = window.localStorage.getItem("heaktar-theme");
@@ -93,25 +86,91 @@ export function AppProvider({ children }: { children: ReactNode }) {
     window.localStorage.setItem("heaktar-theme", theme);
   }, [theme]);
 
-  const value = useMemo<AppState>(
+  const value = useMemo<ThemeState>(
+    () => ({ theme, toggleTheme: () => setTheme((t) => (t === "dark" ? "light" : "dark")) }),
+    [theme],
+  );
+
+  return createElement(ThemeCtx.Provider, { value }, children);
+}
+
+export function useTheme() {
+  const ctx = useContext(ThemeCtx);
+  if (!ctx) throw new Error("useTheme must be used within AppProvider");
+  return ctx;
+}
+
+// --- Profile -------------------------------------------------------------
+
+type ProfileState = { profile: Profile; setProfile: (p: Partial<Profile>) => void };
+
+const ProfileCtx = createContext<ProfileState | null>(null);
+
+function ProfileProvider({ children }: { children: ReactNode }) {
+  const [profile, setProfileState] = useState<Profile>(DEFAULT_PROFILE);
+
+  const value = useMemo<ProfileState>(
     () => ({
-      theme,
-      toggleTheme: () => setTheme((t) => (t === "dark" ? "light" : "dark")),
       profile,
-      setProfile: (p) => setProfileState((prev) => ({ ...prev ?? DEFAULT_PROFILE, ...p })),
+      setProfile: (p) => setProfileState((prev) => ({ ...(prev ?? DEFAULT_PROFILE), ...p })),
+    }),
+    [profile],
+  );
+
+  return createElement(ProfileCtx.Provider, { value }, children);
+}
+
+export function useProfileStore() {
+  const ctx = useContext(ProfileCtx);
+  if (!ctx) throw new Error("useProfileStore must be used within AppProvider");
+  return ctx;
+}
+
+// --- Investment flow -------------------------------------------------------
+// draft + lastInvestment stay together: the one place that needs both
+// (invest.details.tsx) needs them together anyway, and grouping them still
+// keeps this state out of the profile/theme re-render path and vice versa.
+
+type InvestmentFlowState = {
+  draft: Draft;
+  setDraft: (d: Partial<Draft>) => void;
+  lastInvestment: InvestmentConfirmation | null;
+  setLastInvestment: (investment: InvestmentConfirmation | null) => void;
+};
+
+const InvestmentFlowCtx = createContext<InvestmentFlowState | null>(null);
+
+function InvestmentFlowProvider({ children }: { children: ReactNode }) {
+  const [draft, setDraftState] = useState<Draft>({ planId: null, amount: 0 });
+  const [lastInvestment, setLastInvestment] = useState<InvestmentConfirmation | null>(null);
+
+  const value = useMemo<InvestmentFlowState>(
+    () => ({
       draft,
       setDraft: (d) => setDraftState((prev) => ({ ...prev, ...d })),
       lastInvestment,
       setLastInvestment,
     }),
-    [theme, profile, draft, lastInvestment],
+    [draft, lastInvestment],
   );
 
-  return createElement(Ctx.Provider, { value }, children);
+  return createElement(InvestmentFlowCtx.Provider, { value }, children);
 }
 
-export function useApp() {
-  const ctx = useContext(Ctx);
-  if (!ctx) throw new Error("useApp must be used within AppProvider");
+export function useInvestmentFlow() {
+  const ctx = useContext(InvestmentFlowCtx);
+  if (!ctx) throw new Error("useInvestmentFlow must be used within AppProvider");
   return ctx;
+}
+
+// --- Combined provider -------------------------------------------------------
+// Keeps the mount point in __root.tsx unchanged (still just <AppProvider>) while
+// each piece of state lives in its own context under the hood.
+
+export function AppProvider({ children }: { children: ReactNode }) {
+  return createElement(
+    ThemeProvider,
+    null,
+    createElement(ProfileProvider, null, createElement(InvestmentFlowProvider, null, children)),
+  );
 }

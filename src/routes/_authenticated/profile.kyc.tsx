@@ -12,7 +12,7 @@ import {
   Segmented,
   Select,
 } from "@/components/hk/ui";
-import { useApp } from "@/lib/app-store";
+import { useProfileStore } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/components/hk/toast";
 
@@ -44,7 +44,7 @@ const STATES = ["Lagos", "Abuja (FCT)", "Rivers", "Kano", "Oyo", "Enugu", "Kadun
 const GENDER_OPTIONS = ["Female", "Male", "Other", "Prefer not to say"];
 
 function UpdateKyc() {
-  const { profile, setProfile } = useApp();
+  const { profile, setProfile } = useProfileStore();
   const [form, setForm] = useState(profile);
   const { saveProfile } = useAuth();
   const [saving, setSaving] = useState(false);

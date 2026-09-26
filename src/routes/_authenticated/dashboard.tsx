@@ -1,6 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, YAxis } from "recharts";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import {
   ArrowDownLeft,
   ArrowUpRight,
@@ -15,7 +14,7 @@ import {
 } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Card, Metric, StatusPill } from "@/components/hk/ui";
-import { useApp } from "@/lib/app-store";
+import { useProfileStore } from "@/lib/app-store";
 import { money } from "@/lib/data";
 import { usePortfolio, portfolioQueryOptions } from "@/hooks/use-portfolio";
 import { useNotifications, notificationsQueryOptions } from "@/hooks/use-notifications";
@@ -24,6 +23,12 @@ import type { InvestmentView } from "@/lib/portfolio.server";
 import { useMarketQuotes } from "@/hooks/use-market";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+// recharts is a genuinely heavy dependency (pulls in a chunk of d3). Dashboard is the
+// first page every authenticated user lands on, so loading it eagerly here meant every
+// login/reload paid for parsing that whole library before the page could be interactive.
+// Splitting it into its own chunk means it streams in after first paint instead.
+const PerformanceChart = lazy(() => import("@/components/hk/performance-chart"));
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -160,7 +165,7 @@ function ActivePlansCarousel({ investments }: { investments: InvestmentView[] })
 }
 
 function Dashboard() {
-  const { profile } = useApp();
+  const { profile } = useProfileStore();
   const { data: portfolio, isPending } = usePortfolio();
   const { unread } = useNotifications();
   const balance = portfolio?.balance ?? 0;
@@ -284,33 +289,9 @@ function Dashboard() {
             >{`${changePct >= 0 ? "+" : ""}${changePct}%`}</StatusPill>
           </div>
           <div className="mt-4 h-40">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={performance} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
-                <defs>
-                  <linearGradient id="perf" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="var(--primary)" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-
-                <CartesianGrid
-                  stroke="var(--border)"
-                  strokeOpacity={1}
-                  strokeDasharray="2 2"
-                  vertical={true}
-                />
-
-                <YAxis hide domain={["dataMin - 300", "dataMax + 200"]} />
-
-                <Area
-                  type="monotone"
-                  dataKey="value"
-                  stroke="var(--primary)"
-                  strokeWidth={2.4}
-                  fill="url(#perf)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+            <Suspense fallback={<div className="h-full w-full animate-pulse rounded-lg bg-muted" />}>
+              <PerformanceChart data={performance} />
+            </Suspense>
           </div>
         </Card>
       </section>

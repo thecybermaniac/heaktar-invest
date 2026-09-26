@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useApp } from "@/lib/app-store";
+import { useProfileStore } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/components/hk/toast";
 
@@ -15,7 +15,7 @@ function extensionFor(file: File) {
 
 export function useAvatarUpload() {
   const { user } = useAuth();
-  const { profile, setProfile } = useApp();
+  const { profile, setProfile } = useProfileStore();
   const { saveProfile } = useAuth();
   const [uploading, setUploading] = useState(false);
 

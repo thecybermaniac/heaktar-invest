@@ -11,6 +11,17 @@ export const Route = createFileRoute("/_authenticated")({
   // stale login (session revoked, expired) still gets caught within that window, and
   // onboarding completion explicitly invalidates below rather than waiting it out.
   staleTime: 30_000,
+  // Without a pendingComponent, TanStack Router shows nothing at all while beforeLoad/loader
+  // are in flight — on a slow connection that reads as a frozen app, not a loading one.
+  // pendingMs: show it fast rather than waiting out the router's 1s default. pendingMinMs:
+  // but don't flash it for a few ms when the data was already warm from cache.
+  pendingMs: 100,
+  pendingMinMs: 300,
+  pendingComponent: () => (
+    <div className="grid min-h-dvh place-items-center">
+      <div className="size-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+    </div>
+  ),
   beforeLoad: async ({ location, context }) => {
     // getSession() reads the already-verified session from local storage — no network call.
     // getUser() re-validates the JWT against Supabase's Auth server every time, which is the

@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { jsPDF } from "jspdf";
-import { autoTable } from "jspdf-autotable";
 import { Download } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Card, MonthPicker, PageHeader } from "@/components/hk/ui";
@@ -108,6 +106,12 @@ function AccountStatement() {
 
       const net = rows.reduce((s, r) => s + r.amount, 0);
       const period = from === to ? monthLabel(from) : `${monthLabel(from)} – ${monthLabel(to)}`;
+
+      // jsPDF + jspdf-autotable (~140 KB gzipped, plus their own transitive dependencies)
+      // are only needed once someone actually clicks "Download PDF" — loading them here
+      // instead of as a static top-of-file import keeps this page's own chunk small for
+      // everyone who's just viewing the date pickers.
+      const [{ jsPDF }, { autoTable }] = await Promise.all([import("jspdf"), import("jspdf-autotable")]);
 
       const doc = new jsPDF({ unit: "pt", format: "a4" });
       const pageWidth = doc.internal.pageSize.getWidth();

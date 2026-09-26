@@ -7,7 +7,7 @@ import { Button, Card, Field, PageHeader } from "@/components/hk/ui";
 import { resolveBankAccount } from "@/lib/paystack.functions";
 import { saveWithdrawalMethod } from "@/lib/withdrawals.functions";
 import { useBanks, useRefreshWithdrawalMethod, useWithdrawalMethod, banksQueryOptions, withdrawalMethodQueryOptions } from "@/hooks/use-withdrawal";
-import { useApp } from "@/lib/app-store";
+import { useProfileStore } from "@/lib/app-store";
 import { namesLikelyMatch } from "@/lib/name-match";
 import { toast } from "@/components/hk/toast";
 import { cn } from "@/lib/utils";
@@ -125,7 +125,7 @@ function BankPicker({
 
 function WithdrawalMethod() {
   const navigate = useNavigate();
-  const { profile } = useApp();
+  const { profile } = useProfileStore();
   const { data: banks, isPending: banksLoading, isError: banksError } = useBanks();
   const { data: existing } = useWithdrawalMethod();
   const refreshMethod = useRefreshWithdrawalMethod();

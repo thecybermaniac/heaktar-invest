@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Briefcase, Building2, CreditCard, Globe, Home, MapPin, Mail, Users } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Card, Chips, DatePicker, Field, PageHeader, Select } from "@/components/hk/ui";
-import { useApp } from "@/lib/app-store";
+import { useProfileStore } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/hk/toast";
@@ -100,7 +100,7 @@ function EmailCard({ currentEmail }: { currentEmail: string }) {
 }
 
 function PersonalInformation() {
-  const { profile, setProfile } = useApp();
+  const { profile, setProfile } = useProfileStore();
   const { saveProfile } = useAuth();
   const [form, setForm] = useState(profile);
   const [saving, setSaving] = useState(false);

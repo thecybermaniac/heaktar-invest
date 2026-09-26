@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Lock } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Field, PageHeader } from "@/components/hk/ui";
-import { useApp } from "@/lib/app-store";
+import { useProfileStore } from "@/lib/app-store";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/hk/toast";
 
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/profile/password")({
 
 function ChangePassword() {
   const navigate = useNavigate();
-  const { profile } = useApp();
+  const { profile } = useProfileStore();
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
   const [confirm, setConfirm] = useState("");

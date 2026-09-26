@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Card } from "@/components/hk/ui";
 import { money } from "@/lib/data";
-import { useApp } from "@/lib/app-store";
+import { useInvestmentFlow } from "@/lib/app-store";
 
 export const Route = createFileRoute("/_authenticated/invest/success")({
   head: () => ({
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/invest/success")({
 
 function InvestSuccess() {
   const navigate = useNavigate();
-  const { lastInvestment } = useApp();
+  const { lastInvestment } = useInvestmentFlow();
 
   useEffect(() => {
     if (!lastInvestment) navigate({ to: "/invest", replace: true });

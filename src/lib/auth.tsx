@@ -11,7 +11,7 @@ import type { Session, User } from "@supabase/supabase-js";
 import { useRouter } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useApp, type Profile } from "@/lib/app-store";
+import { useProfileStore, type Profile } from "@/lib/app-store";
 import { profileQueryOptions } from "@/hooks/use-profile";
 import { PROFILE_COLUMNS } from "@/lib/profile-columns";
 
@@ -30,7 +30,7 @@ const Ctx = createContext<AuthState | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { setProfile } = useApp();
+  const { setProfile } = useProfileStore();
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
