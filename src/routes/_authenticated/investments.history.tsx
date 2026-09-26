@@ -29,8 +29,8 @@ function History() {
   return (
     <Screen>
       <header className="px-5 pt-6">
-        <h1 className="text-xl font-semibold tracking-tight">My investments</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Completed plans and settled payouts.</p>
+        <h1 className="text-lg font-semibold tracking-tight">My Investments</h1>
+        <p className="mt-1 text-xs text-muted-foreground">Completed plans and settled payouts.</p>
       </header>
 
       <Tabs active="history" />
