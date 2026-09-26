@@ -1,6 +1,7 @@
 import {
   createContext,
   createElement,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -86,9 +87,13 @@ function ThemeProvider({ children }: { children: ReactNode }) {
     window.localStorage.setItem("heaktar-theme", theme);
   }, [theme]);
 
+  const toggleTheme = useCallback(() => {
+    setTheme((t) => (t === "dark" ? "light" : "dark"));
+  }, []);
+
   const value = useMemo<ThemeState>(
-    () => ({ theme, toggleTheme: () => setTheme((t) => (t === "dark" ? "light" : "dark")) }),
-    [theme],
+    () => ({ theme, toggleTheme }),
+    [theme, toggleTheme],
   );
 
   return createElement(ThemeCtx.Provider, { value }, children);
@@ -109,12 +114,17 @@ const ProfileCtx = createContext<ProfileState | null>(null);
 function ProfileProvider({ children }: { children: ReactNode }) {
   const [profile, setProfileState] = useState<Profile>(DEFAULT_PROFILE);
 
+  // Stable identity: does not depend on `profile`, so consumers that put
+  // setProfile in a dependency array (e.g. auth.tsx's loadProfile) don't
+  // get a new function — and therefore don't re-run — every time the
+  // profile changes.
+  const setProfile = useCallback((p: Partial<Profile>) => {
+    setProfileState((prev) => ({ ...(prev ?? DEFAULT_PROFILE), ...p }));
+  }, []);
+
   const value = useMemo<ProfileState>(
-    () => ({
-      profile,
-      setProfile: (p) => setProfileState((prev) => ({ ...(prev ?? DEFAULT_PROFILE), ...p })),
-    }),
-    [profile],
+    () => ({ profile, setProfile }),
+    [profile, setProfile],
   );
 
   return createElement(ProfileCtx.Provider, { value }, children);
@@ -144,14 +154,13 @@ function InvestmentFlowProvider({ children }: { children: ReactNode }) {
   const [draft, setDraftState] = useState<Draft>({ planId: null, amount: 0 });
   const [lastInvestment, setLastInvestment] = useState<InvestmentConfirmation | null>(null);
 
+  const setDraft = useCallback((d: Partial<Draft>) => {
+    setDraftState((prev) => ({ ...prev, ...d }));
+  }, []);
+
   const value = useMemo<InvestmentFlowState>(
-    () => ({
-      draft,
-      setDraft: (d) => setDraftState((prev) => ({ ...prev, ...d })),
-      lastInvestment,
-      setLastInvestment,
-    }),
-    [draft, lastInvestment],
+    () => ({ draft, setDraft, lastInvestment, setLastInvestment }),
+    [draft, setDraft, lastInvestment],
   );
 
   return createElement(InvestmentFlowCtx.Provider, { value }, children);
