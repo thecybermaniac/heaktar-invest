@@ -109,13 +109,12 @@ const ProfileCtx = createContext<ProfileState | null>(null);
 function ProfileProvider({ children }: { children: ReactNode }) {
   const [profile, setProfileState] = useState<Profile>(DEFAULT_PROFILE);
 
-  const setProfile = useCallback((p: Partial<Profile>) => {
-    setProfileState((prev) => ({ ...(prev ?? DEFAULT_PROFILE), ...p }));
-  }, []);
-
   const value = useMemo<ProfileState>(
-    () => ({ profile, setProfile }),
-    [profile, setProfile],
+    () => ({
+      profile,
+      setProfile: (p) => setProfileState((prev) => ({ ...(prev ?? DEFAULT_PROFILE), ...p })),
+    }),
+    [profile],
   );
 
   return createElement(ProfileCtx.Provider, { value }, children);
