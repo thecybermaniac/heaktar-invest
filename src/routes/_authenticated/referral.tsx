@@ -27,7 +27,7 @@ function Referral() {
   const { data, isPending } = useReferrals();
   const [copied, setCopied] = useState(false);
   const referralCode = data?.referralCode ?? "";
-  const link = referralCode ? `https://app.heaktar.com.ng/register/${referralCode}` : "";
+  const link = referralCode ? `https://app.heaktar.com.ng/register?ref=${referralCode}` : "";
   const referrals = data?.referrals ?? [];
 
   const copy = async () => {

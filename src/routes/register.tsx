@@ -33,7 +33,7 @@ function Register() {
   const [busy, setBusy] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
-  const referralCode = window.location.pathname.match(/^\/register\/([^/]+)\/?$/)?.[1] ?? "";
+  const referralCode = new URLSearchParams(window.location.search).get("ref") ?? "";
 
   const [form, setForm] = useState({
     firstName: "",
@@ -175,12 +175,15 @@ function Register() {
             {agreed && <Check className="size-3.5" strokeWidth={3} />}
           </span>
           <span className="text-xs text-muted-foreground">
-            I agree to Heaktar's <a href="#" className="underline hover:no-underline">
+            I agree to Heaktar's{" "}
+            <a href="#" className="underline hover:no-underline">
               Terms &amp; Conditions
-            </a> and <a href="#" className="underline hover:no-underline">
+            </a>{" "}
+            and{" "}
+            <a href="#" className="underline hover:no-underline">
               Privacy Policy
-            </a>, and to receive emails
-            with account updates.
+            </a>
+            , and to receive emails with account updates.
           </span>
         </button>
 
