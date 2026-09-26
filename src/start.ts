@@ -2,16 +2,19 @@ import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/r
 
 import { renderErrorPage } from "./lib/error-page";
 import { renderDesktopBlockedPage } from "./lib/desktop-blocked-page";
-import { isPhoneUserAgent } from "./lib/device";
+import { isPhoneUserAgent, isCrawlerUserAgent } from "./lib/device";
 import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
 
-// The app is mobile-only: anything that isn't a phone browser (desktop, tablet, bots,
-// curl, ...) gets a static "use your phone" page instead of the app shell. Runs for
-// page/asset requests ("router") only — server function calls ("serverFn") are never
-// reachable on their own since the client bundle that issues them never loads for a
-// blocked visitor in the first place.
+// The app is mobile-only for real visitors: anything that isn't a phone browser (desktop,
+// tablet, curl, ...) gets a static "use your phone" page instead of the app shell. Search
+// engines and link-preview bots (Googlebot, facebookexternalhit, Twitterbot, WhatsApp, ...)
+// are explicitly let through instead — they only ever fetch a page's <head> tags for search
+// results / share cards, never "use" the app, and most of them don't present a phone-like
+// UA in the first place, so without this they'd get the blocked page and every shared link
+// would show a generic "use your phone" card instead of the real banner/description.
 const deviceGateMiddleware = createMiddleware().server(async ({ request, handlerType, next }) => {
-  if (handlerType === "router" && !isPhoneUserAgent(request.headers.get("user-agent") ?? "")) {
+  const ua = request.headers.get("user-agent") ?? "";
+  if (handlerType === "router" && !isPhoneUserAgent(ua) && !isCrawlerUserAgent(ua)) {
     return new Response(renderDesktopBlockedPage(), {
       status: 403,
       headers: { "content-type": "text/html; charset=utf-8" },

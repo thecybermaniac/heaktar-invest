@@ -8,7 +8,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { registerSchema, firstIssue } from "@/lib/validation";
 import { cn } from "@/lib/utils";
 
+type Search = { ref?: string };
+
 export const Route = createFileRoute("/register")({
+  validateSearch: (search: Record<string, unknown>): Search =>
+    typeof search["ref"] === "string" ? { ref: search["ref"] } : {},
   head: () => ({
     meta: [
       { title: "Create Account — Heaktar Nigeria" },
@@ -22,25 +26,29 @@ export const Route = createFileRoute("/register")({
         property: "og:description",
         content: "Open a Heaktar account and start earning daily returns.",
       },
+      { property: "og:url", content: "https://app.heaktar.com.ng/register" },
     ],
+    // Points at the bare URL regardless of "?ref=" — every referral link is a distinct
+    // query-string variant of the same page, and without this each one risks being
+    // indexed as separate, near-duplicate content instead of consolidating onto one.
+    links: [{ rel: "canonical", href: "https://app.heaktar.com.ng/register" }],
   }),
   component: Register,
 });
 
 function Register() {
   const navigate = useNavigate();
+  const { ref } = Route.useSearch();
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
   const [agreed, setAgreed] = useState(false);
-
-  const referralCode = window.location.pathname.match(/^\/register\/([^/]+)\/?$/)?.[1] ?? "";
 
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-    ref: referralCode,
+    ref: ref ?? "",
   });
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));

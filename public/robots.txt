@@ -1,7 +1,30 @@
+# Everything under these paths requires a signed-in session, so a crawler can never see
+# real content there anyway — disallowing keeps them out of the index and out of search
+# results, and stops crawl budget being spent on pages that just redirect to /.
 User-agent: Googlebot
+Disallow: /dashboard
+Disallow: /deposit
+Disallow: /invest
+Disallow: /investments
+Disallow: /notifications
+Disallow: /onboarding
+Disallow: /profile
+Disallow: /referral
+Disallow: /withdraw
+Disallow: /auth/callback
 Allow: /
 
 User-agent: Bingbot
+Disallow: /dashboard
+Disallow: /deposit
+Disallow: /invest
+Disallow: /investments
+Disallow: /notifications
+Disallow: /onboarding
+Disallow: /profile
+Disallow: /referral
+Disallow: /withdraw
+Disallow: /auth/callback
 Allow: /
 
 User-agent: Twitterbot
@@ -11,4 +34,16 @@ User-agent: facebookexternalhit
 Allow: /
 
 User-agent: *
+Disallow: /dashboard
+Disallow: /deposit
+Disallow: /invest
+Disallow: /investments
+Disallow: /notifications
+Disallow: /onboarding
+Disallow: /profile
+Disallow: /referral
+Disallow: /withdraw
+Disallow: /auth/callback
 Allow: /
+
+Sitemap: https://app.heaktar.com.ng/sitemap.xml
