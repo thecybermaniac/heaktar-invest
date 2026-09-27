@@ -22,7 +22,9 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Sign in to Heaktar to track your portfolio and invest in daily-yield plans.",
       },
+      { property: "og:url", content: "https://app.heaktar.com.ng/" },
     ],
+    links: [{ rel: "canonical", href: "https://app.heaktar.com.ng/" }],
   }),
   component: Login,
 });
