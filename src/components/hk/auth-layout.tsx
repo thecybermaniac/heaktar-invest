@@ -29,7 +29,9 @@ export function AuthShell({
             {back.label}
           </Link>
         ) : (
+<a href={HOST_NAME}>
             <img src="/icons/logo.png" alt="logo" className="size-14" />
+</a>
         )}
         <h1 className="mt-6 text-2xl font-semibold">{title}</h1>
         <p className="mt-1 text-sm font-normal text-muted-foreground">{subtitle}</p>
