@@ -15,6 +15,10 @@ import { AppProvider } from "../lib/app-store";
 import { AuthProvider } from "../lib/auth";
 import { Toaster } from "../components/hk/toast";
 import { Analytics } from "@vercel/analytics/react"
+// Side-effect only: attaches the `beforeinstallprompt` listener at app boot rather than
+// only once onboarding.tsx's own chunk loads — see use-pwa-install.ts for why timing
+// matters here (the event fires once, whenever Chrome decides, and is lost if missed).
+import "@/hooks/use-pwa-install";
 
 function NotFoundComponent() {
   return (
