@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, TrendingUp } from "lucide-react";
+import ( HOST_NAME } from "@/lib
 
 export function AuthShell({
   title,
