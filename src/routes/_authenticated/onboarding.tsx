@@ -2,6 +2,8 @@ import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router"
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Briefcase, Building2, Check, CreditCard, Globe, Hash, Home, IdCard, MapPin, Users } from "lucide-react";
 import { Button, Chips, DatePicker, Field, Segmented, Select } from "@/components/hk/ui";
+import { InstallAppModal } from "@/components/hk/install-app-modal";
+import { usePwaInstall } from "@/hooks/use-pwa-install";
 import { useProfileStore, type Profile } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/components/hk/toast";
@@ -43,10 +45,12 @@ function Onboarding() {
   const navigate = useNavigate();
   const router = useRouter();
   const { profile, setProfile } = useProfileStore();
-  const { saveProfile, signOut } = useAuth();
+  const { saveProfile, signOut, user } = useAuth();
+  const { state: pwaState } = usePwaInstall();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<Profile>(profile);
   const [agreed, setAgreed] = useState(false);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const touched = useRef(false);
   const set = (k: keyof Profile, v: string) => {
     touched.current = true;
@@ -59,6 +63,10 @@ function Onboarding() {
   }, [profile]);
 
   const [saving, setSaving] = useState(false);
+
+  function goToDashboard() {
+    navigate({ to: "/dashboard" });
+  }
 
   const next = async () => {
     const missing = REQUIRED[step]?.find(([key]) => !String(form[key] ?? "").trim());
@@ -75,7 +83,20 @@ function Onboarding() {
       // the _authenticated route's beforeLoad now caches its onboarded check for 30s
       // (see route.tsx) — without this, dashboard could bounce back here on a stale read.
       await router.invalidate();
-      navigate({ to: "/dashboard" });
+
+      // Shown once, right after the very first onboarding completion for this account —
+      // scoped by user id (not just a bare flag) since a shared device could see more
+      // than one account onboard. "installed"/"unsupported" mean there's nothing useful
+      // to show (already installed, or the browser gives us no install path at all).
+      const key = user ? `heaktar-install-prompt-shown:${user.id}` : null;
+      const eligible = pwaState === "android" || pwaState === "ios";
+      if (key && eligible && !window.localStorage.getItem(key)) {
+        window.localStorage.setItem(key, "1");
+        setShowInstallPrompt(true);
+        return;
+      }
+
+      goToDashboard();
     } catch {
       toast.error("Couldn't save your profile", "Please check your connection and try again.");
     } finally {
@@ -198,6 +219,8 @@ function Onboarding() {
           </Button>
         </div>
       </div>
+
+      <InstallAppModal open={showInstallPrompt} onClose={goToDashboard} />
     </div>
   );
 }
