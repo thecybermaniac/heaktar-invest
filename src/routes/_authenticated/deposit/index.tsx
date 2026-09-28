@@ -45,7 +45,7 @@ function Deposit() {
       });
       window.location.href = authorizationUrl;
     } catch (err) {
-      setError(err instanceof Error ? `err.message. Method: ${method}` : "Something went wrong. Try again.");
+      setError(err instanceof Error ? err.message : "Something went wrong. Try again.");
       setLoading(false);
     }
   }
