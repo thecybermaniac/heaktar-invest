@@ -27,6 +27,7 @@ import { useProfileStore, useTheme } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { useAvatarUpload } from "@/hooks/use-avatar-upload";
 import { toast } from "@/components/hk/toast";
+import { HOST_NAME } from "@/lib/data";
 
 export const Route = createFileRoute("/_authenticated/profile/")({
   head: () => ({
@@ -123,8 +124,8 @@ function ProfilePage() {
             </div>
             <NavRow to="/profile/transactions" icon={History} label="Transaction History" />
             <NavRow to="/profile/statement" icon={Sheet} label="Account Statement" />
-            <NavRow to="https://heaktar.com/support" icon={Headphones} label="Get Support" external />
-            <NavRow to="https://heaktar.com/about" icon={Building} label="About Heaktar" external />
+            <NavRow to={`${HOST_NAME}/contact`} icon={Headphones} label="Get Support" external />
+            <NavRow to={`${HOST_NAME}/about`} icon={Building} label="About Heaktar" external />
           </div>
         </Card>
       </section>

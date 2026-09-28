@@ -7,6 +7,7 @@ import { toast } from "@/components/hk/toast";
 import { supabase } from "@/integrations/supabase/client";
 import { registerSchema, firstIssue } from "@/lib/validation";
 import { cn } from "@/lib/utils";
+import { HOST_NAME } from "@/lib/data";
 
 type Search = { ref?: string };
 
@@ -184,11 +185,11 @@ function Register() {
           </span>
           <span className="text-xs text-muted-foreground">
             I agree to Heaktar's{" "}
-            <a href="#" className="underline hover:no-underline">
+            <a href={`${HOST_NAME}/terms`} className="underline hover:no-underline">
               Terms &amp; Conditions
             </a>{" "}
             and{" "}
-            <a href="#" className="underline hover:no-underline">
+            <a href={`${HOST_NAME}/privacy`} className="underline hover:no-underline">
               Privacy Policy
             </a>
             , and to receive emails with account updates.

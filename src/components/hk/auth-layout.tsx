@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, TrendingUp } from "lucide-react";
-import ( HOST_NAME } from "@/lib
+import { HOST_NAME } from "@/lib/data";
 
 export function AuthShell({
   title,
@@ -30,9 +30,9 @@ export function AuthShell({
             {back.label}
           </Link>
         ) : (
-<a href={HOST_NAME}>
+          <a href={HOST_NAME}>
             <img src="/icons/logo.png" alt="logo" className="size-14" />
-</a>
+          </a>
         )}
         <h1 className="mt-6 text-2xl font-semibold">{title}</h1>
         <p className="mt-1 text-sm font-normal text-muted-foreground">{subtitle}</p>
@@ -42,7 +42,6 @@ export function AuthShell({
     </div>
   );
 }
-
 
 export function Divider({ label = "or" }: { label?: string }) {
   return (

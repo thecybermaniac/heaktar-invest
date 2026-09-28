@@ -50,7 +50,7 @@ export const PAYMENT_METHODS = [
   { id: "card", label: "Debit card", hint: "Credited instantly" },
 ];
 
-export const HOST_NAME = import.meta.HOST_NANE
+export const HOST_NAME = import.meta.env["HOST_NAME"]
 
 export const fmt = (n: number, digits = 2) =>
   n.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits });
