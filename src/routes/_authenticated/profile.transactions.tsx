@@ -75,7 +75,7 @@ function TransactionHistory() {
             className="flex items-center justify-between gap-3 rounded border border-border bg-card p-3.5"
           >
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-medium">{t.label}</p>
+              <p className="truncate text-[13px] font-medium capitalize">{t.label}</p>
               <p className="mt-0.5 text-[11px] text-muted-foreground">
                 {new Date(t.date).toLocaleDateString("en-US", {
                   month: "short",

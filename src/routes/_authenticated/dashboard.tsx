@@ -335,7 +335,7 @@ function Dashboard() {
                   <Icon className="size-4.5" strokeWidth={1.9} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] font-medium">{a.label}</p>
+                  <p className="truncate text-[13px] font-medium capitalize">{a.label}</p>
                   <p className="text-[11px] text-muted-foreground">{a.date}</p>
                 </div>
                 <div className="text-right">
