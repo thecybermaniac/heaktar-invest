@@ -103,7 +103,7 @@ function Deposit() {
           onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))}
         />
         <div className="flex gap-2">
-          {[1000, 2500, 5000, 10000].map((v) => (
+          {[5000, 10000, 20000, 50000].map((v) => (
             <button
               key={v}
               onClick={() => setAmount(String(v))}
