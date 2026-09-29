@@ -17,8 +17,17 @@ function DepositCallback() {
   const hasRun = useRef(false);
 
   useEffect(() => {
-    if (hasRun.current || !reference) return;
+    if (hasRun.current) return;
     hasRun.current = true;
+
+    // A cancelled/abandoned checkout doesn't always come back with a reference — Paystack
+    // only guarantees one on a completed attempt. Without this, the effect below would
+    // just return early and leave "Verifying your payment…" on screen forever, which is
+    // exactly the "cancel keeps the button stuck processing" bug.
+    if (!reference) {
+      navigate({ to: "/deposit", search: { error: "payment_cancelled" }, replace: true });
+      return;
+    }
 
     confirmDeposit({ data: { reference } })
       .then((result) => {
@@ -29,7 +38,11 @@ function DepositCallback() {
             replace: true,
           });
         } else {
-          navigate({ to: "/deposit", search: { error: "payment_failed" }, replace: true });
+          navigate({
+            to: "/deposit",
+            search: { error: result.status === "abandoned" ? "payment_cancelled" : "payment_failed" },
+            replace: true,
+          });
         }
       })
       .catch(() => {

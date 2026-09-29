@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Building, Building2, Check, CreditCard, Home } from "lucide-react";
 import { Screen } from "@/components/hk/shell";
 import { Button, Field, PageHeader } from "@/components/hk/ui";
@@ -9,6 +9,8 @@ import { initializeDeposit } from "@/lib/paystack.functions";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/_authenticated/deposit/")({
+  validateSearch: (search: Record<string, unknown>) =>
+    typeof search["error"] === "string" ? { error: search["error"] } : {},
   head: () => ({
     meta: [
       { title: "Deposit funds — Heaktar Nigeria" },
@@ -27,13 +29,34 @@ export const Route = createFileRoute("/_authenticated/deposit/")({
   component: Deposit,
 });
 
+const ERROR_MESSAGES: Record<string, string> = {
+  payment_cancelled: "Payment cancelled — no charge was made.",
+  payment_failed: "That payment didn't go through. You can try again.",
+  verification_failed:
+    "We couldn't confirm that payment. If you were charged, contact support with your reference.",
+};
+
 function Deposit() {
   const { user } = useAuth();
+  const { error: errorCode } = Route.useSearch();
   const [amount, setAmount] = useState("");
   const [method, setMethod] = useState<"card" | "bank_transfer">("bank_transfer");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(errorCode ? (ERROR_MESSAGES[errorCode] ?? null) : null);
   const value = Number(amount) || 0;
+
+  // window.location.href navigates fully away to Paystack's hosted checkout. If the person
+  // cancels there via their browser's back button rather than Paystack's own cancel flow,
+  // the browser can restore this exact page from bfcache — including whatever React state
+  // it had when it left, which was mid "Redirecting to Paystack…". Without this, the button
+  // stays stuck saying that forever even though nothing is actually happening anymore.
+  useEffect(() => {
+    function handlePageShow(e: PageTransitionEvent) {
+      if (e.persisted) setLoading(false);
+    }
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, []);
 
   async function handleDeposit() {
     if (value <= 0 || !user?.email) return;
