@@ -81,6 +81,7 @@ export async function verifyTransaction(reference: string) {  const res = await 
 
   return {
     success: json.data.status === "success",
+    status: json.data.status,
     reference: json.data.reference,
     amount: json.data.amount / 100,
   };

@@ -76,14 +76,17 @@ function Notifications() {
   const { data, isPending } = useNotifications();
   const markRead = useMarkNotificationRead();
   const markAllRead = useMarkAllNotificationsRead();
-  const [marking, setMarking] = useState(true);
+  const [marking, setMarking] = useState(false);
   const items = data ?? [];
   const unread = items.filter((n) => !n.read).length;
 
-  const handleRead = () => {
+  const handleRead = async () => {
     setMarking(true);
-    markAllRead();
-    setMarking(false);
+    try {
+      await markAllRead();
+    } finally {
+      setMarking(false);
+    }
   };
 
   return (
@@ -92,7 +95,11 @@ function Notifications() {
         title="Notifications"
         subtitle={`${unread} unread`}
         action={
-          <button className="text-xs font-medium text-primary" onClick={handleRead}>
+          <button
+            className="text-xs font-medium text-primary disabled:opacity-60"
+            onClick={handleRead}
+            disabled={marking || unread === 0}
+          >
             {marking ? "Marking..." : "Mark all read"}
           </button>
         }

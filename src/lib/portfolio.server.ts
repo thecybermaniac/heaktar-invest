@@ -307,7 +307,7 @@ export async function createInvestment(
 export async function creditDeposit(supabase: DB, userId: string, reference: string) {
   const { verifyTransaction } = await import("./paystack.server");
   const verified = await verifyTransaction(reference);
-  if (!verified.success) return { success: false, amount: 0, reference };
+  if (!verified.success) return { success: false, amount: 0, reference, status: verified.status };
 
   const { error } = await supabase.from("transactions").insert({
     user_id: userId,
@@ -317,8 +317,10 @@ export async function creditDeposit(supabase: DB, userId: string, reference: str
     status: "completed",
     reference: verified.reference,
   });
-  // unique reference means an already-credited deposit simply no-ops
+  // unique reference means an already-credited deposit simply no-ops — this is what makes
+  // it safe to call creditDeposit from both /deposit/callback and the webhook for the same
+  // reference (whichever gets there first wins, the other is a harmless no-op).
   if (error && !error.message.toLowerCase().includes("duplicate")) throw new Error(error.message);
 
-  return { success: true, amount: verified.amount, reference: verified.reference };
+  return { success: true, amount: verified.amount, reference: verified.reference, status: verified.status };
 }
