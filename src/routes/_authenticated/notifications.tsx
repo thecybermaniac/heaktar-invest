@@ -76,7 +76,7 @@ function Notifications() {
   const { data, isPending } = useNotifications();
   const markRead = useMarkNotificationRead();
   const markAllRead = useMarkAllNotificationsRead();
-  const [marking, setMarking] = useState(false);
+  const [marking, setMarking] = useState(true);
   const items = data ?? [];
   const unread = items.filter((n) => !n.read).length;
 
