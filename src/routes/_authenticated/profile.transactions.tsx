@@ -69,7 +69,7 @@ function TransactionHistory() {
           </p>
         )}
 
-        {rows.map((t) => (
+        {!isPending && rows.map((t) => (
           <div
             key={t.id}
             className="flex items-center justify-between gap-3 rounded border border-border bg-card p-3.5"
