@@ -300,7 +300,7 @@ function Dashboard() {
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-medium">Recent Activity</h2>
           <Link
-            to="/investments/history"
+            to="/profile/transactions"
             className="text-xs text-muted-foreground hover:text-primary"
           >
             See all
