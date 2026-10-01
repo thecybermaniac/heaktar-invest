@@ -79,7 +79,7 @@ function Register() {
       email: parsed.data.email,
       password: parsed.data.password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `https://app.heaktar.com.ng/auth/callback`,
         data: {
           first_name: parsed.data.firstName,
           last_name: parsed.data.lastName,
