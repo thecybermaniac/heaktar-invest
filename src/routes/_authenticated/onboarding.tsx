@@ -8,7 +8,7 @@ import { useProfileStore, type Profile } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/components/hk/toast";
 import { cn } from "@/lib/utils";
-import { STATES } from "@lib/data";
+import { STATES } from "@/lib/data";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   head: () => ({
