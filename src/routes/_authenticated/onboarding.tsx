@@ -24,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/onboarding")({
 
 const STEPS = ["Personal", "Location", "Identity", "Financial", "Review"];
 
-const NATIONALITIES = ["Nigeria", "Ghana", "Kenya", "South Africa", "United Kingdom", "United States", "Canada"];
+const NATIONALITIES = ["Nigeria", "Ghana", "Kenya", "South Africa"];
 const GENDER_OPTIONS = ["Female", "Male", "Other", "Prefer not to say"];
 
 const REQUIRED: [keyof Profile, string][][] = [
