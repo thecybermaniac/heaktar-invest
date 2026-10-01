@@ -42,7 +42,7 @@ export const DEFAULT_PROFILE: Profile = {
   state: "",
   city: "",
   address: "",
-  idType: "national-id",
+  idType: "National ID",
   idNumber: "",
   occupation: "",
   employmentStatus: "",
