@@ -8,6 +8,7 @@ import { useProfileStore, type Profile } from "@/lib/app-store";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/components/hk/toast";
 import { cn } from "@/lib/utils";
+import { STATES } from "@lib/data";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   head: () => ({
@@ -24,7 +25,6 @@ export const Route = createFileRoute("/_authenticated/onboarding")({
 const STEPS = ["Personal", "Location", "Identity", "Financial", "Review"];
 
 const NATIONALITIES = ["Nigeria", "Ghana", "Kenya", "South Africa", "United Kingdom", "United States", "Canada"];
-const STATES = ["Lagos", "Abuja (FCT)", "Rivers", "Kano", "Oyo", "Enugu", "Kaduna"];
 const GENDER_OPTIONS = ["Female", "Male", "Other", "Prefer not to say"];
 
 const REQUIRED: [keyof Profile, string][][] = [
