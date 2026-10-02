@@ -206,7 +206,7 @@ function Dashboard() {
       </header>
 
       <section className="px-5 pt-5">
-        <div className="rounded border border-primary p-5 shadow-float">
+        <div className="rounded bg-primary p-5 shadow-float">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground font-medium">Total balance</span>
