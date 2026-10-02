@@ -78,7 +78,7 @@ function ActiveInvestments() {
           );
         })}
         {!isPending && !isError && investments.length === 0 && (
-          <Card><p className="text-[13px] text-muted-foreground">You have no active investments yet.</p></Card>
+          <Card><p className="text-xs text-center text-muted-foreground">You have no active investments yet.</p></Card>
         )}
       </div>
     </Screen>
