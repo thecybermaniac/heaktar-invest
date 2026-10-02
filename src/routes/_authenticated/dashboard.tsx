@@ -206,10 +206,10 @@ function Dashboard() {
       </header>
 
       <section className="px-5 pt-5">
-        <div className="rounded bg-primary p-5 shadow-float">
+        <div className="rounded border border-primary p-5 shadow-float">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 font-medium">Total balance</span>
+              <span className="text-xs font-medium">Total balance</span>
               <button onClick={() => setHidden((h) => !h)} aria-label="Toggle balance visibility">
                 {hidden ? (
                   <EyeOff className="size-4 opacity-80" strokeWidth={1.8} />
@@ -220,7 +220,7 @@ function Dashboard() {
             </div>
 
             <button
-              className="flex bg-muted text-xs items-center py-2 px-4 rounded-full gap-1 tracking-wide"
+              className="flex bg-primary text-xs items-center py-2 px-4 rounded-full gap-1 tracking-wide"
               onClick={() => navigate({ to: "/deposit" })}
             >
               <Plus size={15} />
