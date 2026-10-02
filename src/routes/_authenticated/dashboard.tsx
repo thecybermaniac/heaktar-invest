@@ -263,12 +263,12 @@ function Dashboard() {
         ) : (
           <div className="px-5">
             <Card>
-              <p className="text-[13px] text-muted-foreground text-center">
+              <p className="text-xs text-muted-foreground">
                 No active plans yet. Pick a plan to start earning daily.
               </p>
               <Link
                 to="/invest"
-                className="mt-3 block text-center text-xs font-medium text-primary hover:underline"
+                className="mt-3 text-xs font-medium text-primary hover:underline"
               >
                 Browse plans
               </Link>
@@ -355,7 +355,7 @@ function Dashboard() {
           })}
           {!isPending && (portfolio?.activities.length ?? 0) === 0 && (
             <Card>
-              <p className="text-[13px] text-muted-foreground text-center">
+              <p className="text-xs text-muted-foreground">
                 Your deposits, investments and payouts will appear here.
               </p>
             </Card>
