@@ -171,6 +171,7 @@ export type Database = {
           id: string
           id_number: string | null
           id_type: string | null
+          is_admin: boolean
           last_name: string
           nationality: string | null
           occupation: string | null
@@ -196,6 +197,7 @@ export type Database = {
           id: string
           id_number?: string | null
           id_type?: string | null
+          is_admin?: boolean
           last_name?: string
           nationality?: string | null
           occupation?: string | null
@@ -221,6 +223,7 @@ export type Database = {
           id?: string
           id_number?: string | null
           id_type?: string | null
+          is_admin?: boolean
           last_name?: string
           nationality?: string | null
           occupation?: string | null
