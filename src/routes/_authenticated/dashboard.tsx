@@ -355,7 +355,7 @@ function Dashboard() {
           })}
           {!isPending && (portfolio?.activities.length ?? 0) === 0 && (
             <Card>
-              <p className="text-[13px] text-muted-foreground">
+              <p className="text-[13px] text-muted-foreground text-center">
                 Your deposits, investments and payouts will appear here.
               </p>
             </Card>
