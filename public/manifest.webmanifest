@@ -2,7 +2,7 @@
   "name": "Heaktar Nigeria — Investment Platform",
   "short_name": "Heaktar",
   "description": "Grow your wealth with daily-yield investment plans.",
-  "start_url": "/",
+  "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#2eb65b",
   "theme_color": "#2eb65b",
